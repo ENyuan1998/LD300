@@ -20,7 +20,7 @@
     
     .container {
       max-width: 900px;
-      margin: 0 auto;
+      margin: 0 auto 30px;
       background: white;
       border-radius: 20px;
       box-shadow: 0 20px 60px rgba(0,0,0,0.3);
@@ -42,23 +42,6 @@
     .header p {
       font-size: 16px;
       opacity: 0.9;
-    }
-    
-    .contact-info {
-      background: rgba(255,255,255,0.2);
-      padding: 15px;
-      border-radius: 10px;
-      margin-top: 15px;
-      display: inline-block;
-    }
-    
-    .contact-info p {
-      margin: 5px 0;
-      font-size: 14px;
-    }
-    
-    .contact-info strong {
-      font-size: 16px;
     }
     
     .form-container {
@@ -353,6 +336,47 @@
       transform: none;
     }
     
+    .footer {
+      max-width: 900px;
+      margin: 0 auto;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 30px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    
+    .footer h3 {
+      font-size: 20px;
+      margin-bottom: 15px;
+    }
+    
+    .footer .contact-info {
+      background: rgba(255,255,255,0.2);
+      padding: 20px;
+      border-radius: 15px;
+      display: inline-block;
+      margin-top: 10px;
+    }
+    
+    .footer .contact-info p {
+      margin: 8px 0;
+      font-size: 16px;
+    }
+    
+    .footer .contact-info strong {
+      font-size: 24px;
+      color: #fff;
+      display: block;
+      margin-top: 10px;
+    }
+    
+    .footer .line-icon {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+    
     .modal {
       display: none;
       position: fixed;
@@ -418,6 +442,10 @@
       .price-table {
         overflow-x: auto;
       }
+      
+      .footer {
+        margin: 20px;
+      }
     }
   </style>
 </head>
@@ -426,10 +454,6 @@
     <div class="header">
       <h1>🚚 老得服務訂單系統</h1>
       <p>專業搬家 · 寵物接送 · 值得信賴</p>
-      <div class="contact-info">
-        <p>📞 有任何問題？請與小編聯繫</p>
-        <p><strong>LINE ID: 0922317535</strong></p>
-      </div>
     </div>
     
     <div class="form-container">
@@ -552,8 +576,6 @@
             
             <li>如因乙方搬運過程中，因「故意或重大過失」導致甲方之家具外觀明顯受損，折舊理賠上限金額為本趟運費總額之二倍。</li>
           </ol>
-          
-          <p style="margin-top: 15px;"><strong>📞 如有任何疑問，請與小編聯繫 LINE ID: 0922317535</strong></p>
         </div>
         
         <!-- 寵物接送責任條款 -->
@@ -572,8 +594,6 @@
             
             <li><strong>車內設施損壞：</strong>寵物若於車內發生一般便溺、嘔吐，乙方不額外收取基礎清潔費。但若因惡意抓咬、嚴重破壞導致車內硬體或電子設備損壞，乙方得檢具單據向甲方索取特殊維修與營業損失費用。</li>
           </ol>
-          
-          <p style="margin-top: 15px;"><strong>📞 如有任何疑問，請與小編聯繫 LINE ID: 0922317535</strong></p>
         </div>
         
         <!-- 訂購者資料 -->
@@ -647,6 +667,16 @@
         
         <button type="submit" class="submit-btn">確認送出訂單</button>
       </form>
+    </div>
+  </div>
+  
+  <!-- 聯絡資訊 Footer -->
+  <div class="footer">
+    <h3>📞 有任何問題？請與小編聯繫</h3>
+    <div class="contact-info">
+      <div class="line-icon">💬</div>
+      <p>LINE 官方帳號</p>
+      <strong>ID: 0922317535</strong>
     </div>
   </div>
   
