@@ -21,10 +21,33 @@
       color: white;
       padding: 20px 40px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
     
     .navbar h1 {
       font-size: 24px;
+    }
+    
+    .navbar-actions {
+      display: flex;
+      gap: 15px;
+    }
+    
+    .navbar-btn {
+      background: rgba(255,255,255,0.2);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.3s;
+    }
+    
+    .navbar-btn:hover {
+      background: rgba(255,255,255,0.3);
     }
     
     .container {
@@ -35,7 +58,7 @@
     
     .stats-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 20px;
       margin-bottom: 30px;
     }
@@ -44,56 +67,130 @@
       background: white;
       padding: 25px;
       border-radius: 15px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      transition: transform 0.3s;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      transition: transform 0.3s, box-shadow 0.3s;
+      border-left: 4px solid #667eea;
     }
     
     .stat-card:hover {
       transform: translateY(-5px);
+      box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+    }
+    
+    .stat-card.revenue {
+      border-left-color: #28a745;
+    }
+    
+    .stat-card.cost {
+      border-left-color: #dc3545;
+    }
+    
+    .stat-card.profit {
+      border-left-color: #ffc107;
+    }
+    
+    .stat-card.customers {
+      border-left-color: #17a2b8;
     }
     
     .stat-card h3 {
       font-size: 14px;
       color: #666;
       margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
     
     .stat-card .value {
       font-size: 32px;
       font-weight: bold;
+      color: #333;
+    }
+    
+    .stat-card .icon {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+    
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #e0e0e0;
+      flex-wrap: wrap;
+    }
+    
+    .tab {
+      padding: 15px 25px;
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-size: 16px;
+      color: #666;
+      transition: all 0.3s;
+      border-bottom: 3px solid transparent;
+      font-weight: 500;
+    }
+    
+    .tab.active {
       color: #667eea;
+      border-bottom: 3px solid #667eea;
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
     }
     
     .section {
       background: white;
       padding: 30px;
       border-radius: 15px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
       margin-bottom: 30px;
     }
     
-    .section h2 {
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+    
+    .section-header h2 {
       font-size: 22px;
-      margin-bottom: 20px;
       color: #333;
-      border-bottom: 3px solid #667eea;
-      padding-bottom: 10px;
+    }
+    
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
     }
     
     .btn {
-      padding: 12px 24px;
+      padding: 10px 20px;
       background: #667eea;
       color: white;
       border: none;
-      border-radius: 10px;
+      border-radius: 8px;
       cursor: pointer;
-      font-size: 15px;
-      transition: background 0.3s;
-      margin-right: 10px;
+      font-size: 14px;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
     
     .btn:hover {
       background: #5568d3;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
     }
     
     .btn-success {
@@ -112,81 +209,252 @@
       background: #c82333;
     }
     
-    .iframe-container {
+    .btn-secondary {
+      background: #6c757d;
+    }
+    
+    .btn-secondary:hover {
+      background: #5a6268;
+    }
+    
+    .data-table {
       width: 100%;
-      height: 600px;
-      border: 2px solid #e0e0e0;
-      border-radius: 10px;
-      overflow: hidden;
+      border-collapse: collapse;
       margin-top: 20px;
     }
     
-    .iframe-container iframe {
+    .data-table thead {
+      background: #f8f9fa;
+    }
+    
+    .data-table th {
+      padding: 15px;
+      text-align: left;
+      font-weight: 600;
+      color: #495057;
+      border-bottom: 2px solid #dee2e6;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .data-table td {
+      padding: 15px;
+      border-bottom: 1px solid #dee2e6;
+      color: #333;
+    }
+    
+    .data-table tbody tr {
+      transition: background 0.2s;
+    }
+    
+    .data-table tbody tr:hover {
+      background: #f8f9fa;
+    }
+    
+    .status-badge {
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      display: inline-block;
+    }
+    
+    .status-pending {
+      background: #fff3cd;
+      color: #856404;
+    }
+    
+    .status-processing {
+      background: #cfe2ff;
+      color: #084298;
+    }
+    
+    .status-completed {
+      background: #d1e7dd;
+      color: #0f5132;
+    }
+    
+    .status-cancelled {
+      background: #f8d7da;
+      color: #842029;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #999;
+    }
+    
+    .empty-state-icon {
+      font-size: 64px;
+      margin-bottom: 20px;
+      opacity: 0.5;
+    }
+    
+    .empty-state h3 {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+    
+    .empty-state p {
+      font-size: 14px;
+    }
+    
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #667eea;
+    }
+    
+    .loading-spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #667eea;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .search-bar {
+      margin-bottom: 20px;
+      display: flex;
+      gap: 10px;
+    }
+    
+    .search-input {
+      flex: 1;
+      padding: 12px 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    
+    .search-input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+    
+    .filter-select {
+      padding: 12px 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 14px;
+      min-width: 150px;
+    }
+    
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 30px;
+    }
+    
+    .pagination button {
+      padding: 8px 15px;
+      border: 1px solid #dee2e6;
+      background: white;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .pagination button:hover {
+      background: #667eea;
+      color: white;
+      border-color: #667eea;
+    }
+    
+    .pagination button.active {
+      background: #667eea;
+      color: white;
+      border-color: #667eea;
+    }
+    
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
-      border: none;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
     }
     
-    .action-buttons {
+    .modal.show {
       display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
     }
     
-    .tabs {
+    .modal-content {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    
+    .modal-header {
       display: flex;
-      gap: 10px;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 20px;
-      border-bottom: 2px solid #e0e0e0;
-      flex-wrap: wrap;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #f0f0f0;
     }
     
-    .tab {
-      padding: 12px 24px;
-      cursor: pointer;
-      border: none;
+    .modal-header h3 {
+      font-size: 20px;
+      color: #333;
+    }
+    
+    .close-btn {
       background: none;
-      font-size: 16px;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #999;
+    }
+    
+    .close-btn:hover {
+      color: #333;
+    }
+    
+    .detail-row {
+      display: flex;
+      padding: 12px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .detail-row label {
+      font-weight: 600;
+      width: 120px;
       color: #666;
-      transition: all 0.3s;
-      border-bottom: 3px solid transparent;
     }
     
-    .tab.active {
-      color: #667eea;
-      border-bottom: 3px solid #667eea;
-      font-weight: bold;
-    }
-    
-    .tab-content {
-      display: none;
-    }
-    
-    .tab-content.active {
-      display: block;
-    }
-    
-    .info-box {
-      background: #e3f2fd;
-      border-left: 4px solid #2196f3;
-      padding: 15px;
-      margin-bottom: 20px;
-      border-radius: 5px;
-    }
-    
-    .info-box p {
-      margin: 5px 0;
-      color: #1565c0;
+    .detail-row span {
+      flex: 1;
+      color: #333;
     }
     
     @media (max-width: 768px) {
       .navbar {
-        padding: 15px 20px;
+        flex-direction: column;
+        gap: 15px;
       }
       
       .navbar h1 {
-        font-size: 18px;
+        font-size: 20px;
       }
       
       .stats-grid {
@@ -196,62 +464,101 @@
       .section {
         padding: 20px;
       }
+      
+      .data-table {
+        font-size: 12px;
+      }
+      
+      .data-table th,
+      .data-table td {
+        padding: 10px 5px;
+      }
+      
+      .search-bar {
+        flex-direction: column;
+      }
     }
   </style>
 </head>
 <body>
   <div class="navbar">
     <h1>📊 老得服務後台管理系統</h1>
+    <div class="navbar-actions">
+      <button class="navbar-btn" onclick="refreshAllData()">🔄 重新整理</button>
+      <button class="navbar-btn" onclick="openGoogleSheets()">📊 開啟試算表</button>
+    </div>
   </div>
   
   <div class="container">
     <!-- 統計卡片 -->
     <div class="stats-grid">
       <div class="stat-card">
+        <div class="icon">📦</div>
         <h3>總訂單數</h3>
-        <div class="value" id="totalOrders">載入中...</div>
+        <div class="value" id="totalOrders">0</div>
       </div>
-      <div class="stat-card">
+      <div class="stat-card revenue">
+        <div class="icon">💰</div>
         <h3>總營收</h3>
-        <div class="value" id="totalRevenue">載入中...</div>
+        <div class="value" id="totalRevenue">NT$ 0</div>
       </div>
-      <div class="stat-card">
+      <div class="stat-card cost">
+        <div class="icon">💸</div>
         <h3>總成本</h3>
-        <div class="value" id="totalCost">載入中...</div>
+        <div class="value" id="totalCost">NT$ 0</div>
       </div>
-      <div class="stat-card">
+      <div class="stat-card profit">
+        <div class="icon">📈</div>
         <h3>淨利潤</h3>
-        <div class="value" id="totalProfit">載入中...</div>
+        <div class="value" id="totalProfit">NT$ 0</div>
       </div>
-      <div class="stat-card">
+      <div class="stat-card customers">
+        <div class="icon">👥</div>
         <h3>客戶數量</h3>
-        <div class="value" id="totalCustomers">載入中...</div>
+        <div class="value" id="totalCustomers">0</div>
       </div>
     </div>
     
     <!-- 分頁標籤 -->
     <div class="tabs">
-      <button class="tab active" onclick="showTab('orders')">訂單管理</button>
-      <button class="tab" onclick="showTab('services')">服務項目</button>
-      <button class="tab" onclick="showTab('costs')">成本統計</button>
-      <button class="tab" onclick="showTab('customers')">客戶資料</button>
+      <button class="tab active" onclick="showTab('orders')">📋 訂單管理</button>
+      <button class="tab" onclick="showTab('services')">🛠️ 服務項目</button>
+      <button class="tab" onclick="showTab('costs')">💰 成本統計</button>
+      <button class="tab" onclick="showTab('customers')">👥 客戶資料</button>
     </div>
     
     <!-- 訂單管理 -->
     <div id="orders" class="tab-content active">
       <div class="section">
-        <h2>📋 訂單資料管理</h2>
-        <div class="info-box">
-          <p><strong>提示：</strong>您可以直接在下方的試算表中編輯資料</p>
-          <p>點選「在 Google Sheets 中開啟」可進行完整編輯</p>
+        <div class="section-header">
+          <h2>訂單列表</h2>
+          <div class="action-buttons">
+            <button class="btn btn-success" onclick="exportToExcel()">📥 匯出 Excel</button>
+            <button class="btn" onclick="loadOrders()">🔄 重新載入</button>
+          </div>
         </div>
-        <div class="action-buttons">
-          <button class="btn" onclick="refreshData()">🔄 重新整理</button>
-          <button class="btn btn-success" onclick="openInSheets('orders')">📊 在 Google Sheets 中開啟</button>
-          <button class="btn btn-success" onclick="exportToExcel()">📥 匯出 Excel</button>
+        
+        <div class="search-bar">
+          <input type="text" class="search-input" placeholder="搜尋訂單編號、客戶姓名或電話..." id="orderSearch" onkeyup="filterOrders()">
+          <select class="filter-select" id="statusFilter" onchange="filterOrders()">
+            <option value="">全部狀態</option>
+            <option value="待處理">待處理</option>
+            <option value="處理中">處理中</option>
+            <option value="已完成">已完成</option>
+            <option value="已取消">已取消</option>
+          </select>
+          <select class="filter-select" id="serviceFilter" onchange="filterOrders()">
+            <option value="">全部服務</option>
+            <option value="搬家服務">搬家服務</option>
+            <option value="寵物接送">寵物接送</option>
+          </select>
         </div>
-        <div class="iframe-container">
-          <iframe id="ordersFrame" src=""></iframe>
+        
+        <div id="ordersTableContainer">
+          <div class="loading">
+            <div class="loading-spinner"></div>
+            <p>載入中...</p>
+          </div>
         </div>
       </div>
     </div>
@@ -259,16 +566,18 @@
     <!-- 服務項目 -->
     <div id="services" class="tab-content">
       <div class="section">
-        <h2>🛠️ 服務項目設定</h2>
-        <div class="info-box">
-          <p><strong>說明：</strong>在此設定各項服務的價格與計費標準</p>
+        <div class="section-header">
+          <h2>服務項目設定</h2>
+          <div class="action-buttons">
+            <button class="btn btn-success" onclick="openGoogleSheets()">📊 在試算表中編輯</button>
+          </div>
         </div>
-        <div class="action-buttons">
-          <button class="btn" onclick="refreshData()">🔄 重新整理</button>
-          <button class="btn btn-success" onclick="openInSheets('services')">📊 在 Google Sheets 中開啟</button>
-        </div>
-        <div class="iframe-container">
-          <iframe id="servicesFrame" src=""></iframe>
+        
+        <div id="servicesTableContainer">
+          <div class="loading">
+            <div class="loading-spinner"></div>
+            <p>載入中...</p>
+          </div>
         </div>
       </div>
     </div>
@@ -276,16 +585,18 @@
     <!-- 成本統計 -->
     <div id="costs" class="tab-content">
       <div class="section">
-        <h2>💰 成本與營利統計</h2>
-        <div class="info-box">
-          <p><strong>說明：</strong>記錄每筆訂單的成本與利潤</p>
+        <div class="section-header">
+          <h2>成本與營利統計</h2>
+          <div class="action-buttons">
+            <button class="btn btn-success" onclick="openGoogleSheets()">📊 在試算表中編輯</button>
+          </div>
         </div>
-        <div class="action-buttons">
-          <button class="btn" onclick="refreshData()">🔄 重新整理</button>
-          <button class="btn btn-success" onclick="openInSheets('costs')">📊 在 Google Sheets 中開啟</button>
-        </div>
-        <div class="iframe-container">
-          <iframe id="costsFrame" src=""></iframe>
+        
+        <div id="costsTableContainer">
+          <div class="loading">
+            <div class="loading-spinner"></div>
+            <p>載入中...</p>
+          </div>
         </div>
       </div>
     </div>
@@ -293,50 +604,45 @@
     <!-- 客戶資料 -->
     <div id="customers" class="tab-content">
       <div class="section">
-        <h2>👥 客戶資料統計</h2>
-        <div class="info-box">
-          <p><strong>說明：</strong>查看客戶消費記錄與統計</p>
+        <div class="section-header">
+          <h2>客戶資料統計</h2>
+          <div class="action-buttons">
+            <button class="btn" onclick="loadCustomers()">🔄 重新載入</button>
+          </div>
         </div>
-        <div class="action-buttons">
-          <button class="btn" onclick="refreshData()">🔄 重新整理</button>
-          <button class="btn btn-success" onclick="openInSheets('customers')">📊 在 Google Sheets 中開啟</button>
+        
+        <div class="search-bar">
+          <input type="text" class="search-input" placeholder="搜尋客戶姓名或電話..." id="customerSearch" onkeyup="filterCustomers()">
         </div>
-        <div class="iframe-container">
-          <iframe id="customersFrame" src=""></iframe>
+        
+        <div id="customersTableContainer">
+          <div class="loading">
+            <div class="loading-spinner"></div>
+            <p>載入中...</p>
+          </div>
         </div>
       </div>
+    </div>
+  </div>
+  
+  <!-- 訂單詳情彈窗 -->
+  <div class="modal" id="orderDetailModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>訂單詳情</h3>
+        <button class="close-btn" onclick="closeModal()">&times;</button>
+      </div>
+      <div id="orderDetailContent"></div>
     </div>
   </div>
   
   <script>
     // ⚠️ 請替換成您的設定
     const SPREADSHEET_ID = '1O5_nN6zzkQZT9AZgsAK3jtkNY1YgXjLirFBYR5JsoPA';
-    const SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL_HERE'; // 請替換成您的 Apps Script URL
+    const SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL_HERE';
     
-    // 工作表 GID 對應（需要您自行取得）
-    const SHEET_GIDS = {
-      orders: '0',      // 訂單資料的 gid
-      services: '1626194587',    // 服務項目的 gid（需要確認）
-      costs: '1269894708',       // 成本統計的 gid（需要確認）
-      customers: '1925381398'    // 客戶資料的 gid（需要確認）
-    };
-    
-    // 載入 Google Sheets 嵌入式檢視
-    function loadSheets() {
-      // 使用正確的嵌入格式
-      const baseUrl = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/edit?rm=minimal&widget=true&chrome=false&gid=`;
-      
-      document.getElementById('ordersFrame').src = baseUrl + SHEET_GIDS.orders;
-      document.getElementById('servicesFrame').src = baseUrl + SHEET_GIDS.services;
-      document.getElementById('costsFrame').src = baseUrl + SHEET_GIDS.costs;
-      document.getElementById('customersFrame').src = baseUrl + SHEET_GIDS.customers;
-    }
-    
-    // 在 Google Sheets 中開啟
-    function openInSheets(sheetType) {
-      const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/edit#gid=${SHEET_GIDS[sheetType]}`;
-      window.open(url, '_blank');
-    }
+    let allOrders = [];
+    let allCustomers = [];
     
     // 載入統計資料
     async function loadStatistics() {
@@ -350,65 +656,310 @@
           document.getElementById('totalCost').textContent = `NT$ ${result.totalCost.toLocaleString()}`;
           document.getElementById('totalProfit').textContent = `NT$ ${result.totalProfit.toLocaleString()}`;
           document.getElementById('totalCustomers').textContent = result.totalCustomers;
-        } else {
-          console.error('載入統計失敗:', result.error);
-          showErrorStats();
         }
       } catch (error) {
-        console.error('載入統計資料失敗:', error);
-        showErrorStats();
+        console.error('載入統計失敗:', error);
       }
     }
     
-    // 顯示錯誤狀態
-    function showErrorStats() {
-      document.getElementById('totalOrders').textContent = '0';
-      document.getElementById('totalRevenue').textContent = 'NT$ 0';
-      document.getElementById('totalCost').textContent = 'NT$ 0';
-      document.getElementById('totalProfit').textContent = 'NT$ 0';
-      document.getElementById('totalCustomers').textContent = '0';
+    // 載入訂單資料
+    async function loadOrders() {
+      const container = document.getElementById('ordersTableContainer');
+      container.innerHTML = '<div class="loading"><div class="loading-spinner"></div><p>載入中...</p></div>';
+      
+      try {
+        const response = await fetch(`${SCRIPT_URL}?action=getOrders`);
+        const result = await response.json();
+        
+        if (result.success && result.orders.length > 0) {
+          allOrders = result.orders;
+          displayOrders(allOrders);
+        } else {
+          container.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-state-icon">📭</div>
+              <h3>尚無訂單資料</h3>
+              <p>目前還沒有任何訂單記錄</p>
+            </div>
+          `;
+        }
+      } catch (error) {
+        console.error('載入訂單失敗:', error);
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">⚠️</div>
+            <h3>載入失敗</h3>
+            <p>請確認 Apps Script 已正確設定</p>
+          </div>
+        `;
+      }
+    }
+    
+    // 顯示訂單表格
+    function displayOrders(orders) {
+      const container = document.getElementById('ordersTableContainer');
+      
+      let html = `
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>訂單編號</th>
+              <th>日期</th>
+              <th>服務類型</th>
+              <th>客戶姓名</th>
+              <th>電話</th>
+              <th>預約時間</th>
+              <th>金額</th>
+              <th>狀態</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+      
+      orders.forEach(order => {
+        const statusClass = getStatusClass(order.status);
+        html += `
+          <tr>
+            <td><strong>${order.orderNumber}</strong></td>
+            <td>${order.orderDate}</td>
+            <td>${order.serviceType}</td>
+            <td>${order.name}</td>
+            <td>${order.phone}</td>
+            <td>${order.bookingDate} ${order.bookingTime}</td>
+            <td><strong>NT$ ${parseInt(order.totalAmount).toLocaleString()}</strong></td>
+            <td><span class="status-badge ${statusClass}">${order.status}</span></td>
+            <td>
+              <button class="btn btn-secondary" style="padding: 5px 10px; font-size: 12px;" onclick='showOrderDetail(${JSON.stringify(order)})'>查看</button>
+            </td>
+          </tr>
+        `;
+      });
+      
+      html += '</tbody></table>';
+      container.innerHTML = html;
+    }
+    
+    // 獲取狀態樣式
+    function getStatusClass(status) {
+      const statusMap = {
+        '待處理': 'status-pending',
+        '處理中': 'status-processing',
+        '已完成': 'status-completed',
+        '已取消': 'status-cancelled'
+      };
+      return statusMap[status] || 'status-pending';
+    }
+    
+    // 顯示訂單詳情
+    function showOrderDetail(order) {
+      const modal = document.getElementById('orderDetailModal');
+      const content = document.getElementById('orderDetailContent');
+      
+      content.innerHTML = `
+        <div class="detail-row">
+          <label>訂單編號：</label>
+          <span><strong>${order.orderNumber}</strong></span>
+        </div>
+        <div class="detail-row">
+          <label>訂單日期：</label>
+          <span>${order.orderDate} ${order.orderTime}</span>
+        </div>
+        <div class="detail-row">
+          <label>服務類型：</label>
+          <span>${order.serviceType}</span>
+        </div>
+        <div class="detail-row">
+          <label>客戶姓名：</label>
+          <span>${order.name}</span>
+        </div>
+        <div class="detail-row">
+          <label>聯絡電話：</label>
+          <span>${order.phone}</span>
+        </div>
+        <div class="detail-row">
+          <label>預約時間：</label>
+          <span>${order.bookingDate} ${order.bookingTime}</span>
+        </div>
+        <div class="detail-row">
+          <label>起點地址：</label>
+          <span>${order.startAddress}</span>
+        </div>
+        <div class="detail-row">
+          <label>終點地址：</label>
+          <span>${order.endAddress}</span>
+        </div>
+        <div class="detail-row">
+          <label>服務項目：</label>
+          <span style="white-space: pre-line;">${order.serviceItems || '無'}</span>
+        </div>
+        <div class="detail-row">
+          <label>其他需求：</label>
+          <span>${order.requirements || '無'}</span>
+        </div>
+        <div class="detail-row">
+          <label>總金額：</label>
+          <span><strong style="color: #667eea; font-size: 18px;">NT$ ${parseInt(order.totalAmount).toLocaleString()}</strong></span>
+        </div>
+        <div class="detail-row">
+          <label>狀態：</label>
+          <span><span class="status-badge ${getStatusClass(order.status)}">${order.status}</span></span>
+        </div>
+      `;
+      
+      modal.classList.add('show');
+    }
+    
+    // 關閉彈窗
+    function closeModal() {
+      document.getElementById('orderDetailModal').classList.remove('show');
+    }
+    
+    // 篩選訂單
+    function filterOrders() {
+      const searchText = document.getElementById('orderSearch').value.toLowerCase();
+      const statusFilter = document.getElementById('statusFilter').value;
+      const serviceFilter = document.getElementById('serviceFilter').value;
+      
+      const filtered = allOrders.filter(order => {
+        const matchSearch = !searchText || 
+          order.orderNumber.toLowerCase().includes(searchText) ||
+          order.name.toLowerCase().includes(searchText) ||
+          order.phone.includes(searchText);
+        
+        const matchStatus = !statusFilter || order.status === statusFilter;
+        const matchService = !serviceFilter || order.serviceType === serviceFilter;
+        
+        return matchSearch && matchStatus && matchService;
+      });
+      
+      displayOrders(filtered);
+    }
+    
+    // 載入客戶資料
+    async function loadCustomers() {
+      const container = document.getElementById('customersTableContainer');
+      container.innerHTML = '<div class="loading"><div class="loading-spinner"></div><p>載入中...</p></div>';
+      
+      try {
+        const response = await fetch(`${SCRIPT_URL}?action=getCustomers`);
+        const result = await response.json();
+        
+        if (result.success && result.customers.length > 0) {
+          allCustomers = result.customers;
+          displayCustomers(allCustomers);
+        } else {
+          container.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-state-icon">👥</div>
+              <h3>尚無客戶資料</h3>
+              <p>目前還沒有任何客戶記錄</p>
+            </div>
+          `;
+        }
+      } catch (error) {
+        console.error('載入客戶失敗:', error);
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">⚠️</div>
+            <h3>載入失敗</h3>
+            <p>請確認 Apps Script 已正確設定</p>
+          </div>
+        `;
+      }
+    }
+    
+    // 顯示客戶表格
+    function displayCustomers(customers) {
+      const container = document.getElementById('customersTableContainer');
+      
+      let html = `
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>客戶姓名</th>
+              <th>聯絡電話</th>
+              <th>累計訂單數</th>
+              <th>累計金額</th>
+              <th>最後消費日期</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+      
+      customers.forEach(customer => {
+        html += `
+          <tr>
+            <td><strong>${customer.name}</strong></td>
+            <td>${customer.phone}</td>
+            <td>${customer.orderCount} 筆</td>
+            <td><strong>NT$ ${parseInt(customer.totalAmount).toLocaleString()}</strong></td>
+            <td>${customer.lastOrderDate}</td>
+          </tr>
+        `;
+      });
+      
+      html += '</tbody></table>';
+      container.innerHTML = html;
+    }
+    
+    // 篩選客戶
+    function filterCustomers() {
+      const searchText = document.getElementById('customerSearch').value.toLowerCase();
+      
+      const filtered = allCustomers.filter(customer => {
+        return customer.name.toLowerCase().includes(searchText) ||
+               customer.phone.includes(searchText);
+      });
+      
+      displayCustomers(filtered);
     }
     
     // 切換分頁
     function showTab(tabName) {
-      // 隱藏所有內容
       document.querySelectorAll('.tab-content').forEach(content => {
         content.classList.remove('active');
       });
       
-      // 移除所有標籤的 active 狀態
       document.querySelectorAll('.tab').forEach(tab => {
         tab.classList.remove('active');
       });
       
-      // 顯示選中的內容
       document.getElementById(tabName).classList.add('active');
       event.target.classList.add('active');
+      
+      // 載入對應資料
+      if (tabName === 'orders') {
+        loadOrders();
+      } else if (tabName === 'customers') {
+        loadCustomers();
+      }
     }
     
-    // 重新整理資料
-    function refreshData() {
-      loadSheets();
+    // 重新整理所有資料
+    function refreshAllData() {
       loadStatistics();
-      alert('資料已重新整理');
+      loadOrders();
+      loadCustomers();
+    }
+    
+    // 開啟 Google Sheets
+    function openGoogleSheets() {
+      window.open(`https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/edit`, '_blank');
     }
     
     // 匯出 Excel
     function exportToExcel() {
-      const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=xlsx`;
-      window.open(url, '_blank');
+      window.open(`https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=xlsx`, '_blank');
     }
     
     // 初始化
     window.onload = function() {
-      loadSheets();
-      
-      // 如果有設定 SCRIPT_URL 才載入統計
       if (SCRIPT_URL !== 'YOUR_APPS_SCRIPT_URL_HERE') {
         loadStatistics();
+        loadOrders();
       } else {
-        showErrorStats();
-        console.warn('請設定 SCRIPT_URL');
+        alert('請先設定 SCRIPT_URL');
       }
     };
   </script>
