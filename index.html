@@ -44,6 +44,23 @@
       opacity: 0.9;
     }
     
+    .contact-info {
+      background: rgba(255,255,255,0.2);
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 15px;
+      display: inline-block;
+    }
+    
+    .contact-info p {
+      margin: 5px 0;
+      font-size: 14px;
+    }
+    
+    .contact-info strong {
+      font-size: 16px;
+    }
+    
     .form-container {
       padding: 40px;
     }
@@ -123,6 +140,46 @@
     
     .price-table tr:last-child td {
       border-bottom: none;
+    }
+    
+    .terms-section {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 20px;
+      margin: 30px 0;
+      border-radius: 10px;
+    }
+    
+    .terms-section h3 {
+      color: #856404;
+      margin-bottom: 15px;
+      font-size: 18px;
+    }
+    
+    .terms-section h4 {
+      color: #856404;
+      margin-top: 15px;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+    
+    .terms-section p,
+    .terms-section ol {
+      color: #856404;
+      line-height: 1.8;
+      font-size: 14px;
+    }
+    
+    .terms-section ol {
+      margin-left: 20px;
+    }
+    
+    .terms-section li {
+      margin-bottom: 10px;
+    }
+    
+    .terms-section strong {
+      color: #dc3545;
     }
     
     .form-group {
@@ -250,6 +307,28 @@
       padding-top: 15px;
     }
     
+    .agreement-checkbox {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+      border: 2px solid #e0e0e0;
+    }
+    
+    .agreement-checkbox label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+    
+    .agreement-checkbox input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+    }
+    
     .submit-btn {
       width: 100%;
       padding: 18px;
@@ -347,6 +426,10 @@
     <div class="header">
       <h1>🚚 老得服務訂單系統</h1>
       <p>專業搬家 · 寵物接送 · 值得信賴</p>
+      <div class="contact-info">
+        <p>📞 有任何問題？請與小編聯繫</p>
+        <p><strong>LINE ID: 0922317535</strong></p>
+      </div>
     </div>
     
     <div class="form-container">
@@ -457,6 +540,42 @@
           </table>
         </div>
         
+        <!-- 責任限制條款 -->
+        <div class="terms-section" id="movingTerms" style="display: none;">
+          <h3>⚠️ 第四條：責任限制與內容物免責條款（重要備註）</h3>
+          
+          <h4>📦 內容物免責特別註記條款：</h4>
+          <p>本服務車輛與司機僅協助搬家物資之「空間載運與外觀搬移」，所有裝箱、打包、內容物清點與完整度皆由甲方自行負責。<strong>乙方對甲方載運之箱體、袋體或包裝內部之「內容物一概不管、亦一概不知」。</strong>乙方不承擔任何內容物之品項、數量、真偽、功能正常與否、損壞或遺失之民刑事法律責任。如有貴重物品（如現金、證件、珠寶、高價電子產品等），請甲方務必隨身攜帶自行保管。</p>
+          
+          <ol>
+            <li>倘若因不可抗力之事由（如天災、嚴重交通堵塞、交通事故等）導致行程延誤，雙方應寬諒處理，乙方不負損害賠償責任。</li>
+            
+            <li>如因乙方搬運過程中，因「故意或重大過失」導致甲方之家具外觀明顯受損，折舊理賠上限金額為本趟運費總額之二倍。</li>
+          </ol>
+          
+          <p style="margin-top: 15px;"><strong>📞 如有任何疑問，請與小編聯繫 LINE ID: 0922317535</strong></p>
+        </div>
+        
+        <!-- 寵物接送責任條款 -->
+        <div class="terms-section" id="petTerms" style="display: none;">
+          <h3>⚠️ 第四條：責任限制與寵物免責條款（重要備註）</h3>
+          
+          <h4>🐾 健康誠實告知義務：</h4>
+          <p>甲方有義務於運送前如實告知寵物之品種、年齡、重大宿疾（如心臟病、癲癇、傳染病）或攻擊傾向。<strong>若因甲方隱匿寵物重大疾病，導致運送途中因緊張突發休克、死亡，乙方不負任何民刑事損害賠償責任。</strong></p>
+          
+          <ol>
+            <li><strong>緊急就醫授權：</strong>運送途中若寵物出現急性身體不適、呼吸困難等緊急狀況，乙方應第一時間通知甲方。若狀況危急且無法及時聯絡甲方，甲方在此授權乙方可直接將寵物送往最近之動物醫院進行緊急搶救。期間產生之所有醫療與診療費用悉由甲方全額負擔。</li>
+            
+            <li><strong>不可抗力免責：</strong>倘若因不可抗力之事由（如天災、嚴重交通堵塞、交通事故、雷雨驚嚇等）導致行程延誤或寵物突發狀況，雙方應寬諒處理，乙方不負損害賠償責任。</li>
+            
+            <li><strong>過失理賠上限：</strong>如因乙方疏失（如行車疏忽發生車禍、未關好車門導致寵物脫逃）導致寵物受傷或死亡，折舊理賠與醫療上限總額為本趟運費總額之十倍（或設定固定上限：新台幣貳萬元整），甲方同意放棄超過此限額之其他民刑事賠償請求權。</li>
+            
+            <li><strong>車內設施損壞：</strong>寵物若於車內發生一般便溺、嘔吐，乙方不額外收取基礎清潔費。但若因惡意抓咬、嚴重破壞導致車內硬體或電子設備損壞，乙方得檢具單據向甲方索取特殊維修與營業損失費用。</li>
+          </ol>
+          
+          <p style="margin-top: 15px;"><strong>📞 如有任何疑問，請與小編聯繫 LINE ID: 0922317535</strong></p>
+        </div>
+        
         <!-- 訂購者資料 -->
         <div class="form-row">
           <div class="form-group">
@@ -518,6 +637,14 @@
           </div>
         </div>
         
+        <!-- 同意條款 -->
+        <div class="agreement-checkbox">
+          <label>
+            <input type="checkbox" id="agreeTerms" required>
+            <span>我已詳細閱讀並同意上述服務條款與責任限制條款</span>
+          </label>
+        </div>
+        
         <button type="submit" class="submit-btn">確認送出訂單</button>
       </form>
     </div>
@@ -530,6 +657,9 @@
       <p>訂單編號：<strong id="orderNumber"></strong></p>
       <p>總金額：<strong id="orderTotal"></strong></p>
       <p>我們已收到您的預約，將盡快與您聯繫確認。</p>
+      <p style="margin-top: 15px; color: #667eea;">
+        <strong>LINE ID: 0922317535</strong>
+      </p>
       <button class="modal-btn" onclick="location.reload()">返回首頁</button>
     </div>
   </div>
@@ -566,14 +696,18 @@
         this.classList.add('active');
         selectedService = this.dataset.service;
         
-        // 顯示對應的費用表
+        // 顯示對應的費用表和條款
         document.getElementById('movingPriceTable').classList.remove('show');
         document.getElementById('petPriceTable').classList.remove('show');
+        document.getElementById('movingTerms').style.display = 'none';
+        document.getElementById('petTerms').style.display = 'none';
         
         if (selectedService === '搬家服務') {
           document.getElementById('movingPriceTable').classList.add('show');
+          document.getElementById('movingTerms').style.display = 'block';
         } else if (selectedService === '寵物接送') {
           document.getElementById('petPriceTable').classList.add('show');
+          document.getElementById('petTerms').style.display = 'block';
         }
         
         // 清空並重新初始化服務項目
@@ -685,6 +819,11 @@
         return;
       }
       
+      if (!document.getElementById('agreeTerms').checked) {
+        alert('請勾選同意服務條款');
+        return;
+      }
+      
       const totalAmount = serviceItems.reduce((sum, item) => {
         return sum + (item.price * item.quantity);
       }, 0);
@@ -725,7 +864,7 @@
         
       } catch (error) {
         console.error('錯誤:', error);
-        alert('訂單送出成功！我們會盡快與您聯繫。');
+        alert('訂單送出成功！我們會盡快與您聯繫。\n\nLINE ID: 0922317535');
         location.reload();
       }
     });
