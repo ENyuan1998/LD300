@@ -89,6 +89,7 @@
       cursor: pointer;
       font-size: 15px;
       transition: background 0.3s;
+      margin-right: 10px;
     }
     
     .btn:hover {
@@ -111,35 +112,13 @@
       background: #c82333;
     }
     
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-    
-    table th,
-    table td {
-      padding: 12px;
-      text-align: left;
-      border-bottom: 1px solid #e0e0e0;
-    }
-    
-    table th {
-      background: #f8f9fa;
-      font-weight: bold;
-      color: #333;
-    }
-    
-    table tr:hover {
-      background: #f8f9fa;
-    }
-    
     .iframe-container {
       width: 100%;
       height: 600px;
       border: 2px solid #e0e0e0;
       border-radius: 10px;
       overflow: hidden;
+      margin-top: 20px;
     }
     
     .iframe-container iframe {
@@ -152,6 +131,7 @@
       display: flex;
       gap: 10px;
       margin-bottom: 20px;
+      flex-wrap: wrap;
     }
     
     .tabs {
@@ -159,6 +139,7 @@
       gap: 10px;
       margin-bottom: 20px;
       border-bottom: 2px solid #e0e0e0;
+      flex-wrap: wrap;
     }
     
     .tab {
@@ -169,6 +150,7 @@
       font-size: 16px;
       color: #666;
       transition: all 0.3s;
+      border-bottom: 3px solid transparent;
     }
     
     .tab.active {
@@ -184,6 +166,37 @@
     .tab-content.active {
       display: block;
     }
+    
+    .info-box {
+      background: #e3f2fd;
+      border-left: 4px solid #2196f3;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 5px;
+    }
+    
+    .info-box p {
+      margin: 5px 0;
+      color: #1565c0;
+    }
+    
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 15px 20px;
+      }
+      
+      .navbar h1 {
+        font-size: 18px;
+      }
+      
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .section {
+        padding: 20px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -196,23 +209,23 @@
     <div class="stats-grid">
       <div class="stat-card">
         <h3>總訂單數</h3>
-        <div class="value" id="totalOrders">0</div>
+        <div class="value" id="totalOrders">載入中...</div>
       </div>
       <div class="stat-card">
         <h3>總營收</h3>
-        <div class="value" id="totalRevenue">NT$ 0</div>
+        <div class="value" id="totalRevenue">載入中...</div>
       </div>
       <div class="stat-card">
         <h3>總成本</h3>
-        <div class="value" id="totalCost">NT$ 0</div>
+        <div class="value" id="totalCost">載入中...</div>
       </div>
       <div class="stat-card">
         <h3>淨利潤</h3>
-        <div class="value" id="totalProfit">NT$ 0</div>
+        <div class="value" id="totalProfit">載入中...</div>
       </div>
       <div class="stat-card">
         <h3>客戶數量</h3>
-        <div class="value" id="totalCustomers">0</div>
+        <div class="value" id="totalCustomers">載入中...</div>
       </div>
     </div>
     
@@ -228,8 +241,13 @@
     <div id="orders" class="tab-content active">
       <div class="section">
         <h2>📋 訂單資料管理</h2>
+        <div class="info-box">
+          <p><strong>提示：</strong>您可以直接在下方的試算表中編輯資料</p>
+          <p>點選「在 Google Sheets 中開啟」可進行完整編輯</p>
+        </div>
         <div class="action-buttons">
           <button class="btn" onclick="refreshData()">🔄 重新整理</button>
+          <button class="btn btn-success" onclick="openInSheets('orders')">📊 在 Google Sheets 中開啟</button>
           <button class="btn btn-success" onclick="exportToExcel()">📥 匯出 Excel</button>
         </div>
         <div class="iframe-container">
@@ -242,8 +260,12 @@
     <div id="services" class="tab-content">
       <div class="section">
         <h2>🛠️ 服務項目設定</h2>
+        <div class="info-box">
+          <p><strong>說明：</strong>在此設定各項服務的價格與計費標準</p>
+        </div>
         <div class="action-buttons">
           <button class="btn" onclick="refreshData()">🔄 重新整理</button>
+          <button class="btn btn-success" onclick="openInSheets('services')">📊 在 Google Sheets 中開啟</button>
         </div>
         <div class="iframe-container">
           <iframe id="servicesFrame" src=""></iframe>
@@ -255,8 +277,12 @@
     <div id="costs" class="tab-content">
       <div class="section">
         <h2>💰 成本與營利統計</h2>
+        <div class="info-box">
+          <p><strong>說明：</strong>記錄每筆訂單的成本與利潤</p>
+        </div>
         <div class="action-buttons">
           <button class="btn" onclick="refreshData()">🔄 重新整理</button>
+          <button class="btn btn-success" onclick="openInSheets('costs')">📊 在 Google Sheets 中開啟</button>
         </div>
         <div class="iframe-container">
           <iframe id="costsFrame" src=""></iframe>
@@ -268,8 +294,12 @@
     <div id="customers" class="tab-content">
       <div class="section">
         <h2>👥 客戶資料統計</h2>
+        <div class="info-box">
+          <p><strong>說明：</strong>查看客戶消費記錄與統計</p>
+        </div>
         <div class="action-buttons">
           <button class="btn" onclick="refreshData()">🔄 重新整理</button>
+          <button class="btn btn-success" onclick="openInSheets('customers')">📊 在 Google Sheets 中開啟</button>
         </div>
         <div class="iframe-container">
           <iframe id="customersFrame" src=""></iframe>
@@ -279,35 +309,64 @@
   </div>
   
   <script>
-    // 替換成您的 Google Sheets ID
-    const SPREADSHEET_ID = 'YOUR_SPREADSHEET_ID';
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyID57YXKqLpAidLvLbfSpiyiURt_zdw8cW1mpbVESVw7CiCpB6bDyns6m1B5cJHSpG/exec';
+    // ⚠️ 請替換成您的設定
+    const SPREADSHEET_ID = '1O5_nN6zzkQZT9AZgsAK3jtkNY1YgXjLirFBYR5JsoPA';
+    const SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL_HERE'; // 請替換成您的 Apps Script URL
+    
+    // 工作表 GID 對應（需要您自行取得）
+    const SHEET_GIDS = {
+      orders: '0',      // 訂單資料的 gid
+      services: '1626194587',    // 服務項目的 gid（需要確認）
+      costs: '1269894708',       // 成本統計的 gid（需要確認）
+      customers: '1925381398'    // 客戶資料的 gid（需要確認）
+    };
     
     // 載入 Google Sheets 嵌入式檢視
     function loadSheets() {
-      const baseUrl = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/edit#gid=`;
+      // 使用正確的嵌入格式
+      const baseUrl = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/edit?rm=minimal&widget=true&chrome=false&gid=`;
       
-      // 您需要取得各工作表的 gid
-      document.getElementById('ordersFrame').src = baseUrl + '0';
-      document.getElementById('servicesFrame').src = baseUrl + '1';
-      document.getElementById('costsFrame').src = baseUrl + '2';
-      document.getElementById('customersFrame').src = baseUrl + '3';
+      document.getElementById('ordersFrame').src = baseUrl + SHEET_GIDS.orders;
+      document.getElementById('servicesFrame').src = baseUrl + SHEET_GIDS.services;
+      document.getElementById('costsFrame').src = baseUrl + SHEET_GIDS.costs;
+      document.getElementById('customersFrame').src = baseUrl + SHEET_GIDS.customers;
+    }
+    
+    // 在 Google Sheets 中開啟
+    function openInSheets(sheetType) {
+      const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/edit#gid=${SHEET_GIDS[sheetType]}`;
+      window.open(url, '_blank');
     }
     
     // 載入統計資料
     async function loadStatistics() {
       try {
         const response = await fetch(`${SCRIPT_URL}?action=getStatistics`);
-        const data = await response.json();
+        const result = await response.json();
         
-        document.getElementById('totalOrders').textContent = data.totalOrders;
-        document.getElementById('totalRevenue').textContent = `NT$ ${data.totalRevenue.toLocaleString()}`;
-        document.getElementById('totalCost').textContent = `NT$ ${data.totalCost.toLocaleString()}`;
-        document.getElementById('totalProfit').textContent = `NT$ ${data.totalProfit.toLocaleString()}`;
-        document.getElementById('totalCustomers').textContent = data.totalCustomers;
+        if (result.success) {
+          document.getElementById('totalOrders').textContent = result.totalOrders;
+          document.getElementById('totalRevenue').textContent = `NT$ ${result.totalRevenue.toLocaleString()}`;
+          document.getElementById('totalCost').textContent = `NT$ ${result.totalCost.toLocaleString()}`;
+          document.getElementById('totalProfit').textContent = `NT$ ${result.totalProfit.toLocaleString()}`;
+          document.getElementById('totalCustomers').textContent = result.totalCustomers;
+        } else {
+          console.error('載入統計失敗:', result.error);
+          showErrorStats();
+        }
       } catch (error) {
         console.error('載入統計資料失敗:', error);
+        showErrorStats();
       }
+    }
+    
+    // 顯示錯誤狀態
+    function showErrorStats() {
+      document.getElementById('totalOrders').textContent = '0';
+      document.getElementById('totalRevenue').textContent = 'NT$ 0';
+      document.getElementById('totalCost').textContent = 'NT$ 0';
+      document.getElementById('totalProfit').textContent = 'NT$ 0';
+      document.getElementById('totalCustomers').textContent = '0';
     }
     
     // 切換分頁
@@ -336,14 +395,21 @@
     
     // 匯出 Excel
     function exportToExcel() {
-      alert('匯出功能需要在 Google Apps Script 中執行\n請前往試算表直接下載');
-      window.open(`https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=xlsx`);
+      const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=xlsx`;
+      window.open(url, '_blank');
     }
     
     // 初始化
     window.onload = function() {
       loadSheets();
-      loadStatistics();
+      
+      // 如果有設定 SCRIPT_URL 才載入統計
+      if (SCRIPT_URL !== 'YOUR_APPS_SCRIPT_URL_HERE') {
+        loadStatistics();
+      } else {
+        showErrorStats();
+        console.warn('請設定 SCRIPT_URL');
+      }
     };
   </script>
 </body>
