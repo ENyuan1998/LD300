@@ -1158,76 +1158,108 @@
     document.getElementById('bookingDate').setAttribute('min', today);
     
     // 表單提交
-    document.getElementById('orderForm').addEventListener('submit', async function(e) {
-      e.preventDefault();
-      
-      if (!selectedService) {
-        alert('請選擇服務類型');
-        return;
-      }
-      
-      if (serviceItems.length === 0 || !serviceItems.some(i => i.name)) {
-        alert('請至少選擇一項服務');
-        return;
-      }
-      
-      if (!selectedTimeSlot) {
-        alert('請選擇預約時段');
-        return;
-      }
-      
-      if (!document.getElementById('agreeTerms').checked) {
-        alert('請勾選同意服務條款');
-        return;
-      }
-      
-      const totalAmount = serviceItems.reduce((sum, item) => {
-        return sum + (item.price * item.quantity);
-      }, 0);
-      
-      // 使用 URLSearchParams
-      const formData = new URLSearchParams();
-      formData.append('serviceType', selectedService);
-      formData.append('name', document.getElementById('name').value);
-      formData.append('phone', document.getElementById('phone').value);
-      formData.append('bookingDate', document.getElementById('bookingDate').value);
-      formData.append('bookingTime', selectedTimeSlot);
-      formData.append('startAddress', document.getElementById('startAddress').value);
-      formData.append('endAddress', document.getElementById('endAddress').value);
-      formData.append('requirements', document.getElementById('requirements').value);
-      formData.append('serviceItems', JSON.stringify(serviceItems.filter(i => i.name)));
-      formData.append('totalAmount', totalAmount);
-      
-      // 顯示載入畫面
-      document.getElementById('loadingOverlay').classList.add('show');
-      
-      try {
-        const response = await fetch(SCRIPT_URL, {
-          method: 'POST',
-          body: formData
-        });
-        
-        const result = await response.json();
-        
-        // 隱藏載入畫面
-        document.getElementById('loadingOverlay').classList.remove('show');
-        
-        if (result.success) {
-          // 顯示成功訊息
-          document.getElementById('orderNumber').textContent = result.orderNumber;
-          document.getElementById('orderTotal').textContent = `NT$ ${totalAmount.toLocaleString()}`;
-          document.getElementById('orderTimeSlot').textContent = `${document.getElementById('bookingDate').value} ${selectedTimeSlot}`;
-          document.getElementById('successModal').classList.add('show');
-        } else {
-          alert('訂單提交失敗：' + (result.error || '未知錯誤'));
-        }
-        
-      } catch (error) {
-        console.error('錯誤:', error);
-        document.getElementById('loadingOverlay').classList.remove('show');
-        alert('訂單提交失敗，請稍後再試或聯繫客服');
-      }
+document.getElementById('orderForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  
+  // 驗證
+  if (!selectedService) {
+    alert('請選擇服務類型');
+    return;
+  }
+  
+  if (serviceItems.length === 0 || !serviceItems.some(i => i.name)) {
+    alert('請至少選擇一項服務');
+    return;
+  }
+  
+  if (!selectedTimeSlot) {
+    alert('請選擇預約時段');
+    return;
+  }
+  
+  if (!document.getElementById('agreeTerms').checked) {
+    alert('請勾選同意服務條款');
+    return;
+  }
+  
+  const totalAmount = serviceItems.reduce((sum, item) => {
+    return sum + (item.price * item.quantity);
+  }, 0);
+  
+  // 使用 URLSearchParams
+  const formData = new URLSearchParams();
+  formData.append('serviceType', selectedService);
+  formData.append('name', document.getElementById('name').value);
+  formData.append('phone', document.getElementById('phone').value);
+  formData.append('bookingDate', document.getElementById('bookingDate').value);
+  formData.append('bookingTime', selectedTimeSlot);
+  formData.append('startAddress', document.getElementById('startAddress').value);
+  formData.append('endAddress', document.getElementById('endAddress').value);
+  formData.append('requirements', document.getElementById('requirements').value);
+  formData.append('serviceItems', JSON.stringify(serviceItems.filter(i => i.name)));
+  formData.append('totalAmount', totalAmount);
+  
+  // 顯示載入畫面
+  document.getElementById('loadingOverlay').classList.add('show');
+  
+  try {
+    const response = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      body: formData,
+      redirect: 'follow'
     });
+    
+    // 檢查回應狀態
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    // 取得回應文字
+    const responseText = await response.text();
+    console.log('API 回應:', responseText);
+    
+    // 嘗試解析 JSON
+    let result;
+    try {
+      result = JSON.parse(responseText);
+    } catch (parseError) {
+      console.error('JSON 解析錯誤:', parseError);
+      console.log('原始回應:', responseText);
+      throw new Error('伺服器回應格式錯誤');
+    }
+    
+    // 隱藏載入畫面
+    document.getElementById('loadingOverlay').classList.remove('show');
+    
+    // 檢查結果
+    if (result.success) {
+      // 顯示成功訊息
+      document.getElementById('orderNumber').textContent = result.orderNumber || ('ORD' + new Date().getTime());
+      document.getElementById('orderTotal').textContent = `NT$ ${totalAmount.toLocaleString()}`;
+      document.getElementById('orderTimeSlot').textContent = `${document.getElementById('bookingDate').value} ${selectedTimeSlot}`;
+      document.getElementById('successModal').classList.add('show');
+      
+      console.log('✓ 訂單建立成功:', result.orderNumber);
+    } else {
+      throw new Error(result.error || result.message || '訂單提交失敗');
+    }
+    
+  } catch (error) {
+    console.error('提交錯誤:', error);
+    document.getElementById('loadingOverlay').classList.remove('show');
+    
+    // 顯示詳細錯誤訊息
+    let errorMessage = '訂單提交失敗\n\n';
+    errorMessage += '錯誤原因: ' + error.message + '\n\n';
+    errorMessage += '請檢查:\n';
+    errorMessage += '1. Apps Script 是否已正確部署\n';
+    errorMessage += '2. SCRIPT_URL 是否正確\n';
+    errorMessage += '3. 部署權限是否設定為「任何人」\n\n';
+    errorMessage += '如需協助，請聯繫客服\nLINE ID: 0922317535';
+    
+    alert(errorMessage);
+  }
+});
   </script>
 </body>
 </html>
