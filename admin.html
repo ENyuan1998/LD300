@@ -948,7 +948,8 @@
     const SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL_HERE';
     let allOrders = [];
     let allCustomers = [];
-    let currentPeriod = 'year';    
+    let currentPeriod = 'year';
+        
     // 載入統計資料
     async function loadStatistics() {
       try {
@@ -1537,7 +1538,7 @@
     
     // 初始化
     window.onload = function() {
-      if (SCRIPT_URL !== 'https://script.google.com/macros/s/AKfycbyID57YXKqLpAidLvLbfSpiyiURt_zdw8cW1mpbVESVw7CiCpB6bDyns6m1B5cJHSpG/exec') {
+      if (SCRIPT_URL !== 'YOUR_APPS_SCRIPT_URL_HERE') {
         loadStatistics();
         loadOrders();
       } else {
