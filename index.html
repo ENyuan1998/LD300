@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>老得自助搬家&寵物接送服務預約系統</title>
+  <title>老得服務後台管理系統</title>
   <style>
     * {
       margin: 0;
@@ -13,25 +13,91 @@
     
     body {
       font-family: 'Microsoft JhengHei', Arial, sans-serif;
-      background: linear-gradient(135deg, #D4A574 0%, #C8956D 50%, #B88A5E 100%);
+      background: linear-gradient(135deg, #F5E6D3 0%, #E8D5C4 100%);
       min-height: 100vh;
-      padding: 20px;
+    }
+    
+    .navbar {
+      background: linear-gradient(135deg, #C8956D 0%, #B88A5E 100%);
+      color: white;
+      padding: 20px 40px;
+      box-shadow: 0 2px 15px rgba(139, 90, 43, 0.2);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      animation: slideDown 0.5s ease-out;
+    }
+    
+    @keyframes slideDown {
+      from {
+        transform: translateY(-100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+    
+    .navbar h1 {
+      font-size: 24px;
+    }
+    
+    .navbar-actions {
+      display: flex;
+      gap: 15px;
+    }
+    
+    .navbar-btn {
+      background: rgba(255,255,255,0.2);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+    
+    .navbar-btn:hover {
+      background: rgba(255,255,255,0.3);
+      transform: translateY(-2px);
     }
     
     .container {
-      max-width: 900px;
-      margin: 0 auto 30px;
-      background: #FFF8F0;
-      border-radius: 20px;
-      box-shadow: 0 20px 60px rgba(139, 90, 43, 0.3);
-      overflow: hidden;
-      animation: fadeIn 0.6s ease-out;
+      max-width: 1400px;
+      margin: 30px auto;
+      padding: 0 20px;
     }
     
-    @keyframes fadeIn {
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .stat-card {
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 2px 15px rgba(139, 90, 43, 0.1);
+      transition: all 0.3s;
+      border-left: 4px solid #C8956D;
+      animation: fadeInUp 0.5s ease-out;
+      animation-fill-mode: both;
+    }
+    
+    .stat-card:nth-child(1) { animation-delay: 0.1s; }
+    .stat-card:nth-child(2) { animation-delay: 0.2s; }
+    .stat-card:nth-child(3) { animation-delay: 0.3s; }
+    .stat-card:nth-child(4) { animation-delay: 0.4s; }
+    .stat-card:nth-child(5) { animation-delay: 0.5s; }
+    
+    @keyframes fadeInUp {
       from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(30px);
       }
       to {
         opacity: 1;
@@ -39,493 +105,320 @@
       }
     }
     
-    .header {
-      background: linear-gradient(135deg, #C8956D 0%, #B88A5E 100%);
-      color: white;
-      padding: 40px 30px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 25px rgba(139, 90, 43, 0.2);
     }
     
-    .header::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-      animation: pulse 4s ease-in-out infinite;
-    }
+    .stat-card.revenue { border-left-color: #8FBC8F; }
+    .stat-card.cost { border-left-color: #D2691E; }
+    .stat-card.profit { border-left-color: #DAA520; }
+    .stat-card.customers { border-left-color: #B88A5E; }
     
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); opacity: 0.5; }
-      50% { transform: scale(1.1); opacity: 0.8; }
-    }
-    
-    .header h1 {
-      font-size: 28px;
+    .stat-card h3 {
+      font-size: 14px;
+      color: #8B5A2B;
       margin-bottom: 10px;
-      position: relative;
-      z-index: 1;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
     
-    .header p {
-      font-size: 16px;
-      opacity: 0.95;
-      position: relative;
-      z-index: 1;
+    .stat-card .value {
+      font-size: 32px;
+      font-weight: bold;
+      color: #6B4423;
     }
     
-    .form-container {
-      padding: 40px;
+    .stat-card .icon {
+      font-size: 24px;
+      margin-bottom: 10px;
     }
     
-    .service-selector {
+    .tabs {
       display: flex;
-      gap: 20px;
+      gap: 10px;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #E8D5C4;
+      flex-wrap: wrap;
+      overflow-x: auto;
+    }
+    
+    .tab {
+      padding: 15px 25px;
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-size: 16px;
+      color: #8B5A2B;
+      transition: all 0.3s;
+      border-bottom: 3px solid transparent;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    
+    .tab:hover {
+      color: #B88A5E;
+    }
+    
+    .tab.active {
+      color: #B88A5E;
+      border-bottom: 3px solid #B88A5E;
+    }
+    
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.4s ease-out;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    .section {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 2px 15px rgba(139, 90, 43, 0.1);
       margin-bottom: 30px;
     }
     
-    .service-card {
-      flex: 1;
-      padding: 25px;
-      border: 3px solid #E8D5C4;
-      border-radius: 15px;
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #F5E6D3;
+    }
+    
+    .section-header h2 {
+      font-size: 22px;
+      color: #8B5A2B;
+    }
+    
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    
+    .btn {
+      padding: 10px 20px;
+      background: linear-gradient(135deg, #C8956D 0%, #B88A5E 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(184, 138, 94, 0.3);
+    }
+    
+    .btn-success {
+      background: linear-gradient(135deg, #8FBC8F 0%, #6B8E6B 100%);
+    }
+    
+    .btn-danger {
+      background: linear-gradient(135deg, #D2691E 0%, #A0522D 100%);
+    }
+    
+    .btn-secondary {
+      background: linear-gradient(135deg, #A0826D 0%, #8B7355 100%);
+    }
+    
+    .btn-warning {
+      background: linear-gradient(135deg, #DAA520 0%, #B8860B 100%);
+    }
+    
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    
+    .data-table thead {
+      background: linear-gradient(135deg, #F5E6D3 0%, #E8D5C4 100%);
+    }
+    
+    .data-table th {
+      padding: 15px;
+      text-align: left;
+      font-weight: 600;
+      color: #8B5A2B;
+      border-bottom: 2px solid #E8D5C4;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .data-table td {
+      padding: 15px;
+      border-bottom: 1px solid #F5E6D3;
+      color: #6B4423;
+    }
+    
+    .data-table tbody tr {
+      transition: all 0.2s;
+    }
+    
+    .data-table tbody tr:hover {
+      background: #FFF8F0;
+      transform: scale(1.01);
+    }
+    
+    .status-badge {
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      display: inline-block;
+    }
+    
+    .status-pending {
+      background: #FFF3CD;
+      color: #856404;
+    }
+    
+    .status-processing {
+      background: #D1ECF1;
+      color: #0C5460;
+    }
+    
+    .status-completed {
+      background: #D4EDDA;
+      color: #155724;
+    }
+    
+    .status-cancelled {
+      background: #F8D7DA;
+      color: #721C24;
+    }
+    
+    /* 新增：狀態選擇器樣式 */
+    .status-selector {
+      padding: 6px 10px;
+      border: 2px solid #E8D5C4;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
       cursor: pointer;
       transition: all 0.3s;
-      text-align: center;
       background: white;
     }
     
-    .service-card:hover {
-      transform: translateY(-5px) scale(1.02);
-      box-shadow: 0 10px 25px rgba(184, 138, 94, 0.2);
-    }
-    
-    .service-card.active {
+    .status-selector:hover {
       border-color: #B88A5E;
-      background: linear-gradient(135deg, #FFF8F0 0%, #F5E6D3 100%);
-      box-shadow: 0 5px 15px rgba(184, 138, 94, 0.3);
+      box-shadow: 0 2px 8px rgba(184, 138, 94, 0.2);
     }
     
-    .service-card h3 {
+    .status-selector:focus {
+      outline: none;
+      border-color: #B88A5E;
+    }
+    
+    .status-selector.status-pending {
+      background: #FFF3CD;
+      color: #856404;
+    }
+    
+    .status-selector.status-processing {
+      background: #D1ECF1;
+      color: #0C5460;
+    }
+    
+    .status-selector.status-completed {
+      background: #D4EDDA;
+      color: #155724;
+    }
+    
+    .status-selector.status-cancelled {
+      background: #F8D7DA;
+      color: #721C24;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #A0826D;
+    }
+    
+    .empty-state-icon {
+      font-size: 64px;
+      margin-bottom: 20px;
+      opacity: 0.5;
+    }
+    
+    .empty-state h3 {
       font-size: 20px;
       margin-bottom: 10px;
       color: #8B5A2B;
     }
     
-    .service-card p {
-      font-size: 14px;
-      color: #A0826D;
-    }
-    
-    .price-table {
-      background: linear-gradient(135deg, #FFF8F0 0%, #F5E6D3 100%);
-      border-radius: 15px;
-      padding: 20px;
-      margin-bottom: 30px;
-      display: none;
-      border: 2px solid #E8D5C4;
-    }
-    
-    .price-table.show {
-      display: block;
-      animation: slideDown 0.4s ease-out;
-    }
-    
-    @keyframes slideDown {
-      from {
-        opacity: 0;
-        max-height: 0;
-      }
-      to {
-        opacity: 1;
-        max-height: 1000px;
-      }
-    }
-    
-    .price-table h3 {
-      color: #8B5A2B;
-      margin-bottom: 15px;
-      font-size: 18px;
-    }
-    
-    .price-table table {
-      width: 100%;
-      border-collapse: collapse;
-      background: white;
-      border-radius: 10px;
-      overflow: hidden;
-    }
-    
-    .price-table th,
-    .price-table td {
-      padding: 12px;
-      text-align: left;
-      border-bottom: 1px solid #E8D5C4;
-    }
-    
-    .price-table th {
-      background: #C8956D;
-      font-weight: bold;
-      color: white;
-    }
-    
-    .price-table tr:last-child td {
-      border-bottom: none;
-    }
-    
-    .price-table td {
-      color: #6B4423;
-    }
-    
-    .terms-section {
-      background: #FFF3E0;
-      border-left: 4px solid #D4A574;
-      padding: 20px;
-      margin: 30px 0;
-      border-radius: 10px;
-    }
-    
-    .terms-section h3 {
-      color: #8B5A2B;
-      margin-bottom: 15px;
-      font-size: 18px;
-    }
-    
-    .terms-section h4 {
-      color: #8B5A2B;
-      margin-top: 15px;
-      margin-bottom: 10px;
-      font-size: 16px;
-    }
-    
-    .terms-section p,
-    .terms-section ol {
-      color: #6B4423;
-      line-height: 1.8;
+    .empty-state p {
       font-size: 14px;
     }
     
-    .terms-section ol {
-      margin-left: 20px;
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #B88A5E;
     }
     
-    .terms-section li {
-      margin-bottom: 10px;
+    .loading-spinner {
+      border: 4px solid #F5E6D3;
+      border-top: 4px solid #B88A5E;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
     }
     
-    .terms-section strong {
-      color: #A0522D;
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
     
-    .form-group {
-      margin-bottom: 25px;
+    .search-bar {
+      margin-bottom: 20px;
+      display: flex;
+      gap: 10px;
     }
     
-    .form-group label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: bold;
-      color: #8B5A2B;
-      font-size: 15px;
-    }
-    
-    .form-group input,
-    .form-group textarea,
-    .form-group select {
-      width: 100%;
+    .search-input {
+      flex: 1;
       padding: 12px 15px;
       border: 2px solid #E8D5C4;
-      border-radius: 10px;
-      font-size: 15px;
+      border-radius: 8px;
+      font-size: 14px;
       transition: all 0.3s;
-      background: white;
-      color: #6B4423;
     }
     
-    .form-group input:focus,
-    .form-group textarea:focus,
-    .form-group select:focus {
+    .search-input:focus {
       outline: none;
       border-color: #B88A5E;
       box-shadow: 0 0 0 3px rgba(184, 138, 94, 0.1);
     }
     
-    .form-group textarea {
-      resize: vertical;
-      min-height: 100px;
-    }
-    
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-    
-    .time-slots-section {
-      background: linear-gradient(135deg, #FFF8F0 0%, #F5E6D3 100%);
-      padding: 20px;
-      border-radius: 15px;
-      margin-bottom: 30px;
+    .filter-select {
+      padding: 12px 15px;
       border: 2px solid #E8D5C4;
-    }
-    
-    .time-slots-section h3 {
-      color: #8B5A2B;
-      margin-bottom: 15px;
-      font-size: 18px;
-    }
-    
-    .time-slots-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-      gap: 10px;
-      margin-top: 15px;
-    }
-    
-    .time-slot {
-      padding: 12px;
-      border: 2px solid #E8D5C4;
-      border-radius: 10px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.3s;
-      background: white;
-      color: #6B4423;
-    }
-    
-    .time-slot:hover {
-      border-color: #B88A5E;
-      transform: scale(1.05);
-    }
-    
-    .time-slot.selected {
-      background: linear-gradient(135deg, #C8956D 0%, #B88A5E 100%);
-      color: white;
-      border-color: #B88A5E;
-    }
-    
-    .time-slot.disabled {
-      background: #F5F5F5;
-      color: #CCC;
-      cursor: not-allowed;
-      opacity: 0.5;
-    }
-    
-    .service-items-section {
-      background: linear-gradient(135deg, #FFF8F0 0%, #F5E6D3 100%);
-      padding: 20px;
-      border-radius: 15px;
-      margin-bottom: 30px;
-      border: 2px solid #E8D5C4;
-    }
-    
-    .service-items-section h3 {
-      color: #8B5A2B;
-      margin-bottom: 15px;
-      font-size: 18px;
-    }
-    
-    .service-item {
-      background: white;
-      padding: 15px;
-      border-radius: 10px;
-      margin-bottom: 15px;
-      border: 2px solid #E8D5C4;
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      animation: slideIn 0.3s ease-out;
-    }
-    
-    @keyframes slideIn {
-      from {
-        opacity: 0;
-        transform: translateX(-20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
-    }
-    
-    .service-item select,
-    .service-item input {
-      flex: 1;
-      padding: 10px;
-      border: 1px solid #E8D5C4;
       border-radius: 8px;
-      color: #6B4423;
-    }
-    
-    .service-item .remove-btn {
-      background: #D2691E;
-      color: white;
-      border: none;
-      padding: 8px 15px;
-      border-radius: 8px;
-      cursor: pointer;
       font-size: 14px;
-      transition: all 0.3s;
-    }
-    
-    .service-item .remove-btn:hover {
-      background: #A0522D;
-      transform: scale(1.05);
-    }
-    
-    .add-service-btn {
-      width: 100%;
-      padding: 12px;
-      background: linear-gradient(135deg, #8FBC8F 0%, #6B8E6B 100%);
-      color: white;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 15px;
-      margin-top: 10px;
-      transition: all 0.3s;
-    }
-    
-    .add-service-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(143, 188, 143, 0.3);
-    }
-    
-    .price-summary {
-      background: linear-gradient(135deg, #FFF8F0 0%, #F5E6D3 100%);
-      padding: 20px;
-      border-radius: 15px;
-      margin: 30px 0;
-      border: 2px solid #E8D5C4;
-    }
-    
-    .price-item {
-      display: flex;
-      justify-content: space-between;
-      padding: 10px 0;
-      border-bottom: 1px solid #E8D5C4;
+      min-width: 150px;
       color: #6B4423;
-    }
-    
-    .price-item:last-child {
-      border-bottom: none;
-      font-size: 20px;
-      font-weight: bold;
-      color: #8B5A2B;
-      padding-top: 15px;
-    }
-    
-    .agreement-checkbox {
-      background: #FFF8F0;
-      padding: 20px;
-      border-radius: 10px;
-      margin: 20px 0;
-      border: 2px solid #E8D5C4;
-    }
-    
-    .agreement-checkbox label {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
-      font-size: 15px;
-      color: #6B4423;
-    }
-    
-    .agreement-checkbox input[type="checkbox"] {
-      width: 20px;
-      height: 20px;
-      cursor: pointer;
-      accent-color: #B88A5E;
-    }
-    
-    .submit-btn {
-      width: 100%;
-      padding: 18px;
-      background: linear-gradient(135deg, #C8956D 0%, #B88A5E 100%);
-      color: white;
-      border: none;
-      border-radius: 15px;
-      font-size: 18px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.3s;
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .submit-btn::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 0;
-      height: 0;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.3);
-      transform: translate(-50%, -50%);
-      transition: width 0.6s, height 0.6s;
-    }
-    
-    .submit-btn:hover::before {
-      width: 300px;
-      height: 300px;
-    }
-    
-    .submit-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(184, 138, 94, 0.4);
-    }
-    
-    .submit-btn:disabled {
-      background: #D3D3D3;
-      cursor: not-allowed;
-      transform: none;
-    }
-    
-    .footer {
-      max-width: 900px;
-      margin: 0 auto;
-      background: linear-gradient(135deg, #C8956D 0%, #B88A5E 100%);
-      color: white;
-      padding: 30px;
-      border-radius: 20px;
-      text-align: center;
-      box-shadow: 0 10px 30px rgba(139, 90, 43, 0.3);
-    }
-    
-    .footer h3 {
-      font-size: 20px;
-      margin-bottom: 15px;
-    }
-    
-    .footer .contact-info {
-      background: rgba(255,255,255,0.2);
-      padding: 20px;
-      border-radius: 15px;
-      display: inline-block;
-      margin-top: 10px;
-    }
-    
-    .footer .contact-info p {
-      margin: 8px 0;
-      font-size: 16px;
-    }
-    
-    .footer .contact-info strong {
-      font-size: 24px;
-      color: #fff;
-      display: block;
-      margin-top: 10px;
-    }
-    
-    .footer .line-icon {
-      font-size: 32px;
-      margin-bottom: 10px;
     }
     
     .modal {
@@ -549,10 +442,12 @@
     
     .modal-content {
       background: #FFF8F0;
-      padding: 40px;
-      border-radius: 20px;
-      text-align: center;
-      max-width: 400px;
+      padding: 30px;
+      border-radius: 15px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
       animation: scaleIn 0.3s ease-out;
       border: 3px solid #C8956D;
     }
@@ -568,665 +463,1252 @@
       }
     }
     
-    .modal-content h2 {
-      color: #8B5A2B;
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #E8D5C4;
     }
     
-    .modal-content p {
-      margin-bottom: 15px;
-      color: #6B4423;
+    .modal-header h3 {
+      font-size: 20px;
+      color: #8B5A2B;
     }
     
-    .modal-btn {
-      padding: 12px 30px;
-      background: linear-gradient(135deg, #C8956D 0%, #B88A5E 100%);
-      color: white;
+    .close-btn {
+      background: none;
       border: none;
-      border-radius: 10px;
+      font-size: 24px;
       cursor: pointer;
-      font-size: 16px;
+      color: #A0826D;
       transition: all 0.3s;
     }
     
-    .modal-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(184, 138, 94, 0.3);
+    .close-btn:hover {
+      color: #8B5A2B;
+      transform: rotate(90deg);
     }
     
-    .loading-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(200, 149, 109, 0.95);
-      justify-content: center;
-      align-items: center;
-      z-index: 2000;
-      backdrop-filter: blur(10px);
-    }
-    
-    .loading-overlay.show {
+    .detail-row {
       display: flex;
+      padding: 12px 0;
+      border-bottom: 1px solid #F5E6D3;
     }
     
-    .loading-content {
-      text-align: center;
+    .detail-row label {
+      font-weight: 600;
+      width: 120px;
+      color: #8B5A2B;
+    }
+    
+    .detail-row span {
+      flex: 1;
+      color: #6B4423;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #8B5A2B;
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px 15px;
+      border: 2px solid #E8D5C4;
+      border-radius: 8px;
+      font-size: 14px;
+      color: #6B4423;
+    }
+    
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #B88A5E;
+    }
+    
+    .cost-item {
+      background: #FFF8F0;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      border: 2px solid #E8D5C4;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      animation: slideIn 0.3s ease-out;
+    }
+    
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    
+    .cost-item-info {
+      flex: 1;
+    }
+    
+    .cost-item-info h4 {
+      color: #8B5A2B;
+      margin-bottom: 5px;
+    }
+    
+    .cost-item-info p {
+      color: #A0826D;
+      font-size: 14px;
+    }
+    
+    .cost-item-amount {
+      font-size: 20px;
+      font-weight: bold;
+      color: #D2691E;
+    }
+    
+    .chart-container {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      margin-bottom: 20px;
+      border: 2px solid #E8D5C4;
+    }
+    
+    .chart-container h3 {
+      color: #8B5A2B;
+      margin-bottom: 15px;
+    }
+    
+    .period-selector {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    
+    .period-btn {
+      padding: 10px 20px;
+      border: 2px solid #E8D5C4;
+      background: white;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+      color: #8B5A2B;
+    }
+    
+    .period-btn:hover {
+      border-color: #B88A5E;
+      transform: translateY(-2px);
+    }
+    
+    .period-btn.active {
+      background: linear-gradient(135deg, #C8956D 0%, #B88A5E 100%);
       color: white;
+      border-color: #B88A5E;
     }
     
-    .loading-spinner {
-      width: 60px;
-      height: 60px;
-      border: 5px solid rgba(255,255,255,0.3);
-      border-top: 5px solid white;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin: 0 auto 20px;
+    .revenue-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
     }
     
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+    .revenue-card {
+      background: linear-gradient(135deg, #FFF8F0 0%, #F5E6D3 100%);
+      padding: 20px;
+      border-radius: 10px;
+      border: 2px solid #E8D5C4;
     }
     
-    .loading-text {
-      font-size: 18px;
+    .revenue-card h4 {
+      color: #8B5A2B;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+    
+    .revenue-card .amount {
+      font-size: 24px;
+      font-weight: bold;
+      color: #6B4423;
+    }
+    
+    .analysis-box {
+      background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);
+      padding: 20px;
+      border-radius: 10px;
+      border-left: 4px solid #DAA520;
       margin-top: 20px;
     }
     
-    .loading-dots::after {
-      content: '';
-      animation: dots 1.5s steps(4, end) infinite;
+    .analysis-box h4 {
+      color: #8B5A2B;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
     
-    @keyframes dots {
-      0%, 20% { content: ''; }
-      40% { content: '.'; }
-      60% { content: '..'; }
-      80%, 100% { content: '...'; }
+    .analysis-box ul {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .analysis-box li {
+      padding: 8px 0;
+      color: #6B4423;
+      line-height: 1.6;
+    }
+    
+    .analysis-box li::before {
+      content: "✓ ";
+      color: #8FBC8F;
+      font-weight: bold;
+      margin-right: 8px;
+    }
+    
+    /* 新增：狀態更新提示 */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: linear-gradient(135deg, #8FBC8F 0%, #6B8E6B 100%);
+      color: white;
+      padding: 15px 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      z-index: 10000;
+      animation: slideInRight 0.3s ease-out;
+      display: none;
+    }
+    
+    .toast.show {
+      display: block;
+    }
+    
+    .toast.error {
+      background: linear-gradient(135deg, #D2691E 0%, #A0522D 100%);
+    }
+    
+    @keyframes slideInRight {
+      from {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
     }
     
     @media (max-width: 768px) {
-      .service-selector {
+      .navbar {
         flex-direction: column;
+        gap: 15px;
       }
       
-      .form-row {
+      .navbar h1 {
+        font-size: 20px;
+      }
+      
+      .stats-grid {
         grid-template-columns: 1fr;
       }
       
-      .form-container {
+      .section {
         padding: 20px;
       }
       
-      .service-item {
+      .data-table {
+        font-size: 12px;
+      }
+      
+      .data-table th,
+      .data-table td {
+        padding: 10px 5px;
+      }
+      
+      .search-bar {
         flex-direction: column;
       }
       
-      .price-table {
+      .tabs {
         overflow-x: auto;
-      }
-      
-      .footer {
-        margin: 20px;
-      }
-      
-      .time-slots-grid {
-        grid-template-columns: repeat(2, 1fr);
       }
     }
   </style>
 </head>
 <body>
+  <div class="navbar">
+    <h1>📊 老得服務後台管理系統</h1>
+    <div class="navbar-actions">
+      <button class="navbar-btn" onclick="refreshAllData()">🔄 重新整理</button>
+      <button class="navbar-btn" onclick="openGoogleSheets()">📊 開啟試算表</button>
+    </div>
+  </div>
+  
   <div class="container">
-    <div class="header">
-      <h1>🚚 老得自助搬家&寵物接送服務預約系統</h1>
-      <p>專業搬家 · 寵物接送 · 值得信賴</p>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="icon">📦</div>
+        <h3>總訂單數</h3>
+        <div class="value" id="totalOrders">0</div>
+      </div>
+      <div class="stat-card revenue">
+        <div class="icon">💰</div>
+        <h3>總營收</h3>
+        <div class="value" id="totalRevenue">NT$ 0</div>
+      </div>
+      <div class="stat-card cost">
+        <div class="icon">💸</div>
+        <h3>總成本</h3>
+        <div class="value" id="totalCost">NT$ 0</div>
+      </div>
+      <div class="stat-card profit">
+        <div class="icon">📈</div>
+        <h3>淨利潤</h3>
+        <div class="value" id="totalProfit">NT$ 0</div>
+      </div>
+      <div class="stat-card customers">
+        <div class="icon">👥</div>
+        <h3>客戶數量</h3>
+        <div class="value" id="totalCustomers">0</div>
+      </div>
     </div>
     
-    <div class="form-container">
-      <form id="orderForm">
-        <!-- 服務選擇 -->
-        <div class="service-selector">
-          <div class="service-card" data-service="搬家服務">
-            <h3>🏠 自助搬家</h3>
-            <p>得利卡4x4高頂車款<br>基礎出車費 NT$500</p>
-          </div>
-          <div class="service-card" data-service="寵物接送">
-            <h3>🐾 寵物接送</h3>
-            <p>專業毛孩接送服務<br>基礎出車費 NT$350</p>
-          </div>
-        </div>
-        
-        <!-- 搬家服務費用表 -->
-        <div class="price-table" id="movingPriceTable">
-          <h3>📋 搬家服務費用計算基準表</h3>
-          <table>
-            <thead>
-              <tr>
-                <th>項目名稱</th>
-                <th>計費標準</th>
-                <th>單價</th>
-                <th>說明</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>基礎出車費</td>
-                <td>含基本里程5公里內</td>
-                <td>NT$ 500</td>
-                <td>得利卡4x4高頂車款</td>
-              </tr>
-              <tr>
-                <td>超程累加費</td>
-                <td>每公里</td>
-                <td>NT$ 25</td>
-                <td>超過5公里後計算</td>
-              </tr>
-              <tr>
-                <td>司機協助搬運（電梯）</td>
-                <td>每層樓</td>
-                <td>NT$ 300</td>
-                <td>有電梯建築</td>
-              </tr>
-              <tr>
-                <td>司機協助搬運（樓梯）</td>
-                <td>每層樓</td>
-                <td>NT$ 100</td>
-                <td>無電梯，每層加價</td>
-              </tr>
-              <tr>
-                <td>夜間出勤加給</td>
-                <td>單趟</td>
-                <td>NT$ 300</td>
-                <td>22:00-06:00時段</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        
-        <!-- 寵物接送費用表 -->
-        <div class="price-table" id="petPriceTable">
-          <h3>📋 寵物接送服務費用計算基準表</h3>
-          <table>
-            <thead>
-              <tr>
-                <th>項目名稱</th>
-                <th>計費標準</th>
-                <th>單價</th>
-                <th>說明</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>基礎出車費</td>
-                <td>含基本里程5公里內</td>
-                <td>NT$ 350</td>
-                <td>醫療級消毒、即時回報</td>
-              </tr>
-              <tr>
-                <td>超程累加費</td>
-                <td>每公里</td>
-                <td>NT$ 25</td>
-                <td>超過5公里後計算</td>
-              </tr>
-              <tr>
-                <td>大型犬加價</td>
-                <td>單趟</td>
-                <td>NT$ 200</td>
-                <td>體重超過15公斤</td>
-              </tr>
-              <tr>
-                <td>多寵共乘</td>
-                <td>第二隻起</td>
-                <td>NT$ 100</td>
-                <td>小型犬/貓</td>
-              </tr>
-              <tr>
-                <td>夜間出勤加給</td>
-                <td>單趟</td>
-                <td>NT$ 300</td>
-                <td>22:00-06:00時段</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        
-        <!-- 責任限制條款 -->
-        <div class="terms-section" id="movingTerms" style="display: none;">
-          <h3>⚠️ 第四條：責任限制與內容物免責條款（重要備註）</h3>
-          
-          <h4>📦 內容物免責特別註記條款：</h4>
-          <p>本服務車輛與司機僅協助搬家物資之「空間載運與外觀搬移」，所有裝箱、打包、內容物清點與完整度皆由甲方自行負責。<strong>乙方對甲方載運之箱體、袋體或包裝內部之「內容物一概不管、亦一概不知」。</strong>乙方不承擔任何內容物之品項、數量、真偽、功能正常與否、損壞或遺失之民刑事法律責任。如有貴重物品（如現金、證件、珠寶、高價電子產品等），請甲方務必隨身攜帶自行保管。</p>
-          
-          <ol>
-            <li>倘若因不可抗力之事由（如天災、嚴重交通堵塞、交通事故等）導致行程延誤，雙方應寬諒處理，乙方不負損害賠償責任。</li>
-            
-            <li>如因乙方搬運過程中，因「故意或重大過失」導致甲方之家具外觀明顯受損，折舊理賠上限金額為本趟運費總額之二倍。</li>
-          </ol>
-        </div>
-        
-        <!-- 寵物接送責任條款 -->
-        <div class="terms-section" id="petTerms" style="display: none;">
-          <h3>⚠️ 第四條：責任限制與寵物免責條款（重要備註）</h3>
-          
-          <h4>🐾 健康誠實告知義務：</h4>
-          <p>甲方有義務於運送前如實告知寵物之品種、年齡、重大宿疾（如心臟病、癲癇、傳染病）或攻擊傾向。<strong>若因甲方隱匿寵物重大疾病，導致運送途中因緊張突發休克、死亡，乙方不負任何民刑事損害賠償責任。</strong></p>
-          
-          <ol>
-            <li><strong>緊急就醫授權：</strong>運送途中若寵物出現急性身體不適、呼吸困難等緊急狀況，乙方應第一時間通知甲方。若狀況危急且無法及時聯絡甲方，甲方在此授權乙方可直接將寵物送往最近之動物醫院進行緊急搶救。期間產生之所有醫療與診療費用悉由甲方全額負擔。</li>
-            
-            <li><strong>不可抗力免責：</strong>倘若因不可抗力之事由（如天災、嚴重交通堵塞、交通事故、雷雨驚嚇等）導致行程延誤或寵物突發狀況，雙方應寬諒處理，乙方不負損害賠償責任。</li>
-            
-            <li><strong>過失理賠上限：</strong>如因乙方疏失（如行車疏忽發生車禍、未關好車門導致寵物脫逃）導致寵物受傷或死亡，折舊理賠與醫療上限總額為本趟運費總額之十倍（或設定固定上限：新台幣貳萬元整），甲方同意放棄超過此限額之其他民刑事賠償請求權。</li>
-            
-            <li><strong>車內設施損壞：</strong>寵物若於車內發生一般便溺、嘔吐，乙方不額外收取基礎清潔費。但若因惡意抓咬、嚴重破壞導致車內硬體或電子設備損壞，乙方得檢具單據向甲方索取特殊維修與營業損失費用。</li>
-          </ol>
-        </div>
-        
-        <!-- 訂購者資料 -->
-        <div class="form-row">
-          <div class="form-group">
-            <label>姓名 *</label>
-            <input type="text" id="name" name="name" required>
-          </div>
-          <div class="form-group">
-            <label>聯絡電話 *</label>
-            <input type="tel" id="phone" name="phone" required>
-          </div>
-        </div>
-        
-        <!-- 預約日期 -->
-        <div class="form-group">
-          <label>預約日期 *</label>
-          <input type="date" id="bookingDate" name="bookingDate" required onchange="loadAvailableTimeSlots()">
-        </div>
-        
-        <!-- 可預約時段 -->
-        <div class="time-slots-section" id="timeSlotsSection" style="display: none;">
-          <h3>⏰ 請選擇預約時段</h3>
-          <p style="color: #A0826D; font-size: 14px; margin-bottom: 10px;">請選擇一個可預約的時段</p>
-          <div class="time-slots-grid" id="timeSlotsGrid">
-            <!-- 動態載入時段 -->
-          </div>
-        </div>
-        
-        <!-- 地點資訊 -->
-        <div class="form-group">
-          <label>起點地址 *</label>
-          <input type="text" id="startAddress" name="startAddress" placeholder="請輸入完整地址" required>
-        </div>
-        
-        <div class="form-group">
-          <label>終點地址 *</label>
-          <input type="text" id="endAddress" name="endAddress" placeholder="請輸入完整地址" required>
-        </div>
-        
-        <!-- 服務項目選擇區 -->
-        <div class="service-items-section">
-          <h3>🛒 選擇服務項目</h3>
-          <div id="serviceItemsContainer">
-            <!-- 動態新增的服務項目會顯示在這裡 -->
-          </div>
-          <button type="button" class="add-service-btn" onclick="addServiceItem()">➕ 新增服務項目</button>
-        </div>
-        
-        <!-- 需求內容 -->
-        <div class="form-group">
-          <label>其他需求說明</label>
-          <textarea id="requirements" name="requirements" placeholder="請描述您的特殊需求"></textarea>
-        </div>
-        
-        <!-- 費用預估 -->
-        <div class="price-summary">
-          <div id="priceBreakdown">
-            <!-- 動態顯示各項費用 -->
-          </div>
-          <div class="price-item">
-            <span>總計金額</span>
-            <span id="totalAmount">NT$ 0</span>
-          </div>
-        </div>
-        
-        <!-- 同意條款 -->
-        <div class="agreement-checkbox">
-          <label>
-            <input type="checkbox" id="agreeTerms" required>
-            <span>我已詳細閱讀並同意上述服務條款與責任限制條款</span>
-          </label>
-        </div>
-        
-        <button type="submit" class="submit-btn">
-          <span>確認送出訂單</span>
-        </button>
-      </form>
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('orders')">📋 訂單管理</button>
+      <button class="tab" onclick="showTab('timeSlots')">⏰ 時段管理</button>
+      <button class="tab" onclick="showTab('fixedCosts')">💰 固定成本</button>
+      <button class="tab" onclick="showTab('revenue')">📊 營業額統計</button>
+      <button class="tab" onclick="showTab('customers')">👥 客戶資料</button>
     </div>
-  </div>
-  
-  <!-- 聯絡資訊 Footer -->
-  <div class="footer">
-    <h3>📞 有任何問題？請與小編聯繫</h3>
-    <div class="contact-info">
-      <div class="line-icon">💬</div>
-      <p>LINE 官方帳號</p>
-      <strong>ID: 0922317535</strong>
+    
+    <div id="orders" class="tab-content active">
+      <div class="section">
+        <div class="section-header">
+          <h2>訂單列表</h2>
+          <div class="action-buttons">
+            <button class="btn btn-success" onclick="exportToExcel()">📥 匯出 Excel</button>
+            <button class="btn" onclick="loadOrders()">🔄 重新載入</button>
+          </div>
+        </div>
+        <div class="search-bar">
+          <input type="text" class="search-input" placeholder="搜尋訂單編號、客戶姓名或電話..." id="orderSearch" onkeyup="filterOrders()">
+          <select class="filter-select" id="statusFilter" onchange="filterOrders()">
+            <option value="">全部狀態</option>
+            <option value="待處理">待處理</option>
+            <option value="處理中">處理中</option>
+            <option value="已完成">已完成</option>
+            <option value="已取消">已取消</option>
+          </select>
+          <select class="filter-select" id="serviceFilter" onchange="filterOrders()">
+            <option value="">全部服務</option>
+            <option value="搬家服務">搬家服務</option>
+            <option value="寵物接送">寵物接送</option>
+          </select>
+        </div>
+        <div id="ordersTableContainer">
+          <div class="loading"><div class="loading-spinner"></div><p>載入中...</p></div>
+        </div>
+      </div>
     </div>
-  </div>
-  
-  <!-- 載入中畫面 -->
-  <div class="loading-overlay" id="loadingOverlay">
-    <div class="loading-content">
-      <div class="loading-spinner"></div>
-      <div class="loading-text">
-        <p>正在處理您的訂單<span class="loading-dots"></span></p>
-        <p style="font-size: 14px; margin-top: 10px; opacity: 0.8;">請稍候片刻</p>
+    
+    <div id="timeSlots" class="tab-content">
+      <div class="section">
+        <div class="section-header">
+          <h2>可預約時段設定</h2>
+          <div class="action-buttons">
+            <button class="btn btn-success" onclick="openAddTimeSlotModal()">➕ 新增時段</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>選擇日期</label>
+          <input type="date" id="timeSlotDate" onchange="loadTimeSlots()">
+        </div>
+        <div id="timeSlotsContainer">
+          <div class="empty-state">
+            <div class="empty-state-icon">⏰</div>
+            <h3>請選擇日期</h3>
+            <p>選擇日期後即可查看和管理該日的可預約時段</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="fixedCosts" class="tab-content">
+      <div class="section">
+        <div class="section-header">
+          <h2>每月固定成本</h2>
+          <div class="action-buttons">
+            <button class="btn btn-success" onclick="openAddCostModal()">➕ 新增成本項目</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>選擇月份</label>
+          <input type="month" id="costMonth" onchange="loadFixedCosts()">
+        </div>
+        <div id="fixedCostsContainer">
+          <div class="loading"><div class="loading-spinner"></div><p>載入中...</p></div>
+        </div>
+        <div class="cost-summary" style="background: linear-gradient(135deg, #FFF8F0 0%, #F5E6D3 100%); padding: 20px; border-radius: 10px; margin-top: 20px; border: 2px solid #E8D5C4;">
+          <h3 style="color: #8B5A2B; margin-bottom: 15px;">本月成本總計</h3>
+          <div style="font-size: 32px; font-weight: bold; color: #D2691E;" id="monthTotalCost">NT$ 0</div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="revenue" class="tab-content">
+      <div class="section">
+        <div class="section-header">
+          <h2>營業額統計分析</h2>
+          <div class="action-buttons">
+            <button class="btn" onclick="loadRevenueStats()">🔄 重新載入</button>
+          </div>
+        </div>
+        <div class="period-selector">
+          <button class="period-btn active" onclick="selectPeriod('year')">年度</button>
+          <button class="period-btn" onclick="selectPeriod('quarter')">季度</button>
+          <button class="period-btn" onclick="selectPeriod('month')">月度</button>
+          <button class="period-btn" onclick="selectPeriod('week')">週度</button>
+        </div>
+        <div class="revenue-grid">
+          <div class="revenue-card">
+            <h4>本年度營業額</h4>
+            <div class="amount" id="yearRevenue">NT$ 0</div>
+          </div>
+          <div class="revenue-card">
+            <h4>本季度營業額</h4>
+            <div class="amount" id="quarterRevenue">NT$ 0</div>
+          </div>
+          <div class="revenue-card">
+            <h4>本月營業額</h4>
+            <div class="amount" id="monthRevenue">NT$ 0</div>
+          </div>
+          <div class="revenue-card">
+            <h4>本週營業額</h4>
+            <div class="amount" id="weekRevenue">NT$ 0</div>
+          </div>
+        </div>
+        <div class="chart-container">
+          <h3>業務別營業額對比</h3>
+          <div class="revenue-grid">
+            <div class="revenue-card">
+              <h4>🏠 搬家服務</h4>
+              <div class="amount" id="movingRevenue">NT$ 0</div>
+              <p style="color: #A0826D; font-size: 14px; margin-top: 10px;">佔比：<span id="movingPercent">0%</span></p>
+            </div>
+            <div class="revenue-card">
+              <h4>🐾 寵物接送</h4>
+              <div class="amount" id="petRevenue">NT$ 0</div>
+              <p style="color: #A0826D; font-size: 14px; margin-top: 10px;">佔比：<span id="petPercent">0%</span></p>
+            </div>
+          </div>
+        </div>
+        <div class="chart-container">
+          <h3>旺季淡季分析</h3>
+          <div id="seasonAnalysis">
+            <div class="loading"><div class="loading-spinner"></div><p>分析中...</p></div>
+          </div>
+        </div>
+        <div class="analysis-box">
+          <h4>🤖 AI 智能分析（由 Monica 提供）</h4>
+          <div id="aiAnalysis"><p style="color: #A0826D;">正在分析數據，請稍候...</p></div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="customers" class="tab-content">
+      <div class="section">
+        <div class="section-header">
+          <h2>客戶資料統計</h2>
+          <div class="action-buttons">
+            <button class="btn" onclick="loadCustomers()">🔄 重新載入</button>
+          </div>
+        </div>
+        <div class="search-bar">
+          <input type="text" class="search-input" placeholder="搜尋客戶姓名或電話..." id="customerSearch" onkeyup="filterCustomers()">
+        </div>
+        <div id="customersTableContainer">
+          <div class="loading"><div class="loading-spinner"></div><p>載入中...</p></div>
+        </div>
       </div>
     </div>
   </div>
   
-  <!-- 成功提示視窗 -->
-  <div class="modal" id="successModal">
+  <div class="modal" id="orderDetailModal">
     <div class="modal-content">
-      <h2>✅ 訂單送出成功！</h2>
-      <p>訂單編號：<strong id="orderNumber"></strong></p>
-      <p>總金額：<strong id="orderTotal"></strong></p>
-      <p>預約時段：<strong id="orderTimeSlot"></strong></p>
-      <p>我們已收到您的預約，將盡快與您聯繫確認。</p>
-      <p style="margin-top: 15px; color: #8B5A2B;">
-        <strong>LINE ID: 0922317535</strong>
-      </p>
-      <button class="modal-btn" onclick="location.reload()">返回首頁</button>
+      <div class="modal-header">
+        <h3>訂單詳情</h3>
+        <button class="close-btn" onclick="closeModal('orderDetailModal')">&times;</button>
+      </div>
+      <div id="orderDetailContent"></div>
     </div>
   </div>
   
+  <div class="modal" id="addTimeSlotModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>新增可預約時段</h3>
+        <button class="close-btn" onclick="closeModal('addTimeSlotModal')">&times;</button>
+      </div>
+      <form onsubmit="saveTimeSlot(event)">
+        <div class="form-group">
+          <label>日期 *</label>
+          <input type="date" id="newSlotDate" required>
+        </div>
+        <div class="form-group">
+          <label>時段 *</label>
+          <input type="time" id="newSlotTime" required>
+        </div>
+        <div class="form-group">
+          <label>狀態</label>
+          <select id="newSlotStatus">
+            <option value="available">可預約</option>
+            <option value="unavailable">不可預約</option>
+          </select>
+        </div>
+        <button type="submit" class="btn" style="width: 100%;">儲存</button>
+      </form>
+    </div>
+  </div>
+  
+  <div class="modal" id="addCostModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>新增固定成本</h3>
+        <button class="close-btn" onclick="closeModal('addCostModal')">&times;</button>
+      </div>
+      <form onsubmit="saveCost(event)">
+        <div class="form-group">
+          <label>月份 *</label>
+          <input type="month" id="newCostMonth" required>
+        </div>
+        <div class="form-group">
+          <label>成本項目 *</label>
+          <select id="newCostType" required>
+            <option value="">請選擇</option>
+            <option value="油錢">油錢</option>
+            <option value="保養費">保養費</option>
+            <option value="耗材成本">耗材成本</option>
+            <option value="保險費">保險費</option>
+            <option value="停車費">停車費</option>
+            <option value="其他">其他</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>金額 *</label>
+          <input type="number" id="newCostAmount" placeholder="請輸入金額" required>
+        </div>
+        <div class="form-group">
+          <label>備註</label>
+          <textarea id="newCostNote" rows="3" placeholder="選填"></textarea>
+        </div>
+        <button type="submit" class="btn" style="width: 100%;">儲存</button>
+      </form>
+    </div>
+  </div>
+  
+  <!-- 新增：Toast 提示 -->
+  <div class="toast" id="toast"></div>
+  
   <script>
-    // ⚠️ 請替換成您的 Google Apps Script Web App URL
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyID57YXKqLpAidLvLbfSpiyiURt_zdw8cW1mpbVESVw7CiCpB6bDyns6m1B5cJHSpG/exec';
-    
-    let selectedService = '';
-    let serviceItems = [];
-    let selectedTimeSlot = '';
-    
-    // 服務項目定義
-    const serviceOptions = {
-      '搬家服務': [
-        { name: '基礎出車費', price: 500 },
-        { name: '超程累加費（每公里）', price: 25 },
-        { name: '司機協助搬運（電梯）', price: 300 },
-        { name: '司機協助搬運（樓梯每層）', price: 100 },
-        { name: '夜間出勤加給', price: 300 }
-      ],
-      '寵物接送': [
-        { name: '基礎出車費', price: 350 },
-        { name: '超程累加費（每公里）', price: 25 },
-        { name: '大型犬加價', price: 200 },
-        { name: '多寵共乘', price: 100 },
-        { name: '夜間出勤加給', price: 300 }
-      ]
-    };
-    
-    // 服務選擇
-    document.querySelectorAll('.service-card').forEach(card => {
-      card.addEventListener('click', function() {
-        document.querySelectorAll('.service-card').forEach(c => c.classList.remove('active'));
-        this.classList.add('active');
-        selectedService = this.dataset.service;
+    const SPREADSHEET_ID = '1O5_nN6zzkQZT9AZgsAK3jtkNY1YgXjLirFBYR5JsoPA';
+    const SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL_HERE';
+    let allOrders = [];
+    let allCustomers = [];
+    let currentPeriod = 'year';
         
-        // 顯示對應的費用表和條款
-        document.getElementById('movingPriceTable').classList.remove('show');
-        document.getElementById('petPriceTable').classList.remove('show');
-        document.getElementById('movingTerms').style.display = 'none';
-        document.getElementById('petTerms').style.display = 'none';
+    // 載入統計資料
+    async function loadStatistics() {
+      try {
+        const response = await fetch(`${SCRIPT_URL}?action=getStatistics`);
+        const result = await response.json();
         
-        if (selectedService === '搬家服務') {
-          document.getElementById('movingPriceTable').classList.add('show');
-          document.getElementById('movingTerms').style.display = 'block';
-        } else if (selectedService === '寵物接送') {
-          document.getElementById('petPriceTable').classList.add('show');
-          document.getElementById('petTerms').style.display = 'block';
+        if (result.success) {
+          document.getElementById('totalOrders').textContent = result.totalOrders || 0;
+          document.getElementById('totalRevenue').textContent = `NT$ ${(result.totalRevenue || 0).toLocaleString()}`;
+          document.getElementById('totalCost').textContent = `NT$ ${(result.totalCost || 0).toLocaleString()}`;
+          document.getElementById('totalProfit').textContent = `NT$ ${(result.totalProfit || 0).toLocaleString()}`;
+          document.getElementById('totalCustomers').textContent = result.totalCustomers || 0;
         }
-        
-        // 清空並重新初始化服務項目
-        serviceItems = [];
-        document.getElementById('serviceItemsContainer').innerHTML = '';
-        addServiceItem();
-      });
-    });
+      } catch (error) {
+        console.error('載入統計失敗:', error);
+      }
+    }
     
-    // 載入可預約時段
-    async function loadAvailableTimeSlots() {
-      const date = document.getElementById('bookingDate').value;
-      if (!date) return;
-      
-      const section = document.getElementById('timeSlotsSection');
-      const grid = document.getElementById('timeSlotsGrid');
-      
-      section.style.display = 'block';
-      grid.innerHTML = '<p style="color: #A0826D;">載入中...</p>';
+    // 載入訂單資料
+    async function loadOrders() {
+      const container = document.getElementById('ordersTableContainer');
+      container.innerHTML = '<div class="loading"><div class="loading-spinner"></div><p>載入中...</p></div>';
       
       try {
-        const response = await fetch(`${SCRIPT_URL}?action=getAvailableTimeSlots&date=${date}`);
+        const response = await fetch(`${SCRIPT_URL}?action=getOrders`);
+        const result = await response.json();
+        
+        if (result.success && result.orders && result.orders.length > 0) {
+          allOrders = result.orders;
+          displayOrders(allOrders);
+        } else {
+          container.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-state-icon">📭</div>
+              <h3>尚無訂單資料</h3>
+              <p>目前還沒有任何訂單記錄</p>
+            </div>
+          `;
+        }
+      } catch (error) {
+        console.error('載入訂單失敗:', error);
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">⚠️</div>
+            <h3>載入失敗</h3>
+            <p>請確認 Apps Script 已正確設定並部署</p>
+          </div>
+        `;
+      }
+    }
+    
+    // 顯示訂單表格（新增狀態變更功能）
+    function displayOrders(orders) {
+      const container = document.getElementById('ordersTableContainer');
+      
+      let html = `
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>訂單編號</th>
+              <th>日期</th>
+              <th>服務類型</th>
+              <th>客戶姓名</th>
+              <th>電話</th>
+              <th>預約時間</th>
+              <th>金額</th>
+              <th>狀態</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+      
+      orders.forEach((order, index) => {
+        const statusClass = getStatusClass(order.status);
+        html += `
+          <tr>
+            <td><strong>${order.orderNumber}</strong></td>
+            <td>${order.orderDate}</td>
+            <td>${order.serviceType}</td>
+            <td>${order.name}</td>
+            <td>${order.phone}</td>
+            <td>${order.bookingDate} ${order.bookingTime}</td>
+            <td><strong>NT$ ${parseInt(order.totalAmount || 0).toLocaleString()}</strong></td>
+            <td>
+              <select class="status-selector ${statusClass}" onchange="updateOrderStatus(${index}, this.value)" data-original="${order.status}">
+                <option value="待處理" ${order.status === '待處理' ? 'selected' : ''}>待處理</option>
+                <option value="處理中" ${order.status === '處理中' ? 'selected' : ''}>處理中</option>
+                <option value="已完成" ${order.status === '已完成' ? 'selected' : ''}>已完成</option>
+                <option value="已取消" ${order.status === '已取消' ? 'selected' : ''}>已取消</option>
+              </select>
+            </td>
+            <td>
+              <button class="btn btn-secondary" style="padding: 5px 10px; font-size: 12px;" onclick="showOrderDetail(${index})">查看</button>
+            </td>
+          </tr>
+        `;
+      });
+      
+      html += '</tbody></table>';
+      container.innerHTML = html;
+    }
+    
+    // 新增：更新訂單狀態
+    async function updateOrderStatus(index, newStatus) {
+      const order = allOrders[index];
+      if (!order) return;
+      
+      const selectElement = event.target;
+      const originalStatus = selectElement.dataset.original;
+      
+      // 確認是否要變更
+      if (originalStatus === newStatus) return;
+      
+      if (!confirm(`確定要將訂單 ${order.orderNumber} 的狀態從「${originalStatus}」變更為「${newStatus}」嗎？`)) {
+        selectElement.value = originalStatus;
+        return;
+      }
+      
+      // 顯示載入狀態
+      selectElement.disabled = true;
+      selectElement.style.opacity = '0.5';
+      
+      try {
+        const formData = new URLSearchParams();
+        formData.append('action', 'updateOrderStatus');
+        formData.append('orderNumber', order.orderNumber);
+        formData.append('status', newStatus);
+        
+        const response = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          body: formData
+        });
+        
+        // 等待回應
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        // 更新本地資料
+        allOrders[index].status = newStatus;
+        selectElement.dataset.original = newStatus;
+        
+        // 更新樣式
+        selectElement.className = 'status-selector ' + getStatusClass(newStatus);
+        
+        // 顯示成功提示
+        showToast(`✓ 訂單狀態已更新為「${newStatus}」`, 'success');
+        
+        // 重新載入統計資料
+        loadStatistics();
+        
+      } catch (error) {
+        console.error('更新狀態失敗:', error);
+        showToast('✗ 狀態更新失敗，請稍後再試', 'error');
+        selectElement.value = originalStatus;
+      } finally {
+        selectElement.disabled = false;
+        selectElement.style.opacity = '1';
+      }
+    }
+    
+    // 新增：顯示 Toast 提示
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = 'toast show';
+      
+      if (type === 'error') {
+        toast.classList.add('error');
+      }
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+    
+    // 獲取狀態樣式
+    function getStatusClass(status) {
+      const statusMap = {
+        '待處理': 'status-pending',
+        '處理中': 'status-processing',
+        '已完成': 'status-completed',
+        '已取消': 'status-cancelled'
+      };
+      return statusMap[status] || 'status-pending';
+    }
+    
+    // 顯示訂單詳情
+    function showOrderDetail(index) {
+      const order = allOrders[index];
+      if (!order) return;
+      
+      const modal = document.getElementById('orderDetailModal');
+      const content = document.getElementById('orderDetailContent');
+      
+      content.innerHTML = `
+        <div class="detail-row">
+          <label>訂單編號：</label>
+          <span><strong>${order.orderNumber}</strong></span>
+        </div>
+        <div class="detail-row">
+          <label>訂單日期：</label>
+          <span>${order.orderDate} ${order.orderTime || ''}</span>
+        </div>
+        <div class="detail-row">
+          <label>服務類型：</label>
+          <span>${order.serviceType}</span>
+        </div>
+        <div class="detail-row">
+          <label>客戶姓名：</label>
+          <span>${order.name}</span>
+        </div>
+        <div class="detail-row">
+          <label>聯絡電話：</label>
+          <span>${order.phone}</span>
+        </div>
+        <div class="detail-row">
+          <label>預約時間：</label>
+          <span>${order.bookingDate} ${order.bookingTime}</span>
+        </div>
+        <div class="detail-row">
+          <label>起點地址：</label>
+          <span>${order.startAddress}</span>
+        </div>
+        <div class="detail-row">
+          <label>終點地址：</label>
+          <span>${order.endAddress}</span>
+        </div>
+        <div class="detail-row">
+          <label>服務項目：</label>
+          <span style="white-space: pre-line;">${order.serviceItems || '無'}</span>
+        </div>
+        <div class="detail-row">
+          <label>其他需求：</label>
+          <span>${order.requirements || '無'}</span>
+        </div>
+        <div class="detail-row">
+          <label>總金額：</label>
+          <span><strong style="color: #D2691E; font-size: 18px;">NT$ ${parseInt(order.totalAmount || 0).toLocaleString()}</strong></span>
+        </div>
+        <div class="detail-row">
+          <label>狀態：</label>
+          <span><span class="status-badge ${getStatusClass(order.status)}">${order.status}</span></span>
+        </div>
+      `;
+      
+      modal.classList.add('show');
+    }
+    
+    // 關閉彈窗
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.remove('show');
+    }
+    
+    // 篩選訂單
+    function filterOrders() {
+      const searchText = document.getElementById('orderSearch').value.toLowerCase();
+      const statusFilter = document.getElementById('statusFilter').value;
+      const serviceFilter = document.getElementById('serviceFilter').value;
+      
+      const filtered = allOrders.filter(order => {
+        const matchSearch = !searchText || 
+          order.orderNumber.toLowerCase().includes(searchText) ||
+          order.name.toLowerCase().includes(searchText) ||
+          order.phone.includes(searchText);
+        
+        const matchStatus = !statusFilter || order.status === statusFilter;
+        const matchService = !serviceFilter || order.serviceType === serviceFilter;
+        
+        return matchSearch && matchStatus && matchService;
+      });
+      
+      displayOrders(filtered);
+    }
+    
+    // 載入時段
+    async function loadTimeSlots() {
+      const date = document.getElementById('timeSlotDate').value;
+      if (!date) return;
+      
+      const container = document.getElementById('timeSlotsContainer');
+      container.innerHTML = '<div class="loading"><div class="loading-spinner"></div><p>載入中...</p></div>';
+      
+      try {
+        const response = await fetch(`${SCRIPT_URL}?action=getTimeSlots&date=${date}`);
         const result = await response.json();
         
         if (result.success && result.timeSlots && result.timeSlots.length > 0) {
-          grid.innerHTML = '';
+          let html = '<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px;">';
           result.timeSlots.forEach(slot => {
-            const slotDiv = document.createElement('div');
-            slotDiv.className = `time-slot ${slot.available ? '' : 'disabled'}`;
-            slotDiv.textContent = slot.time;
-            
-            if (slot.available) {
-              slotDiv.onclick = function() {
-                document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
-                this.classList.add('selected');
-                selectedTimeSlot = slot.time;
-              };
-            }
-            
-            grid.appendChild(slotDiv);
+            const statusColor = slot.available ? '#8FBC8F' : '#D3D3D3';
+            html += `
+              <div style="background: white; padding: 15px; border-radius: 10px; border: 2px solid ${statusColor}; text-align: center;">
+                <div style="font-size: 18px; font-weight: bold; color: #6B4423; margin-bottom: 5px;">${slot.time}</div>
+                <div style="font-size: 12px; color: ${statusColor};">${slot.available ? '可預約' : '已預約'}</div>
+                ${slot.orderNumber ? `<div style="font-size: 10px; color: #A0826D; margin-top: 5px;">${slot.orderNumber}</div>` : ''}
+              </div>
+            `;
           });
+          html += '</div>';
+          container.innerHTML = html;
         } else {
-          // 顯示預設時段
-          grid.innerHTML = '';
-          const defaultSlots = ['09:00', '10:00', '11:00', '13:00', '14:00', '15:00', '16:00', '17:00'];
-          defaultSlots.forEach(time => {
-            const slotDiv = document.createElement('div');
-            slotDiv.className = 'time-slot';
-            slotDiv.textContent = time;
-            slotDiv.onclick = function() {
-              document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
-              this.classList.add('selected');
-              selectedTimeSlot = time;
-            };
-            grid.appendChild(slotDiv);
-          });
+          container.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-state-icon">⏰</div>
+              <h3>此日期尚未設定時段</h3>
+              <p>點擊「新增時段」按鈕來設定可預約時段</p>
+            </div>
+          `;
         }
       } catch (error) {
         console.error('載入時段失敗:', error);
-        // 顯示預設時段
-        grid.innerHTML = '';
-        const defaultSlots = ['09:00', '10:00', '11:00', '13:00', '14:00', '15:00', '16:00', '17:00'];
-        defaultSlots.forEach(time => {
-          const slotDiv = document.createElement('div');
-          slotDiv.className = 'time-slot';
-          slotDiv.textContent = time;
-          slotDiv.onclick = function() {
-            document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
-            this.classList.add('selected');
-            selectedTimeSlot = time;
-          };
-          grid.appendChild(slotDiv);
-        });
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">⚠️</div>
+            <h3>載入失敗</h3>
+            <p>請稍後再試</p>
+          </div>
+        `;
       }
     }
     
-    // 新增服務項目
-    function addServiceItem() {
-      if (!selectedService) {
-        alert('請先選擇服務類型（搬家服務或寵物接送）');
-        return;
-      }
-      
-      const itemId = Date.now();
-      const container = document.getElementById('serviceItemsContainer');
-      
-      const itemDiv = document.createElement('div');
-      itemDiv.className = 'service-item';
-      itemDiv.id = `item-${itemId}`;
-      
-      const options = serviceOptions[selectedService];
-      let optionsHTML = '<option value="">請選擇服務項目</option>';
-      options.forEach(opt => {
-        optionsHTML += `<option value="${opt.name}" data-price="${opt.price}">${opt.name} - NT$ ${opt.price}</option>`;
-      });
-      
-      itemDiv.innerHTML = `
-        <select class="service-select" onchange="updateServiceItem(${itemId})">
-          ${optionsHTML}
-        </select>
-        <input type="number" class="quantity-input" placeholder="數量" min="1" value="1" onchange="calculateTotal()">
-        <input type="number" class="price-input" placeholder="金額" readonly>
-        <button type="button" class="remove-btn" onclick="removeServiceItem(${itemId})">刪除</button>
-      `;
-      
-      container.appendChild(itemDiv);
-      serviceItems.push({ id: itemId, name: '', price: 0, quantity: 1 });
+    // 開啟新增時段彈窗
+    function openAddTimeSlotModal() {
+      document.getElementById('addTimeSlotModal').classList.add('show');
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('newSlotDate').value = today;
     }
     
-    // 更新服務項目
-    function updateServiceItem(itemId) {
-      const itemDiv = document.getElementById(`item-${itemId}`);
-      const select = itemDiv.querySelector('.service-select');
-      const selectedOption = select.options[select.selectedIndex];
-      const price = parseFloat(selectedOption.dataset.price) || 0;
-      const quantity = parseInt(itemDiv.querySelector('.quantity-input').value) || 1;
+    // 儲存時段
+    async function saveTimeSlot(event) {
+      event.preventDefault();
       
-      itemDiv.querySelector('.price-input').value = price * quantity;
-      
-      const item = serviceItems.find(i => i.id === itemId);
-      if (item) {
-        item.name = selectedOption.value;
-        item.price = price;
-        item.quantity = quantity;
-      }
-      
-      calculateTotal();
-    }
-    
-    // 移除服務項目
-    function removeServiceItem(itemId) {
-      document.getElementById(`item-${itemId}`).remove();
-      serviceItems = serviceItems.filter(i => i.id !== itemId);
-      calculateTotal();
-    }
-    
-    // 計算總金額
-    function calculateTotal() {
-      let total = 0;
-      const breakdown = document.getElementById('priceBreakdown');
-      breakdown.innerHTML = '';
-      
-      serviceItems.forEach(item => {
-        if (item.name) {
-          const itemTotal = item.price * item.quantity;
-          total += itemTotal;
-          
-          const priceItem = document.createElement('div');
-          priceItem.className = 'price-item';
-          priceItem.innerHTML = `
-            <span>${item.name} × ${item.quantity}</span>
-            <span>NT$ ${itemTotal.toLocaleString()}</span>
-          `;
-          breakdown.appendChild(priceItem);
-        }
-      });
-      
-      document.getElementById('totalAmount').textContent = `NT$ ${total.toLocaleString()}`;
-    }
-    
-    // 設定最小日期為今天
-    const today = new Date().toISOString().split('T')[0];
-    document.getElementById('bookingDate').setAttribute('min', today);
-    
-    // 表單提交
-    document.getElementById('orderForm').addEventListener('submit', async function(e) {
-      e.preventDefault();
-      
-      if (!selectedService) {
-        alert('請選擇服務類型');
-        return;
-      }
-      
-      if (serviceItems.length === 0 || !serviceItems.some(i => i.name)) {
-        alert('請至少選擇一項服務');
-        return;
-      }
-      
-      if (!selectedTimeSlot) {
-        alert('請選擇預約時段');
-        return;
-      }
-      
-      if (!document.getElementById('agreeTerms').checked) {
-        alert('請勾選同意服務條款');
-        return;
-      }
-      
-      const totalAmount = serviceItems.reduce((sum, item) => {
-        return sum + (item.price * item.quantity);
-      }, 0);
-      
-      // 使用 URLSearchParams 而非 JSON
       const formData = new URLSearchParams();
-      formData.append('serviceType', selectedService);
-      formData.append('name', document.getElementById('name').value);
-      formData.append('phone', document.getElementById('phone').value);
-      formData.append('bookingDate', document.getElementById('bookingDate').value);
-      formData.append('bookingTime', selectedTimeSlot);
-      formData.append('startAddress', document.getElementById('startAddress').value);
-      formData.append('endAddress', document.getElementById('endAddress').value);
-      formData.append('requirements', document.getElementById('requirements').value);
-      formData.append('serviceItems', JSON.stringify(serviceItems.filter(i => i.name)));
-      formData.append('totalAmount', totalAmount);
-      
-      // 顯示載入畫面
-      document.getElementById('loadingOverlay').classList.add('show');
+      formData.append('action', 'saveTimeSlot');
+      formData.append('date', document.getElementById('newSlotDate').value);
+      formData.append('time', document.getElementById('newSlotTime').value);
+      formData.append('status', document.getElementById('newSlotStatus').value);
       
       try {
-        // 發送請求
         await fetch(SCRIPT_URL, {
           method: 'POST',
           body: formData
         });
         
-        // 等待處理
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        
-        // 隱藏載入畫面
-        document.getElementById('loadingOverlay').classList.remove('show');
-        
-        // 顯示成功訊息
-        const orderNum = 'ORD' + new Date().getTime();
-        document.getElementById('orderNumber').textContent = orderNum;
-        document.getElementById('orderTotal').textContent = `NT$ ${totalAmount.toLocaleString()}`;
-        document.getElementById('orderTimeSlot').textContent = `${document.getElementById('bookingDate').value} ${selectedTimeSlot}`;
-        document.getElementById('successModal').classList.add('show');
-        
+        showToast('✓ 時段新增成功！', 'success');
+        closeModal('addTimeSlotModal');
+        loadTimeSlots();
       } catch (error) {
-        console.error('錯誤:', error);
-        document.getElementById('loadingOverlay').classList.remove('show');
-        
-        // 即使失敗也顯示成功（因為資料可能已送出）
-        const orderNum = 'ORD' + new Date().getTime();
-        document.getElementById('orderNumber').textContent = orderNum;
-        document.getElementById('orderTotal').textContent = `NT$ ${totalAmount.toLocaleString()}`;
-        document.getElementById('orderTimeSlot').textContent = `${document.getElementById('bookingDate').value} ${selectedTimeSlot}`;
-        document.getElementById('successModal').classList.add('show');
+        console.error('儲存失敗:', error);
+        showToast('✗ 儲存失敗，請稍後再試', 'error');
       }
-    });
+    }
+    
+    // 載入固定成本
+    async function loadFixedCosts() {
+      const month = document.getElementById('costMonth').value;
+      if (!month) return;
+      
+      const container = document.getElementById('fixedCostsContainer');
+      container.innerHTML = '<div class="loading"><div class="loading-spinner"></div><p>載入中...</p></div>';
+      
+      try {
+        const response = await fetch(`${SCRIPT_URL}?action=getFixedCosts&month=${month}`);
+        const result = await response.json();
+        
+        if (result.success && result.costs && result.costs.length > 0) {
+          let html = '';
+          let total = 0;
+          
+          result.costs.forEach(cost => {
+            total += parseFloat(cost.amount || 0);
+            html += `
+              <div class="cost-item">
+                <div class="cost-item-info">
+                  <h4>${cost.type}</h4>
+                  <p>${cost.note || '無備註'}</p>
+                </div>
+                <div class="cost-item-amount">NT$ ${parseInt(cost.amount || 0).toLocaleString()}</div>
+              </div>
+            `;
+          });
+          
+          container.innerHTML = html;
+          document.getElementById('monthTotalCost').textContent = `NT$ ${total.toLocaleString()}`;
+        } else {
+          container.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-state-icon">💰</div>
+              <h3>本月尚無成本記錄</h3>
+              <p>點擊「新增成本項目」開始記錄</p>
+            </div>
+          `;
+          document.getElementById('monthTotalCost').textContent = 'NT$ 0';
+        }
+      } catch (error) {
+        console.error('載入成本失敗:', error);
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">⚠️</div>
+            <h3>載入失敗</h3>
+            <p>請稍後再試</p>
+          </div>
+        `;
+      }
+    }
+    
+    // 開啟新增成本彈窗
+    function openAddCostModal() {
+      document.getElementById('addCostModal').classList.add('show');
+      const today = new Date();
+      const month = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
+      document.getElementById('newCostMonth').value = month;
+    }
+    
+    // 儲存成本
+    async function saveCost(event) {
+      event.preventDefault();
+      
+      const formData = new URLSearchParams();
+      formData.append('action', 'saveCost');
+      formData.append('month', document.getElementById('newCostMonth').value);
+      formData.append('type', document.getElementById('newCostType').value);
+      formData.append('amount', document.getElementById('newCostAmount').value);
+      formData.append('note', document.getElementById('newCostNote').value);
+      
+      try {
+        await fetch(SCRIPT_URL, {
+          method: 'POST',
+          body: formData
+        });
+        
+        showToast('✓ 成本項目新增成功！', 'success');
+        closeModal('addCostModal');
+        loadFixedCosts();
+      } catch (error) {
+        console.error('儲存失敗:', error);
+        showToast('✗ 儲存失敗，請稍後再試', 'error');
+      }
+    }
+    
+    // 載入營業額統計
+    async function loadRevenueStats() {
+      try {
+        const response = await fetch(`${SCRIPT_URL}?action=getRevenueStats`);
+        const result = await response.json();
+        
+        if (result.success) {
+          document.getElementById('yearRevenue').textContent = `NT$ ${(result.yearRevenue || 0).toLocaleString()}`;
+          document.getElementById('quarterRevenue').textContent = `NT$ ${(result.quarterRevenue || 0).toLocaleString()}`;
+          document.getElementById('monthRevenue').textContent = `NT$ ${(result.monthRevenue || 0).toLocaleString()}`;
+          document.getElementById('weekRevenue').textContent = `NT$ ${(result.weekRevenue || 0).toLocaleString()}`;
+          
+          document.getElementById('movingRevenue').textContent = `NT$ ${(result.movingRevenue || 0).toLocaleString()}`;
+          document.getElementById('petRevenue').textContent = `NT$ ${(result.petRevenue || 0).toLocaleString()}`;
+          
+          const total = (result.movingRevenue || 0) + (result.petRevenue || 0);
+          const movingPercent = total > 0 ? (((result.movingRevenue || 0) / total) * 100).toFixed(1) : 0;
+          const petPercent = total > 0 ? (((result.petRevenue || 0) / total) * 100).toFixed(1) : 0;
+          
+          document.getElementById('movingPercent').textContent = `${movingPercent}%`;
+          document.getElementById('petPercent').textContent = `${petPercent}%`;
+          
+          if (result.seasonData) {
+            displaySeasonAnalysis(result.seasonData);
+          }
+          generateAIAnalysis(result);
+        }
+      } catch (error) {
+        console.error('載入營業額失敗:', error);
+      }
+    }
+    
+    // 顯示旺季淡季分析
+    function displaySeasonAnalysis(data) {
+      const container = document.getElementById('seasonAnalysis');
+      
+      if (!data || data.length === 0) {
+        container.innerHTML = '<p style="color: #A0826D;">資料不足，無法進行分析</p>';
+        return;
+      }
+      
+      const avgRevenue = data.reduce((sum, m) => sum + (m.revenue || 0), 0) / data.length;
+      
+      let html = '<div class="revenue-grid">';
+      data.forEach(month => {
+        const isBusy = (month.revenue || 0) > avgRevenue;
+        html += `
+          <div class="revenue-card" style="border-left: 4px solid ${isBusy ? '#8FBC8F' : '#D2691E'};">
+            <h4>${month.month} ${isBusy ? '🔥 旺季' : '❄️ 淡季'}</h4>
+            <div class="amount">NT$ ${(month.revenue || 0).toLocaleString()}</div>
+          </div>
+        `;
+      });
+      html += '</div>';
+      container.innerHTML = html;
+    }
+    
+    // 生成 AI 分析
+    function generateAIAnalysis(data) {
+      const container = document.getElementById('aiAnalysis');
+      
+      const total = (data.movingRevenue || 0) + (data.petRevenue || 0);
+      const movingPercent = total > 0 ? (((data.movingRevenue || 0) / total) * 100).toFixed(1) : 0;
+      
+      let analysis = '<ul>';
+      
+      if (movingPercent > 60) {
+        analysis += '<li><strong>優勢：</strong>搬家服務為主要營收來源，市場定位明確</li>';
+        analysis += '<li><strong>建議：</strong>可考慮增加寵物接送服務的行銷力度，平衡業務組合</li>';
+      } else if (movingPercent < 40) {
+        analysis += '<li><strong>優勢：</strong>寵物接送服務表現亮眼，具有成長潛力</li>';
+        analysis += '<li><strong>建議：</strong>持續深耕寵物市場，建立口碑與回購率</li>';
+      } else {
+        analysis += '<li><strong>優勢：</strong>兩項業務發展均衡，風險分散良好</li>';
+        analysis += '<li><strong>建議：</strong>維持現有策略，同時觀察季節性變化調整資源配置</li>';
+      }
+      
+      if ((data.monthRevenue || 0) > ((data.quarterRevenue || 0) / 3)) {
+        analysis += '<li><strong>趨勢：</strong>本月業績表現優於季度平均，呈現成長態勢</li>';
+      } else {
+        analysis += '<li><strong>提醒：</strong>本月業績低於季度平均，建議檢視行銷策略</li>';
+      }
+      
+      analysis += '<li><strong>成本控制：</strong>建議每月檢視固定成本，確保利潤率維持在健康水準</li>';
+      analysis += '</ul>';
+      
+      container.innerHTML = analysis;
+    }
+    
+    // 選擇期間
+    function selectPeriod(period) {
+      currentPeriod = period;
+      document.querySelectorAll('.period-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+    }
+    
+    // 載入客戶資料
+    async function loadCustomers() {
+      const container = document.getElementById('customersTableContainer');
+      container.innerHTML = '<div class="loading"><div class="loading-spinner"></div><p>載入中...</p></div>';
+      
+      try {
+        const response = await fetch(`${SCRIPT_URL}?action=getCustomers`);
+        const result = await response.json();
+        
+        if (result.success && result.customers && result.customers.length > 0) {
+          allCustomers = result.customers;
+          displayCustomers(allCustomers);
+        } else {
+          container.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-state-icon">👥</div>
+              <h3>尚無客戶資料</h3>
+              <p>目前還沒有任何客戶記錄</p>
+            </div>
+          `;
+        }
+      } catch (error) {
+        console.error('載入客戶失敗:', error);
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">⚠️</div>
+            <h3>載入失敗</h3>
+            <p>請確認 Apps Script 已正確設定</p>
+          </div>
+        `;
+      }
+    }
+    
+    // 顯示客戶表格
+    function displayCustomers(customers) {
+      const container = document.getElementById('customersTableContainer');
+      
+      let html = `
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>客戶姓名</th>
+              <th>聯絡電話</th>
+              <th>累計訂單數</th>
+              <th>累計金額</th>
+              <th>最後消費日期</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+      
+      customers.forEach(customer => {
+        html += `
+          <tr>
+            <td><strong>${customer.name}</strong></td>
+            <td>${customer.phone}</td>
+            <td>${customer.orderCount} 筆</td>
+            <td><strong>NT$ ${parseInt(customer.totalAmount || 0).toLocaleString()}</strong></td>
+            <td>${customer.lastOrderDate}</td>
+          </tr>
+        `;
+      });
+      
+      html += '</tbody></table>';
+      container.innerHTML = html;
+    }
+    
+    // 篩選客戶
+    function filterCustomers() {
+      const searchText = document.getElementById('customerSearch').value.toLowerCase();
+      
+      const filtered = allCustomers.filter(customer => {
+        return customer.name.toLowerCase().includes(searchText) ||
+               customer.phone.includes(searchText);
+      });
+      
+      displayCustomers(filtered);
+    }
+    
+    // 切換分頁
+    function showTab(tabName) {
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      
+      document.getElementById(tabName).classList.add('active');
+      event.target.classList.add('active');
+      
+      // 載入對應資料
+      if (tabName === 'orders') {
+        loadOrders();
+      } else if (tabName === 'customers') {
+        loadCustomers();
+      } else if (tabName === 'revenue') {
+        loadRevenueStats();
+      } else if (tabName === 'fixedCosts') {
+        const today = new Date();
+        const month = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
+        document.getElementById('costMonth').value = month;
+        loadFixedCosts();
+      } else if (tabName === 'timeSlots') {
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('timeSlotDate').value = today;
+        loadTimeSlots();
+      }
+    }
+    
+    // 重新整理所有資料
+    function refreshAllData() {
+      loadStatistics();
+      loadOrders();
+      loadCustomers();
+      loadRevenueStats();
+      showToast('✓ 資料已重新整理', 'success');
+    }
+    
+    // 開啟 Google Sheets
+    function openGoogleSheets() {
+      window.open(`https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/edit`, '_blank');
+    }
+    
+    // 匯出 Excel
+    function exportToExcel() {
+      window.open(`https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=xlsx`, '_blank');
+      showToast('✓ 開始匯出 Excel', 'success');
+    }
+    
+    // 初始化
+    window.onload = function() {
+      if (SCRIPT_URL !== 'https://script.google.com/macros/s/AKfycbyID57YXKqLpAidLvLbfSpiyiURt_zdw8cW1mpbVESVw7CiCpB6bDyns6m1B5cJHSpG/exec') {
+        loadStatistics();
+        loadOrders();
+      } else {
+        alert('⚠️ 請先設定 SCRIPT_URL\n\n請將 Apps Script 部署後的網址填入 SCRIPT_URL 變數中');
+      }
+    };
   </script>
 </body>
 </html>
