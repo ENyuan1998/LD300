@@ -1701,14 +1701,11 @@
     }
     
     // 初始化
-    window.onload = function() {
-      if (SCRIPT_URL !== 'https://script.google.com/macros/s/AKfycbyID57YXKqLpAidLvLbfSpiyiURt_zdw8cW1mpbVESVw7CiCpB6bDyns6m1B5cJHSpG/exec') {
-        loadStatistics();
-        loadOrders();
-      } else {
-        alert('⚠️ 請先設定 SCRIPT_URL\n\n請將 Apps Script 部署後的網址填入 SCRIPT_URL 變數中');
-      }
-    };
-  </script>
+window.onload = function() {
+  loadStatistics();
+  loadOrders();
+};
+</script>
 </body>
 </html>
+
