@@ -29,11 +29,19 @@
     }
     
     @keyframes slideDown {
-      from { transform: translateY(-100%); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
+      from {
+        transform: translateY(-100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
     }
     
-    .navbar h1 { font-size: 24px; }
+    .navbar h1 {
+      font-size: 24px;
+    }
     
     .navbar-actions {
       display: flex;
@@ -87,8 +95,14 @@
     .stat-card:nth-child(5) { animation-delay: 0.5s; }
     
     @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
     
     .stat-card:hover {
@@ -142,7 +156,9 @@
       white-space: nowrap;
     }
     
-    .tab:hover { color: #B88A5E; }
+    .tab:hover {
+      color: #B88A5E;
+    }
     
     .tab.active {
       color: #B88A5E;
@@ -154,7 +170,9 @@
       animation: fadeIn 0.4s ease-out;
     }
     
-    .tab-content.active { display: block; }
+    .tab-content.active {
+      display: block;
+    }
     
     @keyframes fadeIn {
       from { opacity: 0; }
@@ -198,6 +216,9 @@
       cursor: pointer;
       font-size: 14px;
       transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
     
     .btn:hover {
@@ -205,8 +226,17 @@
       box-shadow: 0 4px 15px rgba(184, 138, 94, 0.3);
     }
     
-    .btn-success { background: linear-gradient(135deg, #8FBC8F 0%, #6B8E6B 100%); }
-    .btn-secondary { background: linear-gradient(135deg, #A0826D 0%, #8B7355 100%); }
+    .btn-success {
+      background: linear-gradient(135deg, #8FBC8F 0%, #6B8E6B 100%);
+    }
+    
+    .btn-danger {
+      background: linear-gradient(135deg, #D2691E 0%, #A0522D 100%);
+    }
+    
+    .btn-secondary {
+      background: linear-gradient(135deg, #A0826D 0%, #8B7355 100%);
+    }
     
     .data-table {
       width: 100%;
@@ -225,6 +255,8 @@
       color: #8B5A2B;
       border-bottom: 2px solid #E8D5C4;
       font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
     
     .data-table td {
@@ -239,6 +271,7 @@
     
     .data-table tbody tr:hover {
       background: #FFF8F0;
+      transform: scale(1.01);
     }
     
     .status-badge {
@@ -249,10 +282,25 @@
       display: inline-block;
     }
     
-    .status-pending { background: #FFF3CD; color: #856404; }
-    .status-processing { background: #D1ECF1; color: #0C5460; }
-    .status-completed { background: #D4EDDA; color: #155724; }
-    .status-cancelled { background: #F8D7DA; color: #721C24; }
+    .status-pending {
+      background: #FFF3CD;
+      color: #856404;
+    }
+    
+    .status-processing {
+      background: #D1ECF1;
+      color: #0C5460;
+    }
+    
+    .status-completed {
+      background: #D4EDDA;
+      color: #155724;
+    }
+    
+    .status-cancelled {
+      background: #F8D7DA;
+      color: #721C24;
+    }
     
     .empty-state {
       text-align: center;
@@ -270,6 +318,10 @@
       font-size: 20px;
       margin-bottom: 10px;
       color: #8B5A2B;
+    }
+    
+    .empty-state p {
+      font-size: 14px;
     }
     
     .loading {
@@ -305,11 +357,13 @@
       border: 2px solid #E8D5C4;
       border-radius: 8px;
       font-size: 14px;
+      transition: all 0.3s;
     }
     
     .search-input:focus {
       outline: none;
       border-color: #B88A5E;
+      box-shadow: 0 0 0 3px rgba(184, 138, 94, 0.1);
     }
     
     .filter-select {
@@ -318,6 +372,7 @@
       border-radius: 8px;
       font-size: 14px;
       min-width: 150px;
+      color: #6B4423;
     }
     
     .modal {
@@ -331,10 +386,12 @@
       justify-content: center;
       align-items: center;
       z-index: 1000;
+      backdrop-filter: blur(5px);
     }
     
     .modal.show {
       display: flex;
+      animation: fadeIn 0.3s ease-out;
     }
     
     .modal-content {
@@ -345,7 +402,19 @@
       width: 90%;
       max-height: 80vh;
       overflow-y: auto;
+      animation: scaleIn 0.3s ease-out;
       border: 3px solid #C8956D;
+    }
+    
+    @keyframes scaleIn {
+      from {
+        transform: scale(0.8);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
     }
     
     .modal-header {
@@ -368,6 +437,7 @@
       font-size: 24px;
       cursor: pointer;
       color: #A0826D;
+      transition: all 0.3s;
     }
     
     .close-btn:hover {
@@ -411,6 +481,14 @@
       border: 2px solid #E8D5C4;
       border-radius: 8px;
       font-size: 14px;
+      color: #6B4423;
+    }
+    
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #B88A5E;
     }
     
     .cost-item {
@@ -422,6 +500,22 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      animation: slideIn 0.3s ease-out;
+    }
+    
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    
+    .cost-item-info {
+      flex: 1;
     }
     
     .cost-item-info h4 {
@@ -438,6 +532,47 @@
       font-size: 20px;
       font-weight: bold;
       color: #D2691E;
+    }
+    
+    .chart-container {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      margin-bottom: 20px;
+      border: 2px solid #E8D5C4;
+    }
+    
+    .chart-container h3 {
+      color: #8B5A2B;
+      margin-bottom: 15px;
+    }
+    
+    .period-selector {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    
+    .period-btn {
+      padding: 10px 20px;
+      border: 2px solid #E8D5C4;
+      background: white;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+      color: #8B5A2B;
+    }
+    
+    .period-btn:hover {
+      border-color: #B88A5E;
+      transform: translateY(-2px);
+    }
+    
+    .period-btn.active {
+      background: linear-gradient(135deg, #C8956D 0%, #B88A5E 100%);
+      color: white;
+      border-color: #B88A5E;
     }
     
     .revenue-grid {
@@ -477,6 +612,9 @@
     .analysis-box h4 {
       color: #8B5A2B;
       margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
     
     .analysis-box ul {
@@ -495,6 +633,42 @@
       color: #8FBC8F;
       font-weight: bold;
       margin-right: 8px;
+    }
+    
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        gap: 15px;
+      }
+      
+      .navbar h1 {
+        font-size: 20px;
+      }
+      
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .section {
+        padding: 20px;
+      }
+      
+      .data-table {
+        font-size: 12px;
+      }
+      
+      .data-table th,
+      .data-table td {
+        padding: 10px 5px;
+      }
+      
+      .search-bar {
+        flex-direction: column;
+      }
+      
+      .tabs {
+        overflow-x: auto;
+      }
     }
   </style>
 </head>
@@ -538,8 +712,9 @@
     
     <div class="tabs">
       <button class="tab active" onclick="showTab('orders')">📋 訂單管理</button>
-      <button class="tab" onclick="showTab('revenue')">📊 營業額統計</button>
+      <button class="tab" onclick="showTab('timeSlots')">⏰ 時段管理</button>
       <button class="tab" onclick="showTab('fixedCosts')">💰 固定成本</button>
+      <button class="tab" onclick="showTab('revenue')">📊 營業額統計</button>
       <button class="tab" onclick="showTab('customers')">👥 客戶資料</button>
     </div>
     
@@ -548,15 +723,23 @@
         <div class="section-header">
           <h2>訂單列表</h2>
           <div class="action-buttons">
+            <button class="btn btn-success" onclick="exportToExcel()">📥 匯出 Excel</button>
             <button class="btn" onclick="loadOrders()">🔄 重新載入</button>
           </div>
         </div>
         <div class="search-bar">
-          <input type="text" class="search-input" placeholder="搜尋..." id="orderSearch" onkeyup="filterOrders()">
+          <input type="text" class="search-input" placeholder="搜尋訂單編號、客戶姓名或電話..." id="orderSearch" onkeyup="filterOrders()">
           <select class="filter-select" id="statusFilter" onchange="filterOrders()">
             <option value="">全部狀態</option>
             <option value="待處理">待處理</option>
+            <option value="處理中">處理中</option>
             <option value="已完成">已完成</option>
+            <option value="已取消">已取消</option>
+          </select>
+          <select class="filter-select" id="serviceFilter" onchange="filterOrders()">
+            <option value="">全部服務</option>
+            <option value="搬家服務">搬家服務</option>
+            <option value="寵物接送">寵物接送</option>
           </select>
         </div>
         <div id="ordersTableContainer">
@@ -565,37 +748,24 @@
       </div>
     </div>
     
-    <div id="revenue" class="tab-content">
+    <div id="timeSlots" class="tab-content">
       <div class="section">
         <div class="section-header">
-          <h2>營業額統計</h2>
+          <h2>可預約時段設定</h2>
           <div class="action-buttons">
-            <button class="btn" onclick="loadRevenueStats()">🔄 重新載入</button>
+            <button class="btn btn-success" onclick="openAddTimeSlotModal()">➕ 新增時段</button>
           </div>
         </div>
-        <div class="revenue-grid">
-          <div class="revenue-card">
-            <h4>本年度營業額</h4>
-            <div class="amount" id="yearRevenue">NT$ 0</div>
-          </div>
-          <div class="revenue-card">
-            <h4>本月營業額</h4>
-            <div class="amount" id="monthRevenue">NT$ 0</div>
-          </div>
-          <div class="revenue-card">
-            <h4>🏠 搬家服務</h4>
-            <div class="amount" id="movingRevenue">NT$ 0</div>
-            <p style="color: #A0826D; font-size: 14px; margin-top: 10px;">佔比：<span id="movingPercent">0%</span></p>
-          </div>
-          <div class="revenue-card">
-            <h4>🐾 寵物接送</h4>
-            <div class="amount" id="petRevenue">NT$ 0</div>
-            <p style="color: #A0826D; font-size: 14px; margin-top: 10px;">佔比：<span id="petPercent">0%</span></p>
-          </div>
+        <div class="form-group">
+          <label>選擇日期</label>
+          <input type="date" id="timeSlotDate" onchange="loadTimeSlots()">
         </div>
-        <div class="analysis-box">
-          <h4>🤖 AI 智能分析</h4>
-          <div id="aiAnalysis"><p style="color: #A0826D;">正在分析...</p></div>
+        <div id="timeSlotsContainer">
+          <div class="empty-state">
+            <div class="empty-state-icon">⏰</div>
+            <h3>請選擇日期</h3>
+            <p>選擇日期後即可查看和管理該日的可預約時段</p>
+          </div>
         </div>
       </div>
     </div>
@@ -603,9 +773,9 @@
     <div id="fixedCosts" class="tab-content">
       <div class="section">
         <div class="section-header">
-          <h2>固定成本</h2>
+          <h2>每月固定成本</h2>
           <div class="action-buttons">
-            <button class="btn btn-success" onclick="openAddCostModal()">➕ 新增</button>
+            <button class="btn btn-success" onclick="openAddCostModal()">➕ 新增成本項目</button>
           </div>
         </div>
         <div class="form-group">
@@ -615,9 +785,69 @@
         <div id="fixedCostsContainer">
           <div class="loading"><div class="loading-spinner"></div><p>載入中...</p></div>
         </div>
-        <div style="background: #FFF8F0; padding: 20px; border-radius: 10px; margin-top: 20px; border: 2px solid #E8D5C4;">
+        <div class="cost-summary" style="background: linear-gradient(135deg, #FFF8F0 0%, #F5E6D3 100%); padding: 20px; border-radius: 10px; margin-top: 20px; border: 2px solid #E8D5C4;">
           <h3 style="color: #8B5A2B; margin-bottom: 15px;">本月成本總計</h3>
           <div style="font-size: 32px; font-weight: bold; color: #D2691E;" id="monthTotalCost">NT$ 0</div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="revenue" class="tab-content">
+      <div class="section">
+        <div class="section-header">
+          <h2>營業額統計分析</h2>
+          <div class="action-buttons">
+            <button class="btn" onclick="loadRevenueStats()">🔄 重新載入</button>
+          </div>
+        </div>
+        <div class="period-selector">
+          <button class="period-btn active" onclick="selectPeriod('year')">年度</button>
+          <button class="period-btn" onclick="selectPeriod('quarter')">季度</button>
+          <button class="period-btn" onclick="selectPeriod('month')">月度</button>
+          <button class="period-btn" onclick="selectPeriod('week')">週度</button>
+        </div>
+        <div class="revenue-grid">
+          <div class="revenue-card">
+            <h4>本年度營業額</h4>
+            <div class="amount" id="yearRevenue">NT$ 0</div>
+          </div>
+          <div class="revenue-card">
+            <h4>本季度營業額</h4>
+            <div class="amount" id="quarterRevenue">NT$ 0</div>
+          </div>
+          <div class="revenue-card">
+            <h4>本月營業額</h4>
+            <div class="amount" id="monthRevenue">NT$ 0</div>
+          </div>
+          <div class="revenue-card">
+            <h4>本週營業額</h4>
+            <div class="amount" id="weekRevenue">NT$ 0</div>
+          </div>
+        </div>
+        <div class="chart-container">
+          <h3>業務別營業額對比</h3>
+          <div class="revenue-grid">
+            <div class="revenue-card">
+              <h4>🏠 搬家服務</h4>
+              <div class="amount" id="movingRevenue">NT$ 0</div>
+              <p style="color: #A0826D; font-size: 14px; margin-top: 10px;">佔比：<span id="movingPercent">0%</span></p>
+            </div>
+            <div class="revenue-card">
+              <h4>🐾 寵物接送</h4>
+              <div class="amount" id="petRevenue">NT$ 0</div>
+              <p style="color: #A0826D; font-size: 14px; margin-top: 10px;">佔比：<span id="petPercent">0%</span></p>
+            </div>
+          </div>
+        </div>
+        <div class="chart-container">
+          <h3>旺季淡季分析</h3>
+          <div id="seasonAnalysis">
+            <div class="loading"><div class="loading-spinner"></div><p>分析中...</p></div>
+          </div>
+        </div>
+        <div class="analysis-box">
+          <h4>🤖 AI 智能分析（由 Monica 提供）</h4>
+          <div id="aiAnalysis"><p style="color: #A0826D;">正在分析數據，請稍候...</p></div>
         </div>
       </div>
     </div>
@@ -625,10 +855,13 @@
     <div id="customers" class="tab-content">
       <div class="section">
         <div class="section-header">
-          <h2>客戶資料</h2>
+          <h2>客戶資料統計</h2>
           <div class="action-buttons">
             <button class="btn" onclick="loadCustomers()">🔄 重新載入</button>
           </div>
+        </div>
+        <div class="search-bar">
+          <input type="text" class="search-input" placeholder="搜尋客戶姓名或電話..." id="customerSearch" onkeyup="filterCustomers()">
         </div>
         <div id="customersTableContainer">
           <div class="loading"><div class="loading-spinner"></div><p>載入中...</p></div>
@@ -644,6 +877,33 @@
         <button class="close-btn" onclick="closeModal('orderDetailModal')">&times;</button>
       </div>
       <div id="orderDetailContent"></div>
+    </div>
+  </div>
+  
+  <div class="modal" id="addTimeSlotModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>新增可預約時段</h3>
+        <button class="close-btn" onclick="closeModal('addTimeSlotModal')">&times;</button>
+      </div>
+      <form onsubmit="saveTimeSlot(event)">
+        <div class="form-group">
+          <label>日期 *</label>
+          <input type="date" id="newSlotDate" required>
+        </div>
+        <div class="form-group">
+          <label>時段 *</label>
+          <input type="time" id="newSlotTime" required>
+        </div>
+        <div class="form-group">
+          <label>狀態</label>
+          <select id="newSlotStatus">
+            <option value="available">可預約</option>
+            <option value="unavailable">不可預約</option>
+          </select>
+        </div>
+        <button type="submit" class="btn" style="width: 100%;">儲存</button>
+      </form>
     </div>
   </div>
   
@@ -665,33 +925,36 @@
             <option value="油錢">油錢</option>
             <option value="保養費">保養費</option>
             <option value="耗材成本">耗材成本</option>
+            <option value="保險費">保險費</option>
+            <option value="停車費">停車費</option>
             <option value="其他">其他</option>
           </select>
         </div>
         <div class="form-group">
           <label>金額 *</label>
-          <input type="number" id="newCostAmount" required>
+          <input type="number" id="newCostAmount" placeholder="請輸入金額" required>
         </div>
         <div class="form-group">
           <label>備註</label>
-          <textarea id="newCostNote" rows="3"></textarea>
+          <textarea id="newCostNote" rows="3" placeholder="選填"></textarea>
         </div>
         <button type="submit" class="btn" style="width: 100%;">儲存</button>
       </form>
     </div>
   </div>
-    
+  
   <script>
     const SPREADSHEET_ID = '1O5_nN6zzkQZT9AZgsAK3jtkNY1YgXjLirFBYR5JsoPA';
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyID57YXKqLpAidLvLbfSpiyiURt_zdw8cW1mpbVESVw7CiCpB6bDyns6m1B5cJHSpG/exec';
-    
+    const SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL_HERE';
     let allOrders = [];
     let allCustomers = [];
-    
+    let currentPeriod = 'year';    
+    // 載入統計資料
     async function loadStatistics() {
       try {
         const response = await fetch(`${SCRIPT_URL}?action=getStatistics`);
         const result = await response.json();
+        
         if (result.success) {
           document.getElementById('totalOrders').textContent = result.totalOrders || 0;
           document.getElementById('totalRevenue').textContent = `NT$ ${(result.totalRevenue || 0).toLocaleString()}`;
@@ -704,137 +967,316 @@
       }
     }
     
+    // 載入訂單資料
     async function loadOrders() {
       const container = document.getElementById('ordersTableContainer');
       container.innerHTML = '<div class="loading"><div class="loading-spinner"></div><p>載入中...</p></div>';
+      
       try {
         const response = await fetch(`${SCRIPT_URL}?action=getOrders`);
         const result = await response.json();
+        
         if (result.success && result.orders && result.orders.length > 0) {
           allOrders = result.orders;
           displayOrders(allOrders);
         } else {
-          container.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📭</div><h3>尚無訂單</h3></div>';
+          container.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-state-icon">📭</div>
+              <h3>尚無訂單資料</h3>
+              <p>目前還沒有任何訂單記錄</p>
+            </div>
+          `;
         }
       } catch (error) {
         console.error('載入訂單失敗:', error);
-        container.innerHTML = '<div class="empty-state"><div class="empty-state-icon">⚠️</div><h3>載入失敗</h3></div>';
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">⚠️</div>
+            <h3>載入失敗</h3>
+            <p>請確認 Apps Script 已正確設定並部署</p>
+          </div>
+        `;
       }
     }
     
+    // 顯示訂單表格
     function displayOrders(orders) {
       const container = document.getElementById('ordersTableContainer');
-      let html = '<table class="data-table"><thead><tr><th>訂單編號</th><th>日期</th><th>服務</th><th>客戶</th><th>電話</th><th>金額</th><th>狀態</th><th>操作</th></tr></thead><tbody>';
-      orders.forEach(order => {
-        const statusClass = order.status === '已完成' ? 'status-completed' : 'status-pending';
-        html += `<tr>
-          <td><strong>${order.orderNumber}</strong></td>
-          <td>${order.orderDate}</td>
-          <td>${order.serviceType}</td>
-          <td>${order.name}</td>
-          <td>${order.phone}</td>
-          <td><strong>NT$ ${parseInt(order.totalAmount || 0).toLocaleString()}</strong></td>
-          <td><span class="status-badge ${statusClass}">${order.status}</span></td>
-          <td><button class="btn btn-secondary" style="padding: 5px 10px; font-size: 12px;" onclick='showOrderDetail(${JSON.stringify(order).replace(/'/g, "&apos;")})'>查看</button></td>
-        </tr>`;
+      
+      let html = `
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>訂單編號</th>
+              <th>日期</th>
+              <th>服務類型</th>
+              <th>客戶姓名</th>
+              <th>電話</th>
+              <th>預約時間</th>
+              <th>金額</th>
+              <th>狀態</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+      
+      orders.forEach((order, index) => {
+        const statusClass = getStatusClass(order.status);
+        html += `
+          <tr>
+            <td><strong>${order.orderNumber}</strong></td>
+            <td>${order.orderDate}</td>
+            <td>${order.serviceType}</td>
+            <td>${order.name}</td>
+            <td>${order.phone}</td>
+            <td>${order.bookingDate} ${order.bookingTime}</td>
+            <td><strong>NT$ ${parseInt(order.totalAmount || 0).toLocaleString()}</strong></td>
+            <td><span class="status-badge ${statusClass}">${order.status}</span></td>
+            <td>
+              <button class="btn btn-secondary" style="padding: 5px 10px; font-size: 12px;" onclick="showOrderDetail(${index})">查看</button>
+            </td>
+          </tr>
+        `;
       });
+      
       html += '</tbody></table>';
       container.innerHTML = html;
     }
     
-    function showOrderDetail(order) {
+    // 獲取狀態樣式
+    function getStatusClass(status) {
+      const statusMap = {
+        '待處理': 'status-pending',
+        '處理中': 'status-processing',
+        '已完成': 'status-completed',
+        '已取消': 'status-cancelled'
+      };
+      return statusMap[status] || 'status-pending';
+    }
+    
+    // 顯示訂單詳情
+    function showOrderDetail(index) {
+      const order = allOrders[index];
+      if (!order) return;
+      
       const modal = document.getElementById('orderDetailModal');
       const content = document.getElementById('orderDetailContent');
+      
       content.innerHTML = `
-        <div class="detail-row"><label>訂單編號：</label><span><strong>${order.orderNumber}</strong></span></div>
-        <div class="detail-row"><label>服務類型：</label><span>${order.serviceType}</span></div>
-        <div class="detail-row"><label>客戶姓名：</label><span>${order.name}</span></div>
-        <div class="detail-row"><label>聯絡電話：</label><span>${order.phone}</span></div>
-        <div class="detail-row"><label>預約時間：</label><span>${order.bookingDate} ${order.bookingTime}</span></div>
-        <div class="detail-row"><label>起點：</label><span>${order.startAddress}</span></div>
-        <div class="detail-row"><label>終點：</label><span>${order.endAddress}</span></div>
-        <div class="detail-row"><label>需求：</label><span>${order.requirements || '無'}</span></div>
-        <div class="detail-row"><label>金額：</label><span><strong style="color: #D2691E; font-size: 18px;">NT$ ${parseInt(order.totalAmount || 0).toLocaleString()}</strong></span></div>
+        <div class="detail-row">
+          <label>訂單編號：</label>
+          <span><strong>${order.orderNumber}</strong></span>
+        </div>
+        <div class="detail-row">
+          <label>訂單日期：</label>
+          <span>${order.orderDate} ${order.orderTime || ''}</span>
+        </div>
+        <div class="detail-row">
+          <label>服務類型：</label>
+          <span>${order.serviceType}</span>
+        </div>
+        <div class="detail-row">
+          <label>客戶姓名：</label>
+          <span>${order.name}</span>
+        </div>
+        <div class="detail-row">
+          <label>聯絡電話：</label>
+          <span>${order.phone}</span>
+        </div>
+        <div class="detail-row">
+          <label>預約時間：</label>
+          <span>${order.bookingDate} ${order.bookingTime}</span>
+        </div>
+        <div class="detail-row">
+          <label>起點地址：</label>
+          <span>${order.startAddress}</span>
+        </div>
+        <div class="detail-row">
+          <label>終點地址：</label>
+          <span>${order.endAddress}</span>
+        </div>
+        <div class="detail-row">
+          <label>服務項目：</label>
+          <span style="white-space: pre-line;">${order.serviceItems || '無'}</span>
+        </div>
+        <div class="detail-row">
+          <label>其他需求：</label>
+          <span>${order.requirements || '無'}</span>
+        </div>
+        <div class="detail-row">
+          <label>總金額：</label>
+          <span><strong style="color: #D2691E; font-size: 18px;">NT$ ${parseInt(order.totalAmount || 0).toLocaleString()}</strong></span>
+        </div>
+        <div class="detail-row">
+          <label>狀態：</label>
+          <span><span class="status-badge ${getStatusClass(order.status)}">${order.status}</span></span>
+        </div>
       `;
+      
       modal.classList.add('show');
     }
     
+    // 關閉彈窗
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.remove('show');
+    }
+    
+    // 篩選訂單
     function filterOrders() {
       const searchText = document.getElementById('orderSearch').value.toLowerCase();
       const statusFilter = document.getElementById('statusFilter').value;
+      const serviceFilter = document.getElementById('serviceFilter').value;
+      
       const filtered = allOrders.filter(order => {
-        const matchSearch = !searchText || order.orderNumber.toLowerCase().includes(searchText) || order.name.toLowerCase().includes(searchText);
+        const matchSearch = !searchText || 
+          order.orderNumber.toLowerCase().includes(searchText) ||
+          order.name.toLowerCase().includes(searchText) ||
+          order.phone.includes(searchText);
+        
         const matchStatus = !statusFilter || order.status === statusFilter;
-        return matchSearch && matchStatus;
+        const matchService = !serviceFilter || order.serviceType === serviceFilter;
+        
+        return matchSearch && matchStatus && matchService;
       });
+      
       displayOrders(filtered);
     }
     
-    async function loadRevenueStats() {
+    // 載入時段
+    async function loadTimeSlots() {
+      const date = document.getElementById('timeSlotDate').value;
+      if (!date) return;
+      
+      const container = document.getElementById('timeSlotsContainer');
+      container.innerHTML = '<div class="loading"><div class="loading-spinner"></div><p>載入中...</p></div>';
+      
       try {
-        const response = await fetch(`${SCRIPT_URL}?action=getRevenueStats`);
+        const response = await fetch(`${SCRIPT_URL}?action=getTimeSlots&date=${date}`);
         const result = await response.json();
-        if (result.success) {
-          document.getElementById('yearRevenue').textContent = `NT$ ${(result.yearRevenue || 0).toLocaleString()}`;
-          document.getElementById('monthRevenue').textContent = `NT$ ${(result.monthRevenue || 0).toLocaleString()}`;
-          document.getElementById('movingRevenue').textContent = `NT$ ${(result.movingRevenue || 0).toLocaleString()}`;
-          document.getElementById('petRevenue').textContent = `NT$ ${(result.petRevenue || 0).toLocaleString()}`;
-          const total = (result.movingRevenue || 0) + (result.petRevenue || 0);
-          const movingPercent = total > 0 ? (((result.movingRevenue || 0) / total) * 100).toFixed(1) : 0;
-          const petPercent = total > 0 ? (((result.petRevenue || 0) / total) * 100).toFixed(1) : 0;
-          document.getElementById('movingPercent').textContent = `${movingPercent}%`;
-          document.getElementById('petPercent').textContent = `${petPercent}%`;
-          generateAIAnalysis(result);
+        
+        if (result.success && result.timeSlots && result.timeSlots.length > 0) {
+          let html = '<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px;">';
+          result.timeSlots.forEach(slot => {
+            const statusColor = slot.available ? '#8FBC8F' : '#D3D3D3';
+            html += `
+              <div style="background: white; padding: 15px; border-radius: 10px; border: 2px solid ${statusColor}; text-align: center;">
+                <div style="font-size: 18px; font-weight: bold; color: #6B4423; margin-bottom: 5px;">${slot.time}</div>
+                <div style="font-size: 12px; color: ${statusColor};">${slot.available ? '可預約' : '已預約'}</div>
+                ${slot.orderNumber ? `<div style="font-size: 10px; color: #A0826D; margin-top: 5px;">${slot.orderNumber}</div>` : ''}
+              </div>
+            `;
+          });
+          html += '</div>';
+          container.innerHTML = html;
+        } else {
+          container.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-state-icon">⏰</div>
+              <h3>此日期尚未設定時段</h3>
+              <p>點擊「新增時段」按鈕來設定可預約時段</p>
+            </div>
+          `;
         }
       } catch (error) {
-        console.error('載入營業額失敗:', error);
+        console.error('載入時段失敗:', error);
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">⚠️</div>
+            <h3>載入失敗</h3>
+            <p>請稍後再試</p>
+          </div>
+        `;
       }
     }
     
-    function generateAIAnalysis(data) {
-      const container = document.getElementById('aiAnalysis');
-      const total = (data.movingRevenue || 0) + (data.petRevenue || 0);
-      const movingPercent = total > 0 ? (((data.movingRevenue || 0) / total) * 100).toFixed(1) : 0;
-      let analysis = '<ul>';
-      if (movingPercent > 60) {
-        analysis += '<li><strong>優勢：</strong>搬家服務為主要營收來源</li>';
-        analysis += '<li><strong>建議：</strong>可增加寵物接送行銷</li>';
-      } else if (movingPercent < 40) {
-        analysis += '<li><strong>優勢：</strong>寵物接送服務表現亮眼</li>';
-        analysis += '<li><strong>建議：</strong>持續深耕寵物市場</li>';
-      } else {
-        analysis += '<li><strong>優勢：</strong>兩項業務發展均衡</li>';
-      }
-      analysis += '<li><strong>成本控制：</strong>建議每月檢視固定成本</li></ul>';
-      container.innerHTML = analysis;
+    // 開啟新增時段彈窗
+    function openAddTimeSlotModal() {
+      document.getElementById('addTimeSlotModal').classList.add('show');
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('newSlotDate').value = today;
     }
     
+    // 儲存時段
+    async function saveTimeSlot(event) {
+      event.preventDefault();
+      
+      const formData = new URLSearchParams();
+      formData.append('action', 'saveTimeSlot');
+      formData.append('date', document.getElementById('newSlotDate').value);
+      formData.append('time', document.getElementById('newSlotTime').value);
+      formData.append('status', document.getElementById('newSlotStatus').value);
+      
+      try {
+        await fetch(SCRIPT_URL, {
+          method: 'POST',
+          body: formData
+        });
+        
+        alert('時段新增成功！');
+        closeModal('addTimeSlotModal');
+        loadTimeSlots();
+      } catch (error) {
+        console.error('儲存失敗:', error);
+        alert('儲存失敗，請稍後再試');
+      }
+    }
+    
+    // 載入固定成本
     async function loadFixedCosts() {
       const month = document.getElementById('costMonth').value;
       if (!month) return;
+      
       const container = document.getElementById('fixedCostsContainer');
       container.innerHTML = '<div class="loading"><div class="loading-spinner"></div><p>載入中...</p></div>';
+      
       try {
         const response = await fetch(`${SCRIPT_URL}?action=getFixedCosts&month=${month}`);
         const result = await response.json();
+        
         if (result.success && result.costs && result.costs.length > 0) {
           let html = '';
           let total = 0;
+          
           result.costs.forEach(cost => {
             total += parseFloat(cost.amount || 0);
-            html += `<div class="cost-item"><div class="cost-item-info"><h4>${cost.type}</h4><p>${cost.note || '無備註'}</p></div><div class="cost-item-amount">NT$ ${parseInt(cost.amount || 0).toLocaleString()}</div></div>`;
+            html += `
+              <div class="cost-item">
+                <div class="cost-item-info">
+                  <h4>${cost.type}</h4>
+                  <p>${cost.note || '無備註'}</p>
+                </div>
+                <div class="cost-item-amount">NT$ ${parseInt(cost.amount || 0).toLocaleString()}</div>
+              </div>
+            `;
           });
+          
           container.innerHTML = html;
           document.getElementById('monthTotalCost').textContent = `NT$ ${total.toLocaleString()}`;
         } else {
-          container.innerHTML = '<div class="empty-state"><div class="empty-state-icon">💰</div><h3>本月尚無成本記錄</h3></div>';
+          container.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-state-icon">💰</div>
+              <h3>本月尚無成本記錄</h3>
+              <p>點擊「新增成本項目」開始記錄</p>
+            </div>
+          `;
           document.getElementById('monthTotalCost').textContent = 'NT$ 0';
         }
       } catch (error) {
         console.error('載入成本失敗:', error);
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">⚠️</div>
+            <h3>載入失敗</h3>
+            <p>請稍後再試</p>
+          </div>
+        `;
       }
     }
     
+    // 開啟新增成本彈窗
     function openAddCostModal() {
       document.getElementById('addCostModal').classList.add('show');
       const today = new Date();
@@ -842,87 +1284,264 @@
       document.getElementById('newCostMonth').value = month;
     }
     
+    // 儲存成本
     async function saveCost(event) {
       event.preventDefault();
-      const data = new URLSearchParams();
-      data.append('action', 'saveCost');
-      data.append('month', document.getElementById('newCostMonth').value);
-      data.append('type', document.getElementById('newCostType').value);
-      data.append('amount', document.getElementById('newCostAmount').value);
-      data.append('note', document.getElementById('newCostNote').value);
+      
+      const formData = new URLSearchParams();
+      formData.append('action', 'saveCost');
+      formData.append('month', document.getElementById('newCostMonth').value);
+      formData.append('type', document.getElementById('newCostType').value);
+      formData.append('amount', document.getElementById('newCostAmount').value);
+      formData.append('note', document.getElementById('newCostNote').value);
+      
       try {
-        await fetch(SCRIPT_URL, { method: 'POST', body: data });
+        await fetch(SCRIPT_URL, {
+          method: 'POST',
+          body: formData
+        });
+        
         alert('成本項目新增成功！');
         closeModal('addCostModal');
         loadFixedCosts();
       } catch (error) {
         console.error('儲存失敗:', error);
-        alert('儲存失敗');
+        alert('儲存失敗，請稍後再試');
       }
     }
     
+    // 載入營業額統計
+    async function loadRevenueStats() {
+      try {
+        const response = await fetch(`${SCRIPT_URL}?action=getRevenueStats`);
+        const result = await response.json();
+        
+        if (result.success) {
+          document.getElementById('yearRevenue').textContent = `NT$ ${(result.yearRevenue || 0).toLocaleString()}`;
+          document.getElementById('quarterRevenue').textContent = `NT$ ${(result.quarterRevenue || 0).toLocaleString()}`;
+          document.getElementById('monthRevenue').textContent = `NT$ ${(result.monthRevenue || 0).toLocaleString()}`;
+          document.getElementById('weekRevenue').textContent = `NT$ ${(result.weekRevenue || 0).toLocaleString()}`;
+          
+          document.getElementById('movingRevenue').textContent = `NT$ ${(result.movingRevenue || 0).toLocaleString()}`;
+          document.getElementById('petRevenue').textContent = `NT$ ${(result.petRevenue || 0).toLocaleString()}`;
+          
+          const total = (result.movingRevenue || 0) + (result.petRevenue || 0);
+          const movingPercent = total > 0 ? (((result.movingRevenue || 0) / total) * 100).toFixed(1) : 0;
+          const petPercent = total > 0 ? (((result.petRevenue || 0) / total) * 100).toFixed(1) : 0;
+          
+          document.getElementById('movingPercent').textContent = `${movingPercent}%`;
+          document.getElementById('petPercent').textContent = `${petPercent}%`;
+          
+          if (result.seasonData) {
+            displaySeasonAnalysis(result.seasonData);
+          }
+          generateAIAnalysis(result);
+        }
+      } catch (error) {
+        console.error('載入營業額失敗:', error);
+      }
+    }
+    
+    // 顯示旺季淡季分析
+    function displaySeasonAnalysis(data) {
+      const container = document.getElementById('seasonAnalysis');
+      
+      if (!data || data.length === 0) {
+        container.innerHTML = '<p style="color: #A0826D;">資料不足，無法進行分析</p>';
+        return;
+      }
+      
+      const avgRevenue = data.reduce((sum, m) => sum + (m.revenue || 0), 0) / data.length;
+      
+      let html = '<div class="revenue-grid">';
+      data.forEach(month => {
+        const isBusy = (month.revenue || 0) > avgRevenue;
+        html += `
+          <div class="revenue-card" style="border-left: 4px solid ${isBusy ? '#8FBC8F' : '#D2691E'};">
+            <h4>${month.month} ${isBusy ? '🔥 旺季' : '❄️ 淡季'}</h4>
+            <div class="amount">NT$ ${(month.revenue || 0).toLocaleString()}</div>
+          </div>
+        `;
+      });
+      html += '</div>';
+      container.innerHTML = html;
+    }
+    
+    // 生成 AI 分析
+    function generateAIAnalysis(data) {
+      const container = document.getElementById('aiAnalysis');
+      
+      const total = (data.movingRevenue || 0) + (data.petRevenue || 0);
+      const movingPercent = total > 0 ? (((data.movingRevenue || 0) / total) * 100).toFixed(1) : 0;
+      
+      let analysis = '<ul>';
+      
+      if (movingPercent > 60) {
+        analysis += '<li><strong>優勢：</strong>搬家服務為主要營收來源，市場定位明確</li>';
+        analysis += '<li><strong>建議：</strong>可考慮增加寵物接送服務的行銷力度，平衡業務組合</li>';
+      } else if (movingPercent < 40) {
+        analysis += '<li><strong>優勢：</strong>寵物接送服務表現亮眼，具有成長潛力</li>';
+        analysis += '<li><strong>建議：</strong>持續深耕寵物市場，建立口碑與回購率</li>';
+      } else {
+        analysis += '<li><strong>優勢：</strong>兩項業務發展均衡，風險分散良好</li>';
+        analysis += '<li><strong>建議：</strong>維持現有策略，同時觀察季節性變化調整資源配置</li>';
+      }
+      
+      if ((data.monthRevenue || 0) > ((data.quarterRevenue || 0) / 3)) {
+        analysis += '<li><strong>趨勢：</strong>本月業績表現優於季度平均，呈現成長態勢</li>';
+      } else {
+        analysis += '<li><strong>提醒：</strong>本月業績低於季度平均，建議檢視行銷策略</li>';
+      }
+      
+      analysis += '<li><strong>成本控制：</strong>建議每月檢視固定成本，確保利潤率維持在健康水準</li>';
+      analysis += '</ul>';
+      
+      container.innerHTML = analysis;
+    }
+    
+    // 選擇期間
+    function selectPeriod(period) {
+      currentPeriod = period;
+      document.querySelectorAll('.period-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+    }
+    
+    // 載入客戶資料
     async function loadCustomers() {
       const container = document.getElementById('customersTableContainer');
       container.innerHTML = '<div class="loading"><div class="loading-spinner"></div><p>載入中...</p></div>';
+      
       try {
         const response = await fetch(`${SCRIPT_URL}?action=getCustomers`);
         const result = await response.json();
+        
         if (result.success && result.customers && result.customers.length > 0) {
           allCustomers = result.customers;
           displayCustomers(allCustomers);
         } else {
-          container.innerHTML = '<div class="empty-state"><div class="empty-state-icon">👥</div><h3>尚無客戶資料</h3></div>';
+          container.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-state-icon">👥</div>
+              <h3>尚無客戶資料</h3>
+              <p>目前還沒有任何客戶記錄</p>
+            </div>
+          `;
         }
       } catch (error) {
         console.error('載入客戶失敗:', error);
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">⚠️</div>
+            <h3>載入失敗</h3>
+            <p>請確認 Apps Script 已正確設定</p>
+          </div>
+        `;
       }
     }
     
+    // 顯示客戶表格
     function displayCustomers(customers) {
       const container = document.getElementById('customersTableContainer');
-      let html = '<table class="data-table"><thead><tr><th>客戶姓名</th><th>電話</th><th>訂單數</th><th>累計金額</th><th>最後消費</th></tr></thead><tbody>';
+      
+      let html = `
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>客戶姓名</th>
+              <th>聯絡電話</th>
+              <th>累計訂單數</th>
+              <th>累計金額</th>
+              <th>最後消費日期</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+      
       customers.forEach(customer => {
-        html += `<tr><td><strong>${customer.name}</strong></td><td>${customer.phone}</td><td>${customer.orderCount} 筆</td><td><strong>NT$ ${parseInt(customer.totalAmount || 0).toLocaleString()}</strong></td><td>${customer.lastOrderDate}</td></tr>`;
+        html += `
+          <tr>
+            <td><strong>${customer.name}</strong></td>
+            <td>${customer.phone}</td>
+            <td>${customer.orderCount} 筆</td>
+            <td><strong>NT$ ${parseInt(customer.totalAmount || 0).toLocaleString()}</strong></td>
+            <td>${customer.lastOrderDate}</td>
+          </tr>
+        `;
       });
+      
       html += '</tbody></table>';
       container.innerHTML = html;
     }
     
+    // 篩選客戶
+    function filterCustomers() {
+      const searchText = document.getElementById('customerSearch').value.toLowerCase();
+      
+      const filtered = allCustomers.filter(customer => {
+        return customer.name.toLowerCase().includes(searchText) ||
+               customer.phone.includes(searchText);
+      });
+      
+      displayCustomers(filtered);
+    }
+    
+    // 切換分頁
     function showTab(tabName) {
-      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      
       document.getElementById(tabName).classList.add('active');
       event.target.classList.add('active');
-      if (tabName === 'orders') loadOrders();
-      else if (tabName === 'customers') loadCustomers();
-      else if (tabName === 'revenue') loadRevenueStats();
-      else if (tabName === 'fixedCosts') {
+      
+      // 載入對應資料
+      if (tabName === 'orders') {
+        loadOrders();
+      } else if (tabName === 'customers') {
+        loadCustomers();
+      } else if (tabName === 'revenue') {
+        loadRevenueStats();
+      } else if (tabName === 'fixedCosts') {
         const today = new Date();
         const month = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
         document.getElementById('costMonth').value = month;
         loadFixedCosts();
+      } else if (tabName === 'timeSlots') {
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('timeSlotDate').value = today;
+        loadTimeSlots();
       }
     }
     
+    // 重新整理所有資料
     function refreshAllData() {
       loadStatistics();
       loadOrders();
+      loadCustomers();
+      loadRevenueStats();
     }
     
+    // 開啟 Google Sheets
     function openGoogleSheets() {
       window.open(`https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/edit`, '_blank');
     }
     
-    function closeModal(modalId) {
-      document.getElementById(modalId).classList.remove('show');
+    // 匯出 Excel
+    function exportToExcel() {
+      window.open(`https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=xlsx`, '_blank');
     }
     
+    // 初始化
     window.onload = function() {
-      if (SCRIPT_URL === 'YOUR_APPS_SCRIPT_URL_HERE') {
-        alert('⚠️ 請先設定 SCRIPT_URL');
-      } else {
+      if (SCRIPT_URL !== 'https://script.google.com/macros/s/AKfycbyID57YXKqLpAidLvLbfSpiyiURt_zdw8cW1mpbVESVw7CiCpB6bDyns6m1B5cJHSpG/exec') {
         loadStatistics();
         loadOrders();
+      } else {
+        alert('⚠️ 請先設定 SCRIPT_URL\n\n請將 Apps Script 部署後的網址填入 SCRIPT_URL 變數中');
       }
     };
   </script>
