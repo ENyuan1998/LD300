@@ -278,22 +278,16 @@
       transform: scale(1.01);
     }
     
-    /* 優化時間顯示 */
-    .date-display {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-    
-    .date-main {
-      font-weight: 600;
-      color: #6B4423;
+    /* 簡化時間顯示 */
+    .simple-date {
       font-size: 14px;
+      color: #6B4423;
     }
     
-    .date-time {
-      font-size: 12px;
-      color: #A0826D;
+    .booking-time {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
     }
     
     .date-badge {
@@ -301,7 +295,7 @@
       padding: 4px 10px;
       background: linear-gradient(135deg, #FFF8E7 0%, #FFE4B5 100%);
       border-radius: 12px;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 600;
       color: #8B5A2B;
       border: 1px solid #E8D5C4;
@@ -312,11 +306,10 @@
       padding: 4px 10px;
       background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
       border-radius: 12px;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 600;
       color: #1565C0;
       border: 1px solid #90CAF9;
-      margin-left: 6px;
     }
     
     .status-badge {
@@ -754,6 +747,56 @@
       }
     }
     
+    /* 時段卡片樣式 */
+    .time-slot-card {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      border: 2px solid #8FBC8F;
+      text-align: center;
+      transition: all 0.3s;
+    }
+    
+    .time-slot-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(139, 90, 43, 0.15);
+    }
+    
+    .time-slot-card.unavailable {
+      border-color: #D3D3D3;
+      opacity: 0.6;
+    }
+    
+    .time-slot-time {
+      font-size: 18px;
+      font-weight: bold;
+      color: #6B4423;
+      margin-bottom: 8px;
+    }
+    
+    .time-slot-status {
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 12px;
+      display: inline-block;
+    }
+    
+    .time-slot-status.available {
+      background: #D4EDDA;
+      color: #155724;
+    }
+    
+    .time-slot-status.booked {
+      background: #F8D7DA;
+      color: #721C24;
+    }
+    
+    .time-slot-order {
+      font-size: 10px;
+      color: #A0826D;
+      margin-top: 5px;
+    }
+    
     @media (max-width: 768px) {
       .navbar {
         flex-direction: column;
@@ -792,7 +835,7 @@
   </style>
 </head>
 <body>
-  <div class="navbar">
+    <div class="navbar">
     <h1>📊 老得服務後台管理系統</h1>
     <div class="navbar-actions">
       <button class="navbar-btn" onclick="refreshAllData()">🔄 重新整理</button>
@@ -873,6 +916,7 @@
           <h2>可預約時段設定</h2>
           <div class="action-buttons">
             <button class="btn btn-success" onclick="openAddTimeSlotModal()">➕ 新增時段</button>
+            <button class="btn" onclick="loadTimeSlots()">🔄 重新載入</button>
           </div>
         </div>
         <div class="form-group">
@@ -1063,6 +1107,7 @@
   </div>
   
   <div class="toast" id="toast"></div>
+  
   <script>
     const SPREADSHEET_ID = '1O5_nN6zzkQZT9AZgsAK3jtkNY1YgXjLirFBYR5JsoPA';
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyID57YXKqLpAidLvLbfSpiyiURt_zdw8cW1mpbVESVw7CiCpB6bDyns6m1B5cJHSpG/exec';
@@ -1070,67 +1115,31 @@
     let allCustomers = [];
     let currentPeriod = 'year';
     
-    // 格式化日期時間（優化顯示）
-    function formatDateTime(dateString) {
+    // 簡化日期格式化（僅顯示日期）
+    function formatSimpleDate(dateString) {
       if (!dateString) return '-';
-      
       try {
         const date = new Date(dateString);
         if (isNaN(date.getTime())) return dateString;
-        
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const day = String(date.getDate()).padStart(2, '0');
-        const hours = String(date.getHours()).padStart(2, '0');
-        const minutes = String(date.getMinutes()).padStart(2, '0');
-        
-        return `
-          <div class="date-display">
-            <span class="date-main">${year}/${month}/${day}</span>
-            <span class="date-time">${hours}:${minutes}</span>
-          </div>
-        `;
+        return `${year}/${month}/${day}`;
       } catch (error) {
         return dateString;
       }
     }
     
-    // 格式化日期（僅日期）
-    function formatDate(dateString) {
-      if (!dateString) return '-';
-      
-      try {
-        const date = new Date(dateString);
-        if (isNaN(date.getTime())) return dateString;
-        
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        
-        return `<span class="date-badge">${year}/${month}/${day}</span>`;
-      } catch (error) {
-        return dateString;
-      }
-    }
-    
-    // 格式化預約時間（日期 + 時間）
+    // 格式化預約時間（日期 + 時間徽章）
     function formatBookingTime(dateString, timeString) {
       if (!dateString) return '-';
-      
       try {
         const date = new Date(dateString);
         if (isNaN(date.getTime())) return dateString;
-        
-        const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const day = String(date.getDate()).padStart(2, '0');
-        
         const time = timeString || '';
-        
-        return `
-          <span class="date-badge">${month}/${day}</span>
-          <span class="time-badge">${time}</span>
-        `;
+        return `<span class="date-badge">${month}/${day}</span> <span class="time-badge">${time}</span>`;
       } catch (error) {
         return dateString;
       }
@@ -1196,7 +1205,7 @@
           <thead>
             <tr>
               <th>訂單編號</th>
-              <th>建立時間</th>
+              <th>建立日期</th>
               <th>服務類型</th>
               <th>客戶姓名</th>
               <th>電話</th>
@@ -1214,11 +1223,11 @@
         html += `
           <tr>
             <td><strong>${order.orderNumber}</strong></td>
-            <td>${formatDateTime(order.orderDate)}</td>
+            <td class="simple-date">${formatSimpleDate(order.orderDate)}</td>
             <td>${order.serviceType}</td>
             <td>${order.name}</td>
             <td>${order.phone}</td>
-            <td>${formatBookingTime(order.bookingDate, order.bookingTime)}</td>
+            <td class="booking-time">${formatBookingTime(order.bookingDate, order.bookingTime)}</td>
             <td><strong>NT$ ${parseInt(order.totalAmount || 0).toLocaleString()}</strong></td>
             <td>
               <select class="status-selector ${statusClass}" onchange="updateOrderStatus(${index}, this.value)" data-original="${order.status}">
@@ -1328,7 +1337,7 @@
         </div>
         <div class="detail-row">
           <label>建立時間：</label>
-          <span>${formatDateTime(order.orderDate)}</span>
+          <span>${formatSimpleDate(order.orderDate)}</span>
         </div>
         <div class="detail-row">
           <label>服務類型：</label>
@@ -1344,7 +1353,7 @@
         </div>
         <div class="detail-row">
           <label>預約日期：</label>
-          <span>${formatDate(order.bookingDate)}</span>
+          <span>${formatSimpleDate(order.bookingDate)}</span>
         </div>
         <div class="detail-row">
           <label>預約時間：</label>
@@ -1405,10 +1414,19 @@
       displayOrders(filtered);
     }
     
-    // 載入時段
+    // 🔧 修正：載入時段（關鍵修復）
     async function loadTimeSlots() {
       const date = document.getElementById('timeSlotDate').value;
-      if (!date) return;
+      if (!date) {
+        document.getElementById('timeSlotsContainer').innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">⏰</div>
+            <h3>請選擇日期</h3>
+            <p>選擇日期後即可查看和管理該日的可預約時段</p>
+          </div>
+        `;
+        return;
+      }
       
       const container = document.getElementById('timeSlotsContainer');
       container.innerHTML = '<div class="loading"><div class="loading-spinner"></div><p>載入中...</p></div>';
@@ -1417,18 +1435,25 @@
         const response = await fetch(`${SCRIPT_URL}?action=getTimeSlots&date=${date}`);
         const result = await response.json();
         
+        console.log('時段 API 回應:', result); // 除錯用
+        
         if (result.success && result.timeSlots && result.timeSlots.length > 0) {
           let html = '<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px;">';
+          
           result.timeSlots.forEach(slot => {
-            const statusColor = slot.available ? '#8FBC8F' : '#D3D3D3';
+            const isAvailable = slot.status === 'available' || slot.available;
+            const statusColor = isAvailable ? '#8FBC8F' : '#D3D3D3';
+            const statusText = isAvailable ? '可預約' : '已預約';
+            
             html += `
-              <div style="background: white; padding: 15px; border-radius: 10px; border: 2px solid ${statusColor}; text-align: center;">
-                <div style="font-size: 18px; font-weight: bold; color: #6B4423; margin-bottom: 5px;">${slot.time}</div>
-                <div style="font-size: 12px; color: ${statusColor};">${slot.available ? '可預約' : '已預約'}</div>
-                ${slot.orderNumber ? `<div style="font-size: 10px; color: #A0826D; margin-top: 5px;">${slot.orderNumber}</div>` : ''}
+              <div class="time-slot-card ${isAvailable ? '' : 'unavailable'}">
+                <div class="time-slot-time">${slot.time}</div>
+                <div class="time-slot-status ${isAvailable ? 'available' : 'booked'}">${statusText}</div>
+                ${slot.orderNumber ? `<div class="time-slot-order">${slot.orderNumber}</div>` : ''}
               </div>
             `;
           });
+          
           html += '</div>';
           container.innerHTML = html;
         } else {
@@ -1446,7 +1471,7 @@
           <div class="empty-state">
             <div class="empty-state-icon">⚠️</div>
             <h3>載入失敗</h3>
-            <p>請稍後再試</p>
+            <p>${error.message || '請稍後再試'}</p>
           </div>
         `;
       }
@@ -1455,32 +1480,46 @@
     // 開啟新增時段彈窗
     function openAddTimeSlotModal() {
       document.getElementById('addTimeSlotModal').classList.add('show');
+      const selectedDate = document.getElementById('timeSlotDate').value;
       const today = new Date().toISOString().split('T')[0];
-      document.getElementById('newSlotDate').value = today;
+      document.getElementById('newSlotDate').value = selectedDate || today;
     }
     
     // 儲存時段
     async function saveTimeSlot(event) {
       event.preventDefault();
       
+      const date = document.getElementById('newSlotDate').value;
+      const time = document.getElementById('newSlotTime').value;
+      const status = document.getElementById('newSlotStatus').value;
+      
       const formData = new URLSearchParams();
       formData.append('action', 'saveTimeSlot');
-      formData.append('date', document.getElementById('newSlotDate').value);
-      formData.append('time', document.getElementById('newSlotTime').value);
-      formData.append('status', document.getElementById('newSlotStatus').value);
+      formData.append('date', date);
+      formData.append('time', time);
+      formData.append('status', status);
       
       try {
-        await fetch(SCRIPT_URL, {
+        const response = await fetch(SCRIPT_URL, {
           method: 'POST',
           body: formData
         });
         
-        showToast('✓ 時段新增成功！', 'success');
-        closeModal('addTimeSlotModal');
-        loadTimeSlots();
+        const result = await response.json();
+        
+        if (result.success) {
+          showToast('✓ 時段新增成功！', 'success');
+          closeModal('addTimeSlotModal');
+          
+          // 更新日期選擇器並重新載入
+          document.getElementById('timeSlotDate').value = date;
+          loadTimeSlots();
+        } else {
+          throw new Error(result.error || '儲存失敗');
+        }
       } catch (error) {
         console.error('儲存失敗:', error);
-        showToast('✗ 儲存失敗，請稍後再試', 'error');
+        showToast('✗ 儲存失敗：' + error.message, 'error');
       }
     }
     
@@ -1564,6 +1603,9 @@
         
         showToast('✓ 成本項目新增成功！', 'success');
         closeModal('addCostModal');
+        
+        // 更新月份選擇器並重新載入
+        document.getElementById('costMonth').value = document.getElementById('newCostMonth').value;
         loadFixedCosts();
       } catch (error) {
         console.error('儲存失敗:', error);
@@ -1725,7 +1767,7 @@
             <td>${customer.phone}</td>
             <td>${customer.orderCount} 筆</td>
             <td><strong>NT$ ${parseInt(customer.totalAmount || 0).toLocaleString()}</strong></td>
-            <td>${formatDate(customer.lastOrderDate)}</td>
+            <td class="simple-date">${formatSimpleDate(customer.lastOrderDate)}</td>
           </tr>
         `;
       });
@@ -1781,8 +1823,6 @@
     function refreshAllData() {
       loadStatistics();
       loadOrders();
-      loadCustomers();
-      loadRevenueStats();
       showToast('✓ 資料已重新整理', 'success');
     }
     
