@@ -492,33 +492,22 @@
         </div>
 
         <div class="form-group">
-          <label>🛠️ 服務項目 *（可多選）</label>
+          <label>🏢 樓層類型 *</label>
+          <select name="floorType" id="movingFloorType" required onchange="updateMovingFloorOptions()">
+            <option value="">請選擇</option>
+            <option value="電梯">電梯</option>
+            <option value="樓梯">樓梯</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="movingFloorCountGroup" style="display: none;">
+          <label>🔢 樓層數 *</label>
+          <input type="number" name="floorCount" id="movingFloorCount" min="1" placeholder="請輸入樓層數" onchange="updateMovingSummary()">
+        </div>
+
+        <div class="form-group">
+          <label>🛠️ 額外服務項目（可多選）</label>
           <div class="checkbox-group" id="movingServices">
-            <div class="checkbox-item" onclick="toggleService(this, 'moving', '基礎出車費', 850, false)">
-              <input type="checkbox" checked disabled>
-              <span>基礎出車費</span>
-              <span style="margin-left: auto; color: #D2691E; font-weight: bold;">NT$ 850</span>
-            </div>
-            <div class="checkbox-item" onclick="toggleService(this, 'moving', '超程累加費（每公里）', 25, true)">
-              <input type="checkbox">
-              <span>超程累加費（每公里）</span>
-              <div class="quantity-control" style="display: none;">
-                <button type="button" class="quantity-btn" onclick="event.stopPropagation(); changeQuantity(this, -1, 'moving')">-</button>
-                <span class="quantity-display">1</span>
-                <button type="button" class="quantity-btn" onclick="event.stopPropagation(); changeQuantity(this, 1, 'moving')">+</button>
-              </div>
-              <span class="item-price" style="margin-left: auto; color: #D2691E; font-weight: bold;">NT$ 25</span>
-            </div>
-            <div class="checkbox-item" onclick="toggleService(this, 'moving', '樓層費（每層）', 100, true)">
-              <input type="checkbox">
-              <span>樓層費（每層）</span>
-              <div class="quantity-control" style="display: none;">
-                <button type="button" class="quantity-btn" onclick="event.stopPropagation(); changeQuantity(this, -1, 'moving')">-</button>
-                <span class="quantity-display">1</span>
-                <button type="button" class="quantity-btn" onclick="event.stopPropagation(); changeQuantity(this, 1, 'moving')">+</button>
-              </div>
-              <span class="item-price" style="margin-left: auto; color: #D2691E; font-weight: bold;">NT$ 100</span>
-            </div>
             <div class="checkbox-item" onclick="toggleService(this, 'moving', '大型家具搬運', 500, true)">
               <input type="checkbox">
               <span>大型家具搬運</span>
@@ -606,23 +595,22 @@
         </div>
 
         <div class="form-group">
-          <label>🐾 服務項目 *（可多選）</label>
+          <label>📏 預估距離（公里）*</label>
+          <input type="number" name="distance" id="petDistance" min="0" step="0.1" required placeholder="請輸入預估距離" onchange="updatePetSummary()">
+          <small style="color: #A0826D; display: block; margin-top: 5px;">💡 基礎費用已含5公里內，超過5公里每公里加收25元</small>
+        </div>
+
+        <div class="form-group">
+          <label>👥 飼主陪同</label>
+          <select name="ownerAccompany" id="petOwnerAccompany" onchange="updatePetSummary()">
+            <option value="no">不需要</option>
+            <option value="yes">需要陪同（+150元）</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>🐾 額外服務項目（可多選）</label>
           <div class="checkbox-group" id="petServices">
-            <div class="checkbox-item" onclick="toggleService(this, 'pet', '基礎接送費', 850, false)">
-              <input type="checkbox" checked disabled>
-              <span>基礎接送費</span>
-              <span style="margin-left: auto; color: #D2691E; font-weight: bold;">NT$ 850</span>
-            </div>
-            <div class="checkbox-item" onclick="toggleService(this, 'pet', '超程累加費（每公里）', 25, true)">
-              <input type="checkbox">
-              <span>超程累加費（每公里）</span>
-              <div class="quantity-control" style="display: none;">
-                <button type="button" class="quantity-btn" onclick="event.stopPropagation(); changeQuantity(this, -1, 'pet')">-</button>
-                <span class="quantity-display">1</span>
-                <button type="button" class="quantity-btn" onclick="event.stopPropagation(); changeQuantity(this, 1, 'pet')">+</button>
-              </div>
-              <span class="item-price" style="margin-left: auto; color: #D2691E; font-weight: bold;">NT$ 25</span>
-            </div>
             <div class="checkbox-item" onclick="toggleService(this, 'pet', '寵物外出籠租借', 100, true)">
               <input type="checkbox">
               <span>寵物外出籠租借</span>
@@ -690,17 +678,29 @@
   <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyID57YXKqLpAidLvLbfSpiyiURt_zdw8cW1mpbVESVw7CiCpB6bDyns6m1B5cJHSpG/exec';
     
+    // 更新後的費用設定
+    const PRICING = {
+      moving: {
+        baseFee: 500,              // 基本出車費
+        elevatorFee: 300,          // 電梯樓層費
+        stairsFeePerFloor: 100,    // 走樓梯樓層費（每層）
+        nightSurcharge: 300        // 夜間出勤加給（22:00 - 06:00）
+      },
+      pet: {
+        baseFee: 350,              // 基礎出車費（含基本里程5公里內）
+        baseDistance: 5,           // 基本里程（公里）
+        extraDistanceFee: 25,      // 超程累加費（每公里）
+        nightSurcharge: 300,       // 夜間/清晨出勤加給（22:00 - 06:00）
+        ownerAccompanyFee: 150     // 飼主陪同費用
+      }
+    };
+    
     let selectedMovingTimeSlot = null;
     let selectedPetTimeSlot = null;
     
     // 服務項目數據結構
-    let movingServicesData = {
-      '基礎出車費': { price: 850, quantity: 1, canChangeQuantity: false }
-    };
-    
-    let petServicesData = {
-      '基礎接送費': { price: 850, quantity: 1, canChangeQuantity: false }
-    };
+    let movingServicesData = {};
+    let petServicesData = {};
 
     // 切換分頁
     function showTab(tabName) {
@@ -723,12 +723,183 @@
       }
     }
 
+    // 更新搬家樓層選項
+    function updateMovingFloorOptions() {
+      const floorType = document.getElementById('movingFloorType').value;
+      const floorCountGroup = document.getElementById('movingFloorCountGroup');
+      const floorCountInput = document.getElementById('movingFloorCount');
+      
+      if (floorType === '樓梯') {
+        floorCountGroup.style.display = 'block';
+        floorCountInput.required = true;
+      } else if (floorType === '電梯') {
+        floorCountGroup.style.display = 'none';
+        floorCountInput.required = false;
+        floorCountInput.value = '';
+      } else {
+        floorCountGroup.style.display = 'none';
+        floorCountInput.required = false;
+        floorCountInput.value = '';
+      }
+      
+      updateMovingSummary();
+    }
+
+    // 檢查是否為夜間時段
+    function isNightTime(timeSlot) {
+      if (!timeSlot) return false;
+      const hour = parseInt(timeSlot.split(':')[0]);
+      return hour >= 22 || hour < 6;
+    }
+
+    // 更新搬家費用總計
+    function updateMovingSummary() {
+      const floorType = document.getElementById('movingFloorType').value;
+      const floorCount = parseInt(document.getElementById('movingFloorCount').value) || 0;
+      
+      let html = '';
+      let total = PRICING.moving.baseFee;
+      
+      // 基本出車費
+      html += `
+        <div class="summary-item">
+          <span>基本出車費</span>
+          <span>NT$ ${PRICING.moving.baseFee.toLocaleString()}</span>
+        </div>
+      `;
+      
+      // 樓層費用
+      if (floorType === '電梯') {
+        total += PRICING.moving.elevatorFee;
+        html += `
+          <div class="summary-item">
+            <span>電梯樓層費</span>
+            <span>NT$ ${PRICING.moving.elevatorFee.toLocaleString()}</span>
+          </div>
+        `;
+      } else if (floorType === '樓梯' && floorCount > 0) {
+        const stairsFee = PRICING.moving.stairsFeePerFloor * floorCount;
+        total += stairsFee;
+        html += `
+          <div class="summary-item">
+            <span>走樓梯樓層費 (${floorCount}層)</span>
+            <span>NT$ ${stairsFee.toLocaleString()}</span>
+          </div>
+        `;
+      }
+      
+      // 額外服務
+      for (const [name, data] of Object.entries(movingServicesData)) {
+        const itemTotal = data.price * data.quantity;
+        total += itemTotal;
+        html += `
+          <div class="summary-item">
+            <span>${name} ${data.quantity > 1 ? 'x' + data.quantity : ''}</span>
+            <span>NT$ ${itemTotal.toLocaleString()}</span>
+          </div>
+        `;
+      }
+      
+      // 夜間加給
+      if (isNightTime(selectedMovingTimeSlot)) {
+        total += PRICING.moving.nightSurcharge;
+        html += `
+          <div class="summary-item">
+            <span>夜間出勤加給 (22:00-06:00)</span>
+            <span>NT$ ${PRICING.moving.nightSurcharge.toLocaleString()}</span>
+          </div>
+        `;
+      }
+      
+      html += `
+        <div class="summary-item">
+          <span>總金額</span>
+          <span>NT$ ${total.toLocaleString()}</span>
+        </div>
+      `;
+      
+      document.getElementById('movingSummary').innerHTML = html;
+    }
+
+    // 更新寵物接送費用總計
+    function updatePetSummary() {
+      const distance = parseFloat(document.getElementById('petDistance').value) || 0;
+      const ownerAccompany = document.getElementById('petOwnerAccompany').value === 'yes';
+      
+      let html = '';
+      let total = PRICING.pet.baseFee;
+      
+      // 基礎出車費
+      html += `
+        <div class="summary-item">
+          <span>基礎出車費 (含5公里內)</span>
+          <span>NT$ ${PRICING.pet.baseFee.toLocaleString()}</span>
+        </div>
+      `;
+      
+      // 超程費用
+      if (distance > PRICING.pet.baseDistance) {
+        const extraDistance = distance - PRICING.pet.baseDistance;
+        const extraFee = Math.ceil(extraDistance) * PRICING.pet.extraDistanceFee;
+        total += extraFee;
+        html += `
+          <div class="summary-item">
+            <span>超程累加費 (${Math.ceil(extraDistance)}公里)</span>
+            <span>NT$ ${extraFee.toLocaleString()}</span>
+          </div>
+        `;
+      }
+      
+      // 飼主陪同
+      if (ownerAccompany) {
+        total += PRICING.pet.ownerAccompanyFee;
+        html += `
+          <div class="summary-item">
+            <span>飼主陪同費用</span>
+            <span>NT$ ${PRICING.pet.ownerAccompanyFee.toLocaleString()}</span>
+          </div>
+        `;
+      }
+      
+      // 額外服務
+      for (const [name, data] of Object.entries(petServicesData)) {
+        const itemTotal = data.price * data.quantity;
+        total += itemTotal;
+        html += `
+          <div class="summary-item">
+            <span>${name} ${data.quantity > 1 ? 'x' + data.quantity : ''}</span>
+            <span>NT$ ${itemTotal.toLocaleString()}</span>
+          </div>
+        `;
+      }
+      
+      // 夜間加給
+      if (isNightTime(selectedPetTimeSlot)) {
+        total += PRICING.pet.nightSurcharge;
+        html += `
+          <div class="summary-item">
+            <span>夜間出勤加給 (22:00-06:00)</span>
+            <span>NT$ ${PRICING.pet.nightSurcharge.toLocaleString()}</span>
+          </div>
+        `;
+      }
+      
+      html += `
+        <div class="summary-item">
+          <span>總金額</span>
+          <span>NT$ ${total.toLocaleString()}</span>
+        </div>
+      `;
+      
+      document.getElementById('petSummary').innerHTML = html;
+    }
+
     // 切換服務項目
     function toggleService(element, serviceType, serviceName, price, canChangeQuantity) {
       const checkbox = element.querySelector('input[type="checkbox"]');
       const quantityControl = element.querySelector('.quantity-control');
       
-      if (checkbox.disabled) return; // 基礎費用不能取消
+      if (checkbox.disabled) return;
       
       checkbox.checked = !checkbox.checked;
       
@@ -738,11 +909,12 @@
           quantityControl.style.display = 'flex';
         }
         
-        // 加入服務數據
         if (serviceType === 'moving') {
           movingServicesData[serviceName] = { price: price, quantity: 1, canChangeQuantity: canChangeQuantity };
+          updateMovingSummary();
         } else {
           petServicesData[serviceName] = { price: price, quantity: 1, canChangeQuantity: canChangeQuantity };
+          updatePetSummary();
         }
       } else {
         element.classList.remove('checked');
@@ -751,15 +923,14 @@
           quantityControl.querySelector('.quantity-display').textContent = '1';
         }
         
-        // 移除服務數據
         if (serviceType === 'moving') {
           delete movingServicesData[serviceName];
+          updateMovingSummary();
         } else {
           delete petServicesData[serviceName];
+          updatePetSummary();
         }
       }
-      
-      updateSummary(serviceType);
     }
 
     // 修改數量
@@ -774,44 +945,13 @@
       
       quantityDisplay.textContent = newQuantity;
       
-      // 更新服務數據
       if (serviceType === 'moving' && movingServicesData[serviceName]) {
         movingServicesData[serviceName].quantity = newQuantity;
+        updateMovingSummary();
       } else if (serviceType === 'pet' && petServicesData[serviceName]) {
         petServicesData[serviceName].quantity = newQuantity;
+        updatePetSummary();
       }
-      
-      updateSummary(serviceType);
-    }
-
-    // 更新費用總計
-    function updateSummary(serviceType) {
-      const servicesData = serviceType === 'moving' ? movingServicesData : petServicesData;
-      const summaryDiv = document.getElementById(serviceType + 'Summary');
-      
-      let html = '';
-      let total = 0;
-      
-      for (const [name, data] of Object.entries(servicesData)) {
-        const itemTotal = data.price * data.quantity;
-        total += itemTotal;
-        
-        html += `
-          <div class="summary-item">
-            <span>${name} ${data.quantity > 1 ? 'x' + data.quantity : ''}</span>
-            <span>NT$ ${itemTotal.toLocaleString()}</span>
-          </div>
-        `;
-      }
-      
-      html += `
-        <div class="summary-item">
-          <span>總金額</span>
-          <span>NT$ ${total.toLocaleString()}</span>
-        </div>
-      `;
-      
-      summaryDiv.innerHTML = html;
     }
 
     // 載入可預約時段
@@ -850,8 +990,10 @@
                 
                 if (serviceType === 'moving') {
                   selectedMovingTimeSlot = slot.time;
+                  updateMovingSummary();
                 } else {
                   selectedPetTimeSlot = slot.time;
+                  updatePetSummary();
                 }
               };
             }
@@ -867,12 +1009,69 @@
       }
     }
 
+    // 計算搬家總金額
+    function calculateMovingTotal() {
+      const floorType = document.getElementById('movingFloorType').value;
+      const floorCount = parseInt(document.getElementById('movingFloorCount').value) || 0;
+      
+      let total = PRICING.moving.baseFee;
+      
+      if (floorType === '電梯') {
+        total += PRICING.moving.elevatorFee;
+      } else if (floorType === '樓梯' && floorCount > 0) {
+        total += PRICING.moving.stairsFeePerFloor * floorCount;
+      }
+      
+      for (const data of Object.values(movingServicesData)) {
+        total += data.price * data.quantity;
+      }
+      
+      if (isNightTime(selectedMovingTimeSlot)) {
+        total += PRICING.moving.nightSurcharge;
+      }
+      
+      return total;
+    }
+
+    // 計算寵物接送總金額
+    function calculatePetTotal() {
+      const distance = parseFloat(document.getElementById('petDistance').value) || 0;
+      const ownerAccompany = document.getElementById('petOwnerAccompany').value === 'yes';
+      
+      let total = PRICING.pet.baseFee;
+      
+      if (distance > PRICING.pet.baseDistance) {
+        const extraDistance = distance - PRICING.pet.baseDistance;
+        total += Math.ceil(extraDistance) * PRICING.pet.extraDistanceFee;
+      }
+      
+      if (ownerAccompany) {
+        total += PRICING.pet.ownerAccompanyFee;
+      }
+      
+      for (const data of Object.values(petServicesData)) {
+        total += data.price * data.quantity;
+      }
+      
+      if (isNightTime(selectedPetTimeSlot)) {
+        total += PRICING.pet.nightSurcharge;
+      }
+      
+      return total;
+    }
+
     // 表單提交
     document.getElementById('movingForm').addEventListener('submit', async function(e) {
       e.preventDefault();
       
       if (!selectedMovingTimeSlot) {
         alert('請選擇預約時段');
+        return;
+      }
+      
+      const floorType = document.getElementById('movingFloorType').value;
+      if (!floorType) {
+        alert('請選擇樓層類型');
         return;
       }
       
@@ -885,13 +1084,16 @@
         bookingTime: selectedMovingTimeSlot,
         startAddress: formData.get('startAddress'),
         endAddress: formData.get('endAddress'),
+        floorType: floorType,
+        floorCount: formData.get('floorCount') || '',
         requirements: formData.get('requirements'),
+        isNight: isNightTime(selectedMovingTimeSlot),
         serviceItems: JSON.stringify(Object.entries(movingServicesData).map(([name, data]) => ({
           name: name,
           price: data.price,
           quantity: data.quantity
         }))),
-        totalAmount: Object.values(movingServicesData).reduce((sum, item) => sum + (item.price * item.quantity), 0)
+        totalAmount: calculateMovingTotal()
       };
       
       await submitOrder(data);
@@ -905,6 +1107,12 @@
         return;
       }
       
+      const distance = document.getElementById('petDistance').value;
+      if (!distance || distance <= 0) {
+        alert('請輸入預估距離');
+        return;
+      }
+      
       const formData = new FormData(this);
       const data = {
         serviceType: '寵物接送',
@@ -914,13 +1122,16 @@
         bookingTime: selectedPetTimeSlot,
         startAddress: formData.get('startAddress'),
         endAddress: formData.get('endAddress'),
+        distance: distance,
+        ownerAccompany: formData.get('ownerAccompany') === 'yes',
         requirements: formData.get('requirements'),
+        isNight: isNightTime(selectedPetTimeSlot),
         serviceItems: JSON.stringify(Object.entries(petServicesData).map(([name, data]) => ({
           name: name,
           price: data.price,
           quantity: data.quantity
         }))),
-        totalAmount: Object.values(petServicesData).reduce((sum, item) => sum + (item.price * item.quantity), 0)
+        totalAmount: calculatePetTotal()
       };
       
       await submitOrder(data);
@@ -953,13 +1164,30 @@
           // 重置表單
           if (data.serviceType === '搬家服務') {
             document.getElementById('movingForm').reset();
-            movingServicesData = { '基礎出車費': { price: 850, quantity: 1, canChangeQuantity: false } };
-            updateSummary('moving');
+            movingServicesData = {};
+            selectedMovingTimeSlot = null;
+            document.getElementById('movingFloorCountGroup').style.display = 'none';
+            updateMovingSummary();
           } else {
             document.getElementById('petForm').reset();
-            petServicesData = { '基礎接送費': { price: 850, quantity: 1, canChangeQuantity: false } };
-            updateSummary('pet');
+            petServicesData = {};
+            selectedPetTimeSlot = null;
+            updatePetSummary();
           }
+          
+          // 重置所有勾選項目
+          document.querySelectorAll('.checkbox-item').forEach(item => {
+            item.classList.remove('checked');
+            const checkbox = item.querySelector('input[type="checkbox"]');
+            if (!checkbox.disabled) {
+              checkbox.checked = false;
+            }
+            const quantityControl = item.querySelector('.quantity-control');
+            if (quantityControl) {
+              quantityControl.style.display = 'none';
+              quantityControl.querySelector('.quantity-display').textContent = '1';
+            }
+          });
         } else {
           alert('預約失敗：' + result.error);
         }
@@ -976,8 +1204,8 @@
 
     // 初始化
     window.onload = function() {
-      updateSummary('moving');
-      updateSummary('pet');
+      updateMovingSummary();
+      updatePetSummary();
       
       // 設定日期選擇器的最小日期為今天
       const today = new Date().toISOString().split('T')[0];
