@@ -13,7 +13,8 @@
     
     body {
       font-family: 'Microsoft JhengHei', Arial, sans-serif;
-      background: linear-gradient(135deg, #E8B86D 0%, #D4A574 50%, #C8956D 100%);
+      background: linear-gradient(135deg, rgba(232, 184, 109, 0.9) 0%, rgba(212, 165, 116, 0.9) 50%, rgba(200, 149, 109, 0.9) 100%),
+                  url('https://meee.com.tw/4Bo81dr') center/cover no-repeat fixed;
       min-height: 100vh;
       padding: 20px;
     }
@@ -21,11 +22,12 @@
     .container {
       max-width: 900px;
       margin: 0 auto 30px;
-      background: #FFFBF5;
+      background: rgba(255, 251, 245, 0.98);
       border-radius: 20px;
       box-shadow: 0 20px 60px rgba(139, 90, 43, 0.4);
       overflow: hidden;
       animation: fadeIn 0.6s ease-out;
+      backdrop-filter: blur(10px);
     }
     
     @keyframes fadeIn {
@@ -298,7 +300,7 @@
       color: #6B4423;
     }
     
-    .time-slot:hover {
+    .time-slot:hover:not(.disabled) {
       border-color: #D4A574;
       transform: scale(1.05);
       background: #FFF8E7;
@@ -496,12 +498,13 @@
     .footer {
       max-width: 900px;
       margin: 0 auto;
-      background: linear-gradient(135deg, #D4A574 0%, #C8956D 100%);
+      background: linear-gradient(135deg, rgba(212, 165, 116, 0.98) 0%, rgba(200, 149, 109, 0.98) 100%);
       color: white;
       padding: 30px;
       border-radius: 20px;
       text-align: center;
       box-shadow: 0 10px 30px rgba(139, 90, 43, 0.4);
+      backdrop-filter: blur(10px);
     }
     
     .footer h3 {
@@ -801,7 +804,7 @@
           </table>
         </div>
         
-        <!-- 責任限制條款 -->
+        <!-- 搬家責任限制條款 -->
         <div class="terms-section" id="movingTerms" style="display: none;">
           <h3>⚠️ 第四條：責任限制與內容物免責條款（重要備註）</h3>
           
@@ -819,15 +822,14 @@
         <div class="terms-section" id="petTerms" style="display: none;">
           <h3>⚠️ 第四條：責任限制與寵物免責條款（重要備註）</h3>
           
-          <h4>🐾 健康誠實告知義務：</h4>
-          <p>甲方有義務於運送前如實告知寵物之品種、年齡、重大宿疾（如心臟病、癲癇、傳染病）或攻擊傾向。<strong>若因甲方隱匿寵物重大疾病，導致運送途中因緊張突發休克、死亡，乙方不負任何民刑事損害賠償責任。</strong></p>
-          
           <ol>
+            <li><strong>健康誠實告知義務：</strong>甲方有義務於運送前如實告知寵物之品種、年齡、重大宿疾（如心臟病、癲癇、傳染病）或攻擊傾向。若因甲方隱匿寵物重大疾病，導致運送途中因緊張突發休克、死亡，乙方不負任何民刑事損害賠償責任。</li>
+            
             <li><strong>緊急就醫授權：</strong>運送途中若寵物出現急性身體不適、呼吸困難等緊急狀況，乙方應第一時間通知甲方。若狀況危急且無法及時聯絡甲方，甲方在此授權乙方可直接將寵物送往最近之動物醫院進行緊急搶救。期間產生之所有醫療與診療費用悉由甲方全額負擔。</li>
             
             <li><strong>不可抗力免責：</strong>倘若因不可抗力之事由（如天災、嚴重交通堵塞、交通事故、雷雨驚嚇等）導致行程延誤或寵物突發狀況，雙方應寬諒處理，乙方不負損害賠償責任。</li>
             
-            <li><strong>過失理賠上限：</strong>如因乙方疏失（如行車疏忽發生車禍、未關好車門導致寵物脫逃）導致寵物受傷或死亡，折舊理賠與醫療上限總額為本趟運費總額之十倍（或設定固定上限：新台幣貳萬元整），甲方同意放棄超過此限額之其他民刑事賠償請求權。</li>
+            <li><strong>過失理賠上限：</strong>如因乙方疏失（如行車疏忽發生車禍、未關好車門導致寵物脫逃）導致寵物受傷或死亡，折舊理賠與醫療上限總額為本趟運費總額之十倍（固定上限：新台幣貳萬元整），甲方同意放棄超過此限額之其他民刑事賠償請求權。</li>
             
             <li><strong>車內設施損壞：</strong>寵物若於車內發生一般便溺、嘔吐，乙方不額外收取基礎清潔費。但若因惡意抓咬、嚴重破壞導致車內硬體或電子設備損壞，乙方得檢具單據向甲方索取特殊維修與營業損失費用。</li>
           </ol>
@@ -1017,8 +1019,10 @@
         const response = await fetch(`${SCRIPT_URL}?action=getAvailableTimeSlots&date=${date}`);
         const result = await response.json();
         
+        grid.innerHTML = '';
+        
         if (result.success && result.timeSlots && result.timeSlots.length > 0) {
-          grid.innerHTML = '';
+          // 只顯示後台設定的時段
           result.timeSlots.forEach(slot => {
             const slotDiv = document.createElement('div');
             slotDiv.className = `time-slot ${slot.available ? '' : 'disabled'}`;
@@ -1035,37 +1039,12 @@
             grid.appendChild(slotDiv);
           });
         } else {
-          // 顯示預設時段
-          grid.innerHTML = '';
-          const defaultSlots = ['09:00', '10:00', '11:00', '13:00', '14:00', '15:00', '16:00', '17:00'];
-          defaultSlots.forEach(time => {
-            const slotDiv = document.createElement('div');
-            slotDiv.className = 'time-slot';
-            slotDiv.textContent = time;
-            slotDiv.onclick = function() {
-              document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
-              this.classList.add('selected');
-              selectedTimeSlot = time;
-            };
-            grid.appendChild(slotDiv);
-          });
+          // 如果沒有後台設定的時段，顯示提示訊息
+          grid.innerHTML = '<p style="color: #D2691E; padding: 20px; text-align: center;">此日期尚無可預約時段，請選擇其他日期或聯繫客服</p>';
         }
       } catch (error) {
         console.error('載入時段失敗:', error);
-        // 顯示預設時段
-        grid.innerHTML = '';
-        const defaultSlots = ['09:00', '10:00', '11:00', '13:00', '14:00', '15:00', '16:00', '17:00'];
-        defaultSlots.forEach(time => {
-          const slotDiv = document.createElement('div');
-          slotDiv.className = 'time-slot';
-          slotDiv.textContent = time;
-          slotDiv.onclick = function() {
-            document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
-            this.classList.add('selected');
-            selectedTimeSlot = time;
-          };
-          grid.appendChild(slotDiv);
-        });
+        grid.innerHTML = '<p style="color: #D2691E; padding: 20px; text-align: center;">載入時段失敗，請稍後再試或聯繫客服<br>LINE ID: 0922317535</p>';
       }
     }
     
@@ -1158,108 +1137,108 @@
     document.getElementById('bookingDate').setAttribute('min', today);
     
     // 表單提交
-document.getElementById('orderForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  
-  // 驗證
-  if (!selectedService) {
-    alert('請選擇服務類型');
-    return;
-  }
-  
-  if (serviceItems.length === 0 || !serviceItems.some(i => i.name)) {
-    alert('請至少選擇一項服務');
-    return;
-  }
-  
-  if (!selectedTimeSlot) {
-    alert('請選擇預約時段');
-    return;
-  }
-  
-  if (!document.getElementById('agreeTerms').checked) {
-    alert('請勾選同意服務條款');
-    return;
-  }
-  
-  const totalAmount = serviceItems.reduce((sum, item) => {
-    return sum + (item.price * item.quantity);
-  }, 0);
-  
-  // 使用 URLSearchParams
-  const formData = new URLSearchParams();
-  formData.append('serviceType', selectedService);
-  formData.append('name', document.getElementById('name').value);
-  formData.append('phone', document.getElementById('phone').value);
-  formData.append('bookingDate', document.getElementById('bookingDate').value);
-  formData.append('bookingTime', selectedTimeSlot);
-  formData.append('startAddress', document.getElementById('startAddress').value);
-  formData.append('endAddress', document.getElementById('endAddress').value);
-  formData.append('requirements', document.getElementById('requirements').value);
-  formData.append('serviceItems', JSON.stringify(serviceItems.filter(i => i.name)));
-  formData.append('totalAmount', totalAmount);
-  
-  // 顯示載入畫面
-  document.getElementById('loadingOverlay').classList.add('show');
-  
-  try {
-    const response = await fetch(SCRIPT_URL, {
-      method: 'POST',
-      body: formData,
-      redirect: 'follow'
-    });
-    
-    // 檢查回應狀態
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    
-    // 取得回應文字
-    const responseText = await response.text();
-    console.log('API 回應:', responseText);
-    
-    // 嘗試解析 JSON
-    let result;
-    try {
-      result = JSON.parse(responseText);
-    } catch (parseError) {
-      console.error('JSON 解析錯誤:', parseError);
-      console.log('原始回應:', responseText);
-      throw new Error('伺服器回應格式錯誤');
-    }
-    
-    // 隱藏載入畫面
-    document.getElementById('loadingOverlay').classList.remove('show');
-    
-    // 檢查結果
-    if (result.success) {
-      // 顯示成功訊息
-      document.getElementById('orderNumber').textContent = result.orderNumber || ('ORD' + new Date().getTime());
-      document.getElementById('orderTotal').textContent = `NT$ ${totalAmount.toLocaleString()}`;
-      document.getElementById('orderTimeSlot').textContent = `${document.getElementById('bookingDate').value} ${selectedTimeSlot}`;
-      document.getElementById('successModal').classList.add('show');
+    document.getElementById('orderForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
       
-      console.log('✓ 訂單建立成功:', result.orderNumber);
-    } else {
-      throw new Error(result.error || result.message || '訂單提交失敗');
-    }
-    
-  } catch (error) {
-    console.error('提交錯誤:', error);
-    document.getElementById('loadingOverlay').classList.remove('show');
-    
-    // 顯示詳細錯誤訊息
-    let errorMessage = '訂單提交失敗\n\n';
-    errorMessage += '錯誤原因: ' + error.message + '\n\n';
-    errorMessage += '請檢查:\n';
-    errorMessage += '1. Apps Script 是否已正確部署\n';
-    errorMessage += '2. SCRIPT_URL 是否正確\n';
-    errorMessage += '3. 部署權限是否設定為「任何人」\n\n';
-    errorMessage += '如需協助，請聯繫客服\nLINE ID: 0922317535';
-    
-    alert(errorMessage);
-  }
-});
+      // 驗證
+      if (!selectedService) {
+        alert('請選擇服務類型');
+        return;
+      }
+      
+      if (serviceItems.length === 0 || !serviceItems.some(i => i.name)) {
+        alert('請至少選擇一項服務');
+        return;
+      }
+      
+      if (!selectedTimeSlot) {
+        alert('請選擇預約時段');
+        return;
+      }
+      
+      if (!document.getElementById('agreeTerms').checked) {
+        alert('請勾選同意服務條款');
+        return;
+      }
+      
+      const totalAmount = serviceItems.reduce((sum, item) => {
+        return sum + (item.price * item.quantity);
+      }, 0);
+      
+      // 使用 URLSearchParams
+      const formData = new URLSearchParams();
+      formData.append('serviceType', selectedService);
+      formData.append('name', document.getElementById('name').value);
+      formData.append('phone', document.getElementById('phone').value);
+      formData.append('bookingDate', document.getElementById('bookingDate').value);
+      formData.append('bookingTime', selectedTimeSlot);
+      formData.append('startAddress', document.getElementById('startAddress').value);
+      formData.append('endAddress', document.getElementById('endAddress').value);
+      formData.append('requirements', document.getElementById('requirements').value);
+      formData.append('serviceItems', JSON.stringify(serviceItems.filter(i => i.name)));
+      formData.append('totalAmount', totalAmount);
+      
+      // 顯示載入畫面
+      document.getElementById('loadingOverlay').classList.add('show');
+      
+      try {
+        const response = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          body: formData,
+          redirect: 'follow'
+        });
+        
+        // 檢查回應狀態
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        // 取得回應文字
+        const responseText = await response.text();
+        console.log('API 回應:', responseText);
+        
+        // 嘗試解析 JSON
+        let result;
+        try {
+          result = JSON.parse(responseText);
+        } catch (parseError) {
+          console.error('JSON 解析錯誤:', parseError);
+          console.log('原始回應:', responseText);
+          throw new Error('伺服器回應格式錯誤');
+        }
+        
+        // 隱藏載入畫面
+        document.getElementById('loadingOverlay').classList.remove('show');
+        
+        // 檢查結果
+        if (result.success) {
+          // 顯示成功訊息
+          document.getElementById('orderNumber').textContent = result.orderNumber || ('ORD' + new Date().getTime());
+          document.getElementById('orderTotal').textContent = `NT$ ${totalAmount.toLocaleString()}`;
+          document.getElementById('orderTimeSlot').textContent = `${document.getElementById('bookingDate').value} ${selectedTimeSlot}`;
+          document.getElementById('successModal').classList.add('show');
+          
+          console.log('✓ 訂單建立成功:', result.orderNumber);
+        } else {
+          throw new Error(result.error || result.message || '訂單提交失敗');
+        }
+        
+      } catch (error) {
+        console.error('提交錯誤:', error);
+        document.getElementById('loadingOverlay').classList.remove('show');
+        
+        // 顯示詳細錯誤訊息
+        let errorMessage = '訂單提交失敗\n\n';
+        errorMessage += '錯誤原因: ' + error.message + '\n\n';
+        errorMessage += '請檢查:\n';
+        errorMessage += '1. Apps Script 是否已正確部署\n';
+        errorMessage += '2. SCRIPT_URL 是否正確\n';
+        errorMessage += '3. 部署權限是否設定為「任何人」\n\n';
+        errorMessage += '如需協助，請聯繫客服\nLINE ID: 0922317535';
+        
+        alert(errorMessage);
+      }
+    });
   </script>
 </body>
 </html>
