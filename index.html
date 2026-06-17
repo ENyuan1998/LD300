@@ -399,6 +399,7 @@
       background: #FFF8F0;
       border-radius: 15px;
       margin-top: 20px;
+      position: relative;
     }
 
     .contact-info h3 {
@@ -416,6 +417,17 @@
       color: #D2691E;
       text-decoration: none;
       font-weight: bold;
+    }
+
+    .contact-note {
+      background: #FFE4CC;
+      border: 2px solid #FF9800;
+      padding: 12px 15px;
+      border-radius: 8px;
+      margin-top: 15px;
+      color: #E65100;
+      font-weight: bold;
+      font-size: 15px;
     }
 
     @media (max-width: 768px) {
@@ -492,9 +504,16 @@
         </div>
 
         <div class="form-group">
+          <label>📏 預估距離（公里）*</label>
+          <input type="number" name="distance" id="movingDistance" min="0" step="0.1" required placeholder="請輸入預估距離" onchange="updateMovingSummary()">
+          <small style="color: #A0826D; display: block; margin-top: 5px;">💡 基礎費用已含5公里內，超過5公里每公里加收25元</small>
+        </div>
+
+        <div class="form-group">
           <label>🏢 樓層類型 *</label>
           <select name="floorType" id="movingFloorType" required onchange="updateMovingFloorOptions()">
             <option value="">請選擇</option>
+            <option value="無須協助搬運">無須協助搬運（不收費用）</option>
             <option value="電梯">電梯</option>
             <option value="樓梯">樓梯</option>
           </select>
@@ -503,42 +522,6 @@
         <div class="form-group" id="movingFloorCountGroup" style="display: none;">
           <label>🔢 樓層數 *</label>
           <input type="number" name="floorCount" id="movingFloorCount" min="1" placeholder="請輸入樓層數" onchange="updateMovingSummary()">
-        </div>
-
-        <div class="form-group">
-          <label>🛠️ 額外服務項目（可多選）</label>
-          <div class="checkbox-group" id="movingServices">
-            <div class="checkbox-item" onclick="toggleService(this, 'moving', '大型家具搬運', 500, true)">
-              <input type="checkbox">
-              <span>大型家具搬運</span>
-              <div class="quantity-control" style="display: none;">
-                <button type="button" class="quantity-btn" onclick="event.stopPropagation(); changeQuantity(this, -1, 'moving')">-</button>
-                <span class="quantity-display">1</span>
-                <button type="button" class="quantity-btn" onclick="event.stopPropagation(); changeQuantity(this, 1, 'moving')">+</button>
-              </div>
-              <span class="item-price" style="margin-left: auto; color: #D2691E; font-weight: bold;">NT$ 500</span>
-            </div>
-            <div class="checkbox-item" onclick="toggleService(this, 'moving', '家電搬運', 300, true)">
-              <input type="checkbox">
-              <span>家電搬運</span>
-              <div class="quantity-control" style="display: none;">
-                <button type="button" class="quantity-btn" onclick="event.stopPropagation(); changeQuantity(this, -1, 'moving')">-</button>
-                <span class="quantity-display">1</span>
-                <button type="button" class="quantity-btn" onclick="event.stopPropagation(); changeQuantity(this, 1, 'moving')">+</button>
-              </div>
-              <span class="item-price" style="margin-left: auto; color: #D2691E; font-weight: bold;">NT$ 300</span>
-            </div>
-            <div class="checkbox-item" onclick="toggleService(this, 'moving', '紙箱包材', 50, true)">
-              <input type="checkbox">
-              <span>紙箱包材</span>
-              <div class="quantity-control" style="display: none;">
-                <button type="button" class="quantity-btn" onclick="event.stopPropagation(); changeQuantity(this, -1, 'moving')">-</button>
-                <span class="quantity-display">1</span>
-                <button type="button" class="quantity-btn" onclick="event.stopPropagation(); changeQuantity(this, 1, 'moving')">+</button>
-              </div>
-              <span class="item-price" style="margin-left: auto; color: #D2691E; font-weight: bold;">NT$ 50</span>
-            </div>
-          </div>
         </div>
 
         <div class="form-group">
@@ -558,6 +541,9 @@
         <h3>📞 聯絡我們</h3>
         <p>LINE ID: <a href="https://line.me/ti/p/0922317535" target="_blank">0922317535</a></p>
         <p>電話: <a href="tel:0922317535">0922-317-535</a></p>
+        <div class="contact-note">
+          ⚠️ 完成預約後請與我們聯繫
+        </div>
       </div>
     </div>
 
@@ -611,16 +597,6 @@
         <div class="form-group">
           <label>🐾 額外服務項目（可多選）</label>
           <div class="checkbox-group" id="petServices">
-            <div class="checkbox-item" onclick="toggleService(this, 'pet', '寵物外出籠租借', 100, true)">
-              <input type="checkbox">
-              <span>寵物外出籠租借</span>
-              <div class="quantity-control" style="display: none;">
-                <button type="button" class="quantity-btn" onclick="event.stopPropagation(); changeQuantity(this, -1, 'pet')">-</button>
-                <span class="quantity-display">1</span>
-                <button type="button" class="quantity-btn" onclick="event.stopPropagation(); changeQuantity(this, 1, 'pet')">+</button>
-              </div>
-              <span class="item-price" style="margin-left: auto; color: #D2691E; font-weight: bold;">NT$ 100</span>
-            </div>
             <div class="checkbox-item" onclick="toggleService(this, 'pet', '多隻寵物加價', 200, true)">
               <input type="checkbox">
               <span>多隻寵物加價</span>
@@ -630,16 +606,6 @@
                 <button type="button" class="quantity-btn" onclick="event.stopPropagation(); changeQuantity(this, 1, 'pet')">+</button>
               </div>
               <span class="item-price" style="margin-left: auto; color: #D2691E; font-weight: bold;">NT$ 200</span>
-            </div>
-            <div class="checkbox-item" onclick="toggleService(this, 'pet', '等候時間費（每30分鐘）', 150, true)">
-              <input type="checkbox">
-              <span>等候時間費（每30分鐘）</span>
-              <div class="quantity-control" style="display: none;">
-                <button type="button" class="quantity-btn" onclick="event.stopPropagation(); changeQuantity(this, -1, 'pet')">-</button>
-                <span class="quantity-display">1</span>
-                <button type="button" class="quantity-btn" onclick="event.stopPropagation(); changeQuantity(this, 1, 'pet')">+</button>
-              </div>
-              <span class="item-price" style="margin-left: auto; color: #D2691E; font-weight: bold;">NT$ 150</span>
             </div>
           </div>
         </div>
@@ -661,6 +627,9 @@
         <h3>📞 聯絡我們</h3>
         <p>LINE ID: <a href="https://line.me/ti/p/0922317535" target="_blank">0922317535</a></p>
         <p>電話: <a href="tel:0922317535">0922-317-535</a></p>
+        <div class="contact-note">
+          ⚠️ 完成預約後請與我們聯繫
+        </div>
       </div>
     </div>
   </div>
@@ -681,7 +650,9 @@
     // 更新後的費用設定
     const PRICING = {
       moving: {
-        baseFee: 500,              // 基本出車費
+        baseFee: 500,              // 基本出車費（含5公里內）
+        baseDistance: 5,           // 基本里程（公里）
+        extraDistanceFee: 25,      // 超程累加費（每公里）
         elevatorFee: 300,          // 電梯樓層費
         stairsFeePerFloor: 100,    // 走樓梯樓層費（每層）
         nightSurcharge: 300        // 夜間出勤加給（22:00 - 06:00）
@@ -756,6 +727,7 @@
     function updateMovingSummary() {
       const floorType = document.getElementById('movingFloorType').value;
       const floorCount = parseInt(document.getElementById('movingFloorCount').value) || 0;
+      const distance = parseFloat(document.getElementById('movingDistance').value) || 0;
       
       let html = '';
       let total = PRICING.moving.baseFee;
@@ -763,10 +735,23 @@
       // 基本出車費
       html += `
         <div class="summary-item">
-          <span>基本出車費</span>
+          <span>基本出車費（含5公里內）</span>
           <span>NT$ ${PRICING.moving.baseFee.toLocaleString()}</span>
         </div>
       `;
+      
+      // 超程費用
+      if (distance > PRICING.moving.baseDistance) {
+        const extraDistance = distance - PRICING.moving.baseDistance;
+        const extraFee = Math.ceil(extraDistance) * PRICING.moving.extraDistanceFee;
+        total += extraFee;
+        html += `
+          <div class="summary-item">
+            <span>超程累加費 (${Math.ceil(extraDistance)}公里)</span>
+            <span>NT$ ${extraFee.toLocaleString()}</span>
+          </div>
+        `;
+      }
       
       // 樓層費用
       if (floorType === '電梯') {
@@ -1013,8 +998,14 @@
     function calculateMovingTotal() {
       const floorType = document.getElementById('movingFloorType').value;
       const floorCount = parseInt(document.getElementById('movingFloorCount').value) || 0;
+      const distance = parseFloat(document.getElementById('movingDistance').value) || 0;
       
       let total = PRICING.moving.baseFee;
+      
+      if (distance > PRICING.moving.baseDistance) {
+        const extraDistance = distance - PRICING.moving.baseDistance;
+        total += Math.ceil(extraDistance) * PRICING.moving.extraDistanceFee;
+      }
       
       if (floorType === '電梯') {
         total += PRICING.moving.elevatorFee;
@@ -1075,6 +1066,12 @@
         return;
       }
       
+      const distance = document.getElementById('movingDistance').value;
+      if (!distance || distance <= 0) {
+        alert('請輸入預估距離');
+        return;
+      }
+      
       const formData = new FormData(this);
       const data = {
         serviceType: '搬家服務',
@@ -1084,6 +1081,7 @@
         bookingTime: selectedMovingTimeSlot,
         startAddress: formData.get('startAddress'),
         endAddress: formData.get('endAddress'),
+        distance: distance,
         floorType: floorType,
         floorCount: formData.get('floorCount') || '',
         requirements: formData.get('requirements'),
