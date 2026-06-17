@@ -846,8 +846,6 @@
   </style>
 </head>
 <body>
-  <!-- HTML 結構請看第二段 -->
-  <!-- 接續第一段的 </head><body> 之後 -->
   <div class="navbar">
     <h1>📊 老得服務後台管理系統</h1>
     <div class="navbar-actions">
@@ -1441,6 +1439,8 @@
         const response = await fetch(`${SCRIPT_URL}?action=getTimeSlots&date=${date}`);
         const result = await response.json();
         
+        console.log('時段 API 回應:', result);
+        
         if (result.success && result.timeSlots && result.timeSlots.length > 0) {
           let html = '<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px;">';
           
@@ -1544,6 +1544,8 @@
         const response = await fetch(`${SCRIPT_URL}?action=getFixedCosts&month=${month}`);
         const result = await response.json();
         
+        console.log('固定成本 API 回應:', result);
+        
         if (result.success && result.costs && result.costs.length > 0) {
           let html = '';
           let total = 0;
@@ -1554,8 +1556,8 @@
             html += `
               <div class="cost-item">
                 <div class="cost-item-info">
-                  <h4>${cost.type}</h4>
-                  <p>${cost.note || '無備註'} ${cost.date ? '・' + cost.date : ''}</p>
+                  <h4>${cost.type || cost.costType || '未分類'}</h4>
+                  <p>${cost.note || '無備註'} ${cost.date ? '・' + formatSimpleDate(cost.date) : ''}</p>
                 </div>
                 <div class="cost-item-amount">NT$ ${amount.toLocaleString()}</div>
               </div>
@@ -1603,6 +1605,8 @@
       const amount = document.getElementById('newCostAmount').value;
       const note = document.getElementById('newCostNote').value;
       
+      console.log('準備儲存成本:', { month, type, amount, note });
+      
       const formData = new URLSearchParams();
       formData.append('action', 'saveCost');
       formData.append('month', month);
@@ -1617,13 +1621,25 @@
         });
         
         const result = await response.json();
+        console.log('儲存成本回應:', result);
         
         if (result.success) {
           showToast('✓ 成本項目新增成功！', 'success');
           closeModal('addCostModal');
+          
+          // 重置表單
+          document.getElementById('newCostType').value = '';
+          document.getElementById('newCostAmount').value = '';
+          document.getElementById('newCostNote').value = '';
+          
+          // 設定月份並重新載入
           document.getElementById('costMonth').value = month;
-          loadFixedCosts();
-          loadStatistics();
+          
+          // 延遲載入以確保資料已寫入
+          setTimeout(() => {
+            loadFixedCosts();
+            loadStatistics();
+          }, 500);
         } else {
           throw new Error(result.error || '儲存失敗');
         }
