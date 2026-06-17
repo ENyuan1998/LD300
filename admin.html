@@ -1675,35 +1675,41 @@
 }
     
     async function loadRevenueStats() {
-      try {
-        const response = await fetch(`${SCRIPT_URL}?action=getRevenueStats`);
-        const result = await response.json();
-        
-        if (result.success) {
-          document.getElementById('yearRevenue').textContent = `NT$ ${(result.yearRevenue || 0).toLocaleString()}`;
-          document.getElementById('quarterRevenue').textContent = `NT$ ${(result.quarterRevenue || 0).toLocaleString()}`;
-          document.getElementById('monthRevenue').textContent = `NT$ ${(result.monthRevenue || 0).toLocaleString()}`;
-          document.getElementById('weekRevenue').textContent = `NT$ ${(result.weekRevenue || 0).toLocaleString()}`;
-          
-          document.getElementById('movingRevenue').textContent = `NT$ ${(result.movingRevenue || 0).toLocaleString()}`;
-          document.getElementById('petRevenue').textContent = `NT$ ${(result.petRevenue || 0).toLocaleString()}`;
-          
-          const total = (result.movingRevenue || 0) + (result.petRevenue || 0);
-          const movingPercent = total > 0 ? (((result.movingRevenue || 0) / total) * 100).toFixed(1) : 0;
-          const petPercent = total > 0 ? (((result.petRevenue || 0) / total) * 100).toFixed(1) : 0;
-          
-          document.getElementById('movingPercent').textContent = `${movingPercent}%`;
-          document.getElementById('petPercent').textContent = `${petPercent}%`;
-          
-          if (result.seasonData) {
-            displaySeasonAnalysis(result.seasonData);
-          }
-          generateAIAnalysis(result);
-        }
-      } catch (error) {
-        console.error('載入營業額失敗:', error);
+  try {
+    const response = await fetch(`${SCRIPT_URL}?action=getRevenueStats`);
+    const result = await response.json();
+    
+    if (result.success) {
+      document.getElementById('yearRevenue').textContent = `NT$ ${(result.yearRevenue || 0).toLocaleString()}`;
+      document.getElementById('quarterRevenue').textContent = `NT$ ${(result.quarterRevenue || 0).toLocaleString()}`;
+      document.getElementById('monthRevenue').textContent = `NT$ ${(result.monthRevenue || 0).toLocaleString()}`;
+      document.getElementById('weekRevenue').textContent = `NT$ ${(result.weekRevenue || 0).toLocaleString()}`;
+      
+      document.getElementById('movingRevenue').textContent = `NT$ ${(result.movingRevenue || 0).toLocaleString()}`;
+      document.getElementById('petRevenue').textContent = `NT$ ${(result.petRevenue || 0).toLocaleString()}`;
+      
+      const total = (result.movingRevenue || 0) + (result.petRevenue || 0);
+      const movingPercent = total > 0 ? (((result.movingRevenue || 0) / total) * 100).toFixed(1) : 0;
+      const petPercent = total > 0 ? (((result.petRevenue || 0) / total) * 100).toFixed(1) : 0;
+      
+      document.getElementById('movingPercent').textContent = `${movingPercent}%`;
+      document.getElementById('petPercent').textContent = `${petPercent}%`;
+      
+      // 修正：淡旺季分析
+      if (result.seasonData && result.seasonData.length > 0) {
+        displaySeasonAnalysis(result.seasonData);
+      } else {
+        document.getElementById('seasonAnalysis').innerHTML = '<p style="color: #A0826D;">資料不足，無法進行分析</p>';
       }
+      
+      generateAIAnalysis(result);
     }
+  } catch (error) {
+    console.error('載入營業額失敗:', error);
+    document.getElementById('seasonAnalysis').innerHTML = '<p style="color: #D2691E;">載入失敗，請重新整理</p>';
+  }
+}
+
     
     function displaySeasonAnalysis(data) {
       const container = document.getElementById('seasonAnalysis');
