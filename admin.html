@@ -1612,46 +1612,67 @@
   
   console.log('準備儲存成本:', { month, type, amount, note });
   
-  try {
-    // 方法 1: 使用 fetch + no-cors
-    const url = `${SCRIPT_URL}?action=saveCost&month=${encodeURIComponent(month)}&type=${encodeURIComponent(type)}&amount=${encodeURIComponent(amount)}&note=${encodeURIComponent(note)}`;
-    
-    console.log('發送 POST 請求到:', url);
-    
-    await fetch(url, {
-      method: 'POST',
-      mode: 'no-cors'
-    });
-    
-    console.log('POST 請求已送出');
-    
-    // 延遲後顯示成功訊息
-    setTimeout(() => {
-      showToast('✓ 成本項目新增成功！', 'success');
-      closeModal('addCostModal');
-      
-      // 重置表單
-      document.getElementById('newCostType').value = '';
-      document.getElementById('newCostAmount').value = '';
-      document.getElementById('newCostNote').value = '';
-      
-      // 設定月份並重新載入
-      document.getElementById('costMonth').value = month;
-      
-      // 延遲載入以確保資料已寫入
-      setTimeout(() => {
-        loadFixedCosts();
-        loadStatistics();
-      }, 1500);
-    }, 500);
-    
-  } catch (error) {
-    console.error('儲存失敗:', error);
-    showToast('✗ 儲存失敗：' + error.message, 'error');
+  // 建立隱藏的 iframe（如果不存在）
+  let iframe = document.getElementById('hidden-iframe');
+  if (!iframe) {
+    iframe = document.createElement('iframe');
+    iframe.id = 'hidden-iframe';
+    iframe.name = 'hidden-iframe';
+    iframe.style.display = 'none';
+    document.body.appendChild(iframe);
   }
+  
+  // 建立表單
+  const form = document.createElement('form');
+  form.method = 'POST';
+  form.action = SCRIPT_URL;
+  form.target = 'hidden-iframe';
+  
+  // 加入參數
+  const params = {
+    action: 'saveCost',
+    month: month,
+    type: type,
+    amount: amount,
+    note: note
+  };
+  
+  for (const key in params) {
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = key;
+    input.value = params[key];
+    form.appendChild(input);
+  }
+  
+  // 提交表單
+  document.body.appendChild(form);
+  console.log('提交表單，參數:', params);
+  form.submit();
+  document.body.removeChild(form);
+  
+  console.log('表單已提交');
+  
+  // 延遲後顯示成功訊息
+  setTimeout(() => {
+    showToast('✓ 成本項目新增成功！', 'success');
+    closeModal('addCostModal');
+    
+    // 重置表單
+    document.getElementById('newCostType').value = '';
+    document.getElementById('newCostAmount').value = '';
+    document.getElementById('newCostNote').value = '';
+    
+    // 設定月份並重新載入
+    document.getElementById('costMonth').value = month;
+    
+    // 延遲載入以確保資料已寫入
+    setTimeout(() => {
+      loadFixedCosts();
+      loadStatistics();
+    }, 2000); // 增加延遲到 2 秒
+  }, 1000);
 }
-
-
     
     async function loadRevenueStats() {
       try {
