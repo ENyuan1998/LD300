@@ -278,7 +278,6 @@
       transform: scale(1.01);
     }
     
-    /* 簡化時間顯示 */
     .simple-date {
       font-size: 14px;
       color: #6B4423;
@@ -747,7 +746,6 @@
       }
     }
     
-    /* 時段卡片樣式 */
     .time-slot-card {
       background: white;
       padding: 15px;
@@ -797,6 +795,19 @@
       margin-top: 5px;
     }
     
+    .cost-summary {
+      background: linear-gradient(135deg, #FFF8F0 0%, #F5E6D3 100%);
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+      border: 2px solid #E8D5C4;
+    }
+    
+    .cost-summary h3 {
+      color: #8B5A2B;
+      margin-bottom: 15px;
+    }
+    
     @media (max-width: 768px) {
       .navbar {
         flex-direction: column;
@@ -835,7 +846,9 @@
   </style>
 </head>
 <body>
-    <div class="navbar">
+  <!-- HTML 結構請看第二段 -->
+  <!-- 接續第一段的 </head><body> 之後 -->
+  <div class="navbar">
     <h1>📊 老得服務後台管理系統</h1>
     <div class="navbar-actions">
       <button class="navbar-btn" onclick="refreshAllData()">🔄 重新整理</button>
@@ -939,6 +952,7 @@
           <h2>每月固定成本</h2>
           <div class="action-buttons">
             <button class="btn btn-success" onclick="openAddCostModal()">➕ 新增成本項目</button>
+            <button class="btn" onclick="loadFixedCosts()">🔄 重新載入</button>
           </div>
         </div>
         <div class="form-group">
@@ -946,10 +960,14 @@
           <input type="month" id="costMonth" onchange="loadFixedCosts()">
         </div>
         <div id="fixedCostsContainer">
-          <div class="loading"><div class="loading-spinner"></div><p>載入中...</p></div>
+          <div class="empty-state">
+            <div class="empty-state-icon">💰</div>
+            <h3>請選擇月份</h3>
+            <p>選擇月份後即可查看該月的固定成本</p>
+          </div>
         </div>
-        <div class="cost-summary" style="background: linear-gradient(135deg, #FFF8F0 0%, #F5E6D3 100%); padding: 20px; border-radius: 10px; margin-top: 20px; border: 2px solid #E8D5C4;">
-          <h3 style="color: #8B5A2B; margin-bottom: 15px;">本月成本總計</h3>
+        <div class="cost-summary">
+          <h3>本月成本總計</h3>
           <div style="font-size: 32px; font-weight: bold; color: #D2691E;" id="monthTotalCost">NT$ 0</div>
         </div>
       </div>
@@ -1095,7 +1113,7 @@
         </div>
         <div class="form-group">
           <label>金額 *</label>
-          <input type="number" id="newCostAmount" placeholder="請輸入金額" required>
+          <input type="number" id="newCostAmount" placeholder="請輸入金額" required min="0" step="1">
         </div>
         <div class="form-group">
           <label>備註</label>
@@ -1115,7 +1133,6 @@
     let allCustomers = [];
     let currentPeriod = 'year';
     
-    // 簡化日期格式化（僅顯示日期）
     function formatSimpleDate(dateString) {
       if (!dateString) return '-';
       try {
@@ -1130,7 +1147,6 @@
       }
     }
     
-    // 格式化預約時間（日期 + 時間徽章）
     function formatBookingTime(dateString, timeString) {
       if (!dateString) return '-';
       try {
@@ -1145,7 +1161,6 @@
       }
     }
     
-    // 載入統計資料
     async function loadStatistics() {
       try {
         const response = await fetch(`${SCRIPT_URL}?action=getStatistics`);
@@ -1163,7 +1178,6 @@
       }
     }
     
-    // 載入訂單資料
     async function loadOrders() {
       const container = document.getElementById('ordersTableContainer');
       container.innerHTML = '<div class="loading"><div class="loading-spinner"></div><p>載入中...</p></div>';
@@ -1196,7 +1210,6 @@
       }
     }
     
-    // 顯示訂單表格
     function displayOrders(orders) {
       const container = document.getElementById('ordersTableContainer');
       
@@ -1248,7 +1261,6 @@
       container.innerHTML = html;
     }
     
-    // 更新訂單狀態
     async function updateOrderStatus(index, newStatus) {
       const order = allOrders[index];
       if (!order) return;
@@ -1272,7 +1284,7 @@
         formData.append('orderNumber', order.orderNumber);
         formData.append('status', newStatus);
         
-        const response = await fetch(SCRIPT_URL, {
+        await fetch(SCRIPT_URL, {
           method: 'POST',
           body: formData
         });
@@ -1296,7 +1308,6 @@
       }
     }
     
-    // 顯示 Toast 提示
     function showToast(message, type = 'success') {
       const toast = document.getElementById('toast');
       toast.textContent = message;
@@ -1311,7 +1322,6 @@
       }, 3000);
     }
     
-    // 獲取狀態樣式
     function getStatusClass(status) {
       const statusMap = {
         '待處理': 'status-pending',
@@ -1322,7 +1332,6 @@
       return statusMap[status] || 'status-pending';
     }
     
-    // 顯示訂單詳情
     function showOrderDetail(index) {
       const order = allOrders[index];
       if (!order) return;
@@ -1388,12 +1397,10 @@
       modal.classList.add('show');
     }
     
-    // 關閉彈窗
     function closeModal(modalId) {
       document.getElementById(modalId).classList.remove('show');
     }
     
-    // 篩選訂單
     function filterOrders() {
       const searchText = document.getElementById('orderSearch').value.toLowerCase();
       const statusFilter = document.getElementById('statusFilter').value;
@@ -1414,7 +1421,6 @@
       displayOrders(filtered);
     }
     
-    // 🔧 修正：載入時段（關鍵修復）
     async function loadTimeSlots() {
       const date = document.getElementById('timeSlotDate').value;
       if (!date) {
@@ -1435,14 +1441,11 @@
         const response = await fetch(`${SCRIPT_URL}?action=getTimeSlots&date=${date}`);
         const result = await response.json();
         
-        console.log('時段 API 回應:', result); // 除錯用
-        
         if (result.success && result.timeSlots && result.timeSlots.length > 0) {
           let html = '<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px;">';
           
           result.timeSlots.forEach(slot => {
             const isAvailable = slot.status === 'available' || slot.available;
-            const statusColor = isAvailable ? '#8FBC8F' : '#D3D3D3';
             const statusText = isAvailable ? '可預約' : '已預約';
             
             html += `
@@ -1477,7 +1480,6 @@
       }
     }
     
-    // 開啟新增時段彈窗
     function openAddTimeSlotModal() {
       document.getElementById('addTimeSlotModal').classList.add('show');
       const selectedDate = document.getElementById('timeSlotDate').value;
@@ -1485,7 +1487,6 @@
       document.getElementById('newSlotDate').value = selectedDate || today;
     }
     
-    // 儲存時段
     async function saveTimeSlot(event) {
       event.preventDefault();
       
@@ -1510,8 +1511,6 @@
         if (result.success) {
           showToast('✓ 時段新增成功！', 'success');
           closeModal('addTimeSlotModal');
-          
-          // 更新日期選擇器並重新載入
           document.getElementById('timeSlotDate').value = date;
           loadTimeSlots();
         } else {
@@ -1523,10 +1522,20 @@
       }
     }
     
-    // 載入固定成本
     async function loadFixedCosts() {
       const month = document.getElementById('costMonth').value;
-      if (!month) return;
+      
+      if (!month) {
+        document.getElementById('fixedCostsContainer').innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">💰</div>
+            <h3>請選擇月份</h3>
+            <p>選擇月份後即可查看該月的固定成本</p>
+          </div>
+        `;
+        document.getElementById('monthTotalCost').textContent = 'NT$ 0';
+        return;
+      }
       
       const container = document.getElementById('fixedCostsContainer');
       container.innerHTML = '<div class="loading"><div class="loading-spinner"></div><p>載入中...</p></div>';
@@ -1540,14 +1549,15 @@
           let total = 0;
           
           result.costs.forEach(cost => {
-            total += parseFloat(cost.amount || 0);
+            const amount = parseFloat(cost.amount || 0);
+            total += amount;
             html += `
               <div class="cost-item">
                 <div class="cost-item-info">
                   <h4>${cost.type}</h4>
-                  <p>${cost.note || '無備註'}</p>
+                  <p>${cost.note || '無備註'} ${cost.date ? '・' + cost.date : ''}</p>
                 </div>
-                <div class="cost-item-amount">NT$ ${parseInt(cost.amount || 0).toLocaleString()}</div>
+                <div class="cost-item-amount">NT$ ${amount.toLocaleString()}</div>
               </div>
             `;
           });
@@ -1570,50 +1580,59 @@
           <div class="empty-state">
             <div class="empty-state-icon">⚠️</div>
             <h3>載入失敗</h3>
-            <p>請稍後再試</p>
+            <p>${error.message || '請稍後再試'}</p>
           </div>
         `;
+        document.getElementById('monthTotalCost').textContent = 'NT$ 0';
       }
     }
     
-    // 開啟新增成本彈窗
     function openAddCostModal() {
       document.getElementById('addCostModal').classList.add('show');
+      const selectedMonth = document.getElementById('costMonth').value;
       const today = new Date();
-      const month = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
-      document.getElementById('newCostMonth').value = month;
+      const currentMonth = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
+      document.getElementById('newCostMonth').value = selectedMonth || currentMonth;
     }
     
-    // 儲存成本
     async function saveCost(event) {
       event.preventDefault();
       
+      const month = document.getElementById('newCostMonth').value;
+      const type = document.getElementById('newCostType').value;
+      const amount = document.getElementById('newCostAmount').value;
+      const note = document.getElementById('newCostNote').value;
+      
       const formData = new URLSearchParams();
       formData.append('action', 'saveCost');
-      formData.append('month', document.getElementById('newCostMonth').value);
-      formData.append('type', document.getElementById('newCostType').value);
-      formData.append('amount', document.getElementById('newCostAmount').value);
-      formData.append('note', document.getElementById('newCostNote').value);
+      formData.append('month', month);
+      formData.append('type', type);
+      formData.append('amount', amount);
+      formData.append('note', note);
       
       try {
-        await fetch(SCRIPT_URL, {
+        const response = await fetch(SCRIPT_URL, {
           method: 'POST',
           body: formData
         });
         
-        showToast('✓ 成本項目新增成功！', 'success');
-        closeModal('addCostModal');
+        const result = await response.json();
         
-        // 更新月份選擇器並重新載入
-        document.getElementById('costMonth').value = document.getElementById('newCostMonth').value;
-        loadFixedCosts();
+        if (result.success) {
+          showToast('✓ 成本項目新增成功！', 'success');
+          closeModal('addCostModal');
+          document.getElementById('costMonth').value = month;
+          loadFixedCosts();
+          loadStatistics();
+        } else {
+          throw new Error(result.error || '儲存失敗');
+        }
       } catch (error) {
         console.error('儲存失敗:', error);
-        showToast('✗ 儲存失敗，請稍後再試', 'error');
+        showToast('✗ 儲存失敗：' + error.message, 'error');
       }
     }
     
-    // 載入營業額統計
     async function loadRevenueStats() {
       try {
         const response = await fetch(`${SCRIPT_URL}?action=getRevenueStats`);
@@ -1645,7 +1664,6 @@
       }
     }
     
-    // 顯示旺季淡季分析
     function displaySeasonAnalysis(data) {
       const container = document.getElementById('seasonAnalysis');
       
@@ -1670,7 +1688,6 @@
       container.innerHTML = html;
     }
     
-    // 生成 AI 分析
     function generateAIAnalysis(data) {
       const container = document.getElementById('aiAnalysis');
       
@@ -1702,14 +1719,12 @@
       container.innerHTML = analysis;
     }
     
-    // 選擇期間
     function selectPeriod(period) {
       currentPeriod = period;
       document.querySelectorAll('.period-btn').forEach(btn => btn.classList.remove('active'));
       event.target.classList.add('active');
     }
     
-    // 載入客戶資料
     async function loadCustomers() {
       const container = document.getElementById('customersTableContainer');
       container.innerHTML = '<div class="loading"><div class="loading-spinner"></div><p>載入中...</p></div>';
@@ -1742,7 +1757,6 @@
       }
     }
     
-    // 顯示客戶表格
     function displayCustomers(customers) {
       const container = document.getElementById('customersTableContainer');
       
@@ -1776,7 +1790,6 @@
       container.innerHTML = html;
     }
     
-    // 篩選客戶
     function filterCustomers() {
       const searchText = document.getElementById('customerSearch').value.toLowerCase();
       
@@ -1788,7 +1801,6 @@
       displayCustomers(filtered);
     }
     
-    // 切換分頁
     function showTab(tabName) {
       document.querySelectorAll('.tab-content').forEach(content => {
         content.classList.remove('active');
@@ -1819,25 +1831,21 @@
       }
     }
     
-    // 重新整理所有資料
     function refreshAllData() {
       loadStatistics();
       loadOrders();
       showToast('✓ 資料已重新整理', 'success');
     }
     
-    // 開啟 Google Sheets
     function openGoogleSheets() {
       window.open(`https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/edit`, '_blank');
     }
     
-    // 匯出 Excel
     function exportToExcel() {
       window.open(`https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=xlsx`, '_blank');
       showToast('✓ 開始匯出 Excel', 'success');
     }
     
-    // 初始化
     window.onload = function() {
       loadStatistics();
       loadOrders();
