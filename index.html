@@ -375,6 +375,55 @@
       100% { transform: rotate(360deg); }
     }
 
+    /* ✨ 新增：提交訂單的載入畫面 */
+    .submit-loading-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .submit-loading-overlay.show {
+      display: flex;
+    }
+
+    .submit-loading-content {
+      background: white;
+      padding: 50px 60px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      animation: slideUp 0.3s;
+    }
+
+    .submit-loading-spinner {
+      border: 6px solid #E8D5C4;
+      border-top: 6px solid #D2691E;
+      border-radius: 50%;
+      width: 80px;
+      height: 80px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 25px;
+    }
+
+    .submit-loading-content h3 {
+      color: #D2691E;
+      font-size: 24px;
+      margin-bottom: 15px;
+    }
+
+    .submit-loading-content p {
+      color: #8B4513;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
     .info-box {
       background: #E8F4FD;
       border-left: 4px solid #2196F3;
@@ -454,6 +503,15 @@
 
       .time-slots-grid {
         grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+      }
+
+      .submit-loading-content {
+        padding: 40px 30px;
+      }
+
+      .submit-loading-spinner {
+        width: 60px;
+        height: 60px;
       }
     }
   </style>
@@ -640,6 +698,15 @@
     </div>
   </div>
 
+  <!-- ✨ 新增：提交訂單的載入畫面 -->
+  <div class="submit-loading-overlay" id="submitLoadingOverlay">
+    <div class="submit-loading-content">
+      <div class="submit-loading-spinner"></div>
+      <h3>正在提交訂單...</h3>
+      <p>請稍候，不要關閉頁面<br>系統正在處理您的預約</p>
+    </div>
+  </div>
+
   <!-- 成功彈窗 -->
   <div class="modal" id="successModal">
     <div class="modal-content">
@@ -678,6 +745,15 @@
     // 服務項目數據結構
     let movingServicesData = {};
     let petServicesData = {};
+
+    // ✨ 新增：顯示/隱藏提交載入畫面
+    function showSubmitLoading() {
+      document.getElementById('submitLoadingOverlay').classList.add('show');
+    }
+
+    function hideSubmitLoading() {
+      document.getElementById('submitLoadingOverlay').classList.remove('show');
+    }
 
     // 切換分頁
     function showTab(tabName) {
@@ -1193,8 +1269,11 @@
       await submitOrder(data);
     });
 
-    // 提交訂單
+    // ✨ 修改：提交訂單（加入載入畫面）
     async function submitOrder(data) {
+      // 顯示載入畫面
+      showSubmitLoading();
+      
       const formData = new URLSearchParams();
       for (const key in data) {
         formData.append(key, data[key]);
@@ -1207,6 +1286,9 @@
         });
         
         const result = await response.json();
+        
+        // 隱藏載入畫面
+        hideSubmitLoading();
         
         if (result.success) {
           document.getElementById('successMessage').innerHTML = `
@@ -1249,6 +1331,8 @@
         }
       } catch (error) {
         console.error('提交失敗:', error);
+        // 隱藏載入畫面
+        hideSubmitLoading();
         alert('提交失敗，請稍後再試或直接聯繫我們\nLINE ID: 0922317535');
       }
     }
