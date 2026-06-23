@@ -494,6 +494,17 @@
         </div>
 
         <div class="form-group">
+          <label>🗺️ 起始地區 *</label>
+          <select name="startRegion" id="movingStartRegion" required onchange="updateMovingSummary()">
+            <option value="">請選擇起始地區</option>
+            <option value="台中市區" data-fee="0">台中市區（起始費用 NT$ 0）</option>
+            <option value="台中郊區" data-fee="150">台中郊區（起始費用 NT$ 150）</option>
+            <option value="彰化地區" data-fee="300">彰化地區（起始費用 NT$ 300）</option>
+            <option value="南投地區" data-fee="500">南投地區（起始費用 NT$ 500）</option>
+          </select>
+        </div>
+
+        <div class="form-group">
           <label>📍 起點地址 *</label>
           <input type="text" name="startAddress" required placeholder="請輸入搬家起點地址">
         </div>
@@ -571,6 +582,17 @@
         </div>
 
         <div class="form-group">
+          <label>🗺️ 起始地區 *</label>
+          <select name="startRegion" id="petStartRegion" required onchange="updatePetSummary()">
+            <option value="">請選擇起始地區</option>
+            <option value="台中市區" data-fee="0">台中市區（起始費用 NT$ 0）</option>
+            <option value="台中郊區" data-fee="150">台中郊區（起始費用 NT$ 150）</option>
+            <option value="彰化地區" data-fee="300">彰化地區（起始費用 NT$ 300）</option>
+            <option value="南投地區" data-fee="500">南投地區（起始費用 NT$ 500）</option>
+          </select>
+        </div>
+
+        <div class="form-group">
           <label>📍 接送起點 *</label>
           <input type="text" name="startAddress" required placeholder="請輸入寵物接送起點">
         </div>
@@ -592,22 +614,6 @@
             <option value="no">不需要</option>
             <option value="yes">需要陪同（+150元）</option>
           </select>
-        </div>
-
-        <div class="form-group">
-          <label>🐾 額外服務項目（可多選）</label>
-          <div class="checkbox-group" id="petServices">
-            <div class="checkbox-item" onclick="toggleService(this, 'pet', '多隻寵物加價', 200, true)">
-              <input type="checkbox">
-              <span>多隻寵物加價</span>
-              <div class="quantity-control" style="display: none;">
-                <button type="button" class="quantity-btn" onclick="event.stopPropagation(); changeQuantity(this, -1, 'pet')">-</button>
-                <span class="quantity-display">1</span>
-                <button type="button" class="quantity-btn" onclick="event.stopPropagation(); changeQuantity(this, 1, 'pet')">+</button>
-              </div>
-              <span class="item-price" style="margin-left: auto; color: #D2691E; font-weight: bold;">NT$ 200</span>
-            </div>
-          </div>
         </div>
 
         <div class="form-group">
@@ -694,6 +700,14 @@
       }
     }
 
+    // 獲取起始地區費用
+    function getStartRegionFee(serviceType) {
+      const selectId = serviceType === 'moving' ? 'movingStartRegion' : 'petStartRegion';
+      const select = document.getElementById(selectId);
+      const selectedOption = select.options[select.selectedIndex];
+      return parseInt(selectedOption.getAttribute('data-fee')) || 0;
+    }
+
     // 更新搬家樓層選項
     function updateMovingFloorOptions() {
       const floorType = document.getElementById('movingFloorType').value;
@@ -728,6 +742,7 @@
       const floorType = document.getElementById('movingFloorType').value;
       const floorCount = parseInt(document.getElementById('movingFloorCount').value) || 0;
       const distance = parseFloat(document.getElementById('movingDistance').value) || 0;
+      const startRegionFee = getStartRegionFee('moving');
       
       let html = '';
       let total = PRICING.moving.baseFee;
@@ -739,6 +754,19 @@
           <span>NT$ ${PRICING.moving.baseFee.toLocaleString()}</span>
         </div>
       `;
+      
+      // 起始地區費用
+      if (startRegionFee > 0) {
+        total += startRegionFee;
+        const select = document.getElementById('movingStartRegion');
+        const regionName = select.options[select.selectedIndex].value;
+        html += `
+          <div class="summary-item">
+            <span>起始地區費用（${regionName}）</span>
+            <span>NT$ ${startRegionFee.toLocaleString()}</span>
+          </div>
+        `;
+      }
       
       // 超程費用
       if (distance > PRICING.moving.baseDistance) {
@@ -810,6 +838,7 @@
     function updatePetSummary() {
       const distance = parseFloat(document.getElementById('petDistance').value) || 0;
       const ownerAccompany = document.getElementById('petOwnerAccompany').value === 'yes';
+      const startRegionFee = getStartRegionFee('pet');
       
       let html = '';
       let total = PRICING.pet.baseFee;
@@ -821,6 +850,19 @@
           <span>NT$ ${PRICING.pet.baseFee.toLocaleString()}</span>
         </div>
       `;
+      
+      // 起始地區費用
+      if (startRegionFee > 0) {
+        total += startRegionFee;
+        const select = document.getElementById('petStartRegion');
+        const regionName = select.options[select.selectedIndex].value;
+        html += `
+          <div class="summary-item">
+            <span>起始地區費用（${regionName}）</span>
+            <span>NT$ ${startRegionFee.toLocaleString()}</span>
+          </div>
+        `;
+      }
       
       // 超程費用
       if (distance > PRICING.pet.baseDistance) {
@@ -999,8 +1041,9 @@
       const floorType = document.getElementById('movingFloorType').value;
       const floorCount = parseInt(document.getElementById('movingFloorCount').value) || 0;
       const distance = parseFloat(document.getElementById('movingDistance').value) || 0;
+      const startRegionFee = getStartRegionFee('moving');
       
-      let total = PRICING.moving.baseFee;
+      let total = PRICING.moving.baseFee + startRegionFee;
       
       if (distance > PRICING.moving.baseDistance) {
         const extraDistance = distance - PRICING.moving.baseDistance;
@@ -1028,8 +1071,9 @@
     function calculatePetTotal() {
       const distance = parseFloat(document.getElementById('petDistance').value) || 0;
       const ownerAccompany = document.getElementById('petOwnerAccompany').value === 'yes';
+      const startRegionFee = getStartRegionFee('pet');
       
-      let total = PRICING.pet.baseFee;
+      let total = PRICING.pet.baseFee + startRegionFee;
       
       if (distance > PRICING.pet.baseDistance) {
         const extraDistance = distance - PRICING.pet.baseDistance;
@@ -1060,6 +1104,12 @@
         return;
       }
       
+      const startRegion = document.getElementById('movingStartRegion').value;
+      if (!startRegion) {
+        alert('請選擇起始地區');
+        return;
+      }
+      
       const floorType = document.getElementById('movingFloorType').value;
       if (!floorType) {
         alert('請選擇樓層類型');
@@ -1079,6 +1129,7 @@
         phone: formData.get('phone'),
         bookingDate: formData.get('bookingDate'),
         bookingTime: selectedMovingTimeSlot,
+        startRegion: startRegion,
         startAddress: formData.get('startAddress'),
         endAddress: formData.get('endAddress'),
         distance: distance,
@@ -1105,6 +1156,12 @@
         return;
       }
       
+      const startRegion = document.getElementById('petStartRegion').value;
+      if (!startRegion) {
+        alert('請選擇起始地區');
+        return;
+      }
+      
       const distance = document.getElementById('petDistance').value;
       if (!distance || distance <= 0) {
         alert('請輸入預估距離');
@@ -1118,6 +1175,7 @@
         phone: formData.get('phone'),
         bookingDate: formData.get('bookingDate'),
         bookingTime: selectedPetTimeSlot,
+        startRegion: startRegion,
         startAddress: formData.get('startAddress'),
         endAddress: formData.get('endAddress'),
         distance: distance,
